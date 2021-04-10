@@ -12,6 +12,8 @@ use App\Brgy;
 use App\Stock;
 use App\Price;
 use App\Product;
+use App\Seller;
+use App\User;
 use DB;
 class ProductsController extends Controller
 {
@@ -68,7 +70,7 @@ class ProductsController extends Controller
             'price' => 'required|numeric',
 
         ]);
-
+   
         $stock = new Stock;
         $stock->stock_description = $request->input('description');
         $stock->qty_added = $request->input('stock');
@@ -91,7 +93,10 @@ class ProductsController extends Controller
        $price->unit_id = $request->input('unit');
        $price->stock_price = $request->input('price');
 
+       $stock->seller_id =  Auth::id();
        $stock->save();
+    //    $seller=  Auth::id();
+    //    $seller->stocks()->save( $stock_id);
        $stock->prices()->save($price);
 
        return redirect()->back()->with('success','Successfully added a product');

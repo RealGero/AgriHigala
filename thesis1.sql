@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2021 at 01:33 PM
+-- Generation Time: Apr 10, 2021 at 03:54 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -314,7 +314,8 @@ CREATE TABLE `prices` (
 INSERT INTO `prices` (`price_id`, `stock_id`, `unit_id`, `stock_price`, `created_at`, `updated_at`) VALUES
 (1, 3, 1, 123.00, '2021-04-09 05:00:07', '2021-04-09 05:00:07'),
 (2, 4, 2, 1234.00, '2021-04-09 07:11:49', '2021-04-09 07:11:49'),
-(3, 5, 4, 123456.00, '2021-04-09 07:12:43', '2021-04-09 07:12:43');
+(3, 5, 4, 123456.00, '2021-04-09 07:12:43', '2021-04-09 07:12:43'),
+(4, 3, 1, 12345.00, '2021-04-10 04:45:10', '2021-04-10 04:45:10');
 
 -- --------------------------------------------------------
 
@@ -436,6 +437,14 @@ CREATE TABLE `riders` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `riders`
+--
+
+INSERT INTO `riders` (`rider_id`, `user_id`, `seller_id`, `rider_description`, `verified_at`, `created_at`, `updated_at`) VALUES
+(1, 8, 1, NULL, NULL, '2021-04-10 05:14:27', '2021-04-10 05:14:27'),
+(2, 10, 1, NULL, NULL, '2021-04-10 05:32:24', '2021-04-10 05:32:24');
+
 -- --------------------------------------------------------
 
 --
@@ -494,7 +503,7 @@ INSERT INTO `srp` (`srp_id`, `product_id`, `unit_id`, `product_price`, `created_
 CREATE TABLE `stocks` (
   `stock_id` int(10) UNSIGNED NOT NULL,
   `product_id` bigint(20) NOT NULL,
-  `brgy_id` bigint(20) NOT NULL,
+  `seller_id` bigint(20) NOT NULL,
   `stock_description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `qty_added` int(11) NOT NULL,
   `stock_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -508,12 +517,10 @@ CREATE TABLE `stocks` (
 -- Dumping data for table `stocks`
 --
 
-INSERT INTO `stocks` (`stock_id`, `product_id`, `brgy_id`, `stock_description`, `qty_added`, `stock_image`, `expiration_date`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 0, 'sdfsdfsdfsdf', 1, 'lansones.1617972949.jpg', '2021-04-06', NULL, '2021-04-09 04:55:49', '2021-04-09 04:55:49'),
-(2, 1, 0, 'sdfsdfsdfsdf', 1, 'lansones.1617973055.jpg', '2021-04-06', NULL, '2021-04-09 04:57:35', '2021-04-09 04:57:35'),
-(3, 1, 0, 'sdfsdfsdfsdf', 1, 'lansones.1617973207.jpg', '2021-04-06', NULL, '2021-04-09 05:00:07', '2021-04-09 05:00:07'),
-(4, 1, 0, 'sgddsgsdgsdfsdfsdf', 1, 'lansones.1617981108.jpg', '2021-04-17', NULL, '2021-04-09 07:11:49', '2021-04-09 07:11:49'),
-(5, 3, 0, 'agsgasdasasg', 6, 'lansones.1617981162.jpg', '2021-04-16', NULL, '2021-04-09 07:12:42', '2021-04-09 07:12:42');
+INSERT INTO `stocks` (`stock_id`, `product_id`, `seller_id`, `stock_description`, `qty_added`, `stock_image`, `expiration_date`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'sdasdasd', 2, 'lansones.1618058610.jpg', '2021-04-23', NULL, '2021-04-10 04:43:30', '2021-04-10 04:43:30'),
+(2, 1, 1, 'sdasdasd', 2, 'lansones.1618058658.jpg', '2021-04-23', NULL, '2021-04-10 04:44:19', '2021-04-10 04:44:19'),
+(3, 1, 1, 'sdasdasd', 2, 'lansones.1618058710.jpg', '2021-04-23', NULL, '2021-04-10 04:45:10', '2021-04-10 04:45:10');
 
 -- --------------------------------------------------------
 
@@ -570,7 +577,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `user_type`, `password`, `f_name`, `l_name`, `m_name`, `mobile_number`, `email`, `user_image`, `remember_token`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 'gero123', 2, '$2y$10$GvQS6aJEPpOcr/NPOGb3H.L9olx1NFADbqcz8drMMdxtfRPISioKa', 'asdasd', 'asdasds', 'asdasdd', '12345678911', 'gero123@gmail.com', 'user_image.png', NULL, NULL, '2021-04-08 15:16:53', '2021-04-08 15:16:53'),
-(4, 'gero12345', 2, '$2y$10$z9ArFNnPWz2h7jGxzOl2V.flfvkM8sLszKBVQNTMTODyU.CsTRBJS', 'asdasd', 'asdasds', 'asdasdd', '12345678900', 'gero12345@gmail.com', 'user_image.png', NULL, NULL, '2021-04-08 15:18:10', '2021-04-08 15:18:10');
+(4, 'gero12345', 2, '$2y$10$z9ArFNnPWz2h7jGxzOl2V.flfvkM8sLszKBVQNTMTODyU.CsTRBJS', 'asdasd', 'asdasds', 'asdasdd', '12345678900', 'gero12345@gmail.com', 'user_image.png', NULL, NULL, '2021-04-08 15:18:10', '2021-04-08 15:18:10'),
+(6, 'japhetduapa', 3, '$2y$10$ZDtGvMIs2pvxq6vNO6N8rewy/9AgnSSqba3JYF7VyF2mDCq7Fu/Z6', 'japhet', 'duapa', 'rico', '12345678912', NULL, 'user_image.png', NULL, NULL, '2021-04-10 05:12:29', '2021-04-10 05:12:29'),
+(8, 'duaparico', 3, '$2y$10$exjhguAai4JupLInDFo8YOhsba1FuWnbRaHrAL.WSUmRiBIFrBE8.', 'duapa', 'rico', 'japhet', '12354678913', NULL, 'user_image.png', NULL, NULL, '2021-04-10 05:14:27', '2021-04-10 05:14:27'),
+(10, 'roromsroroms', 3, '$2y$10$GkCopGqjtRqkfjzMZrVTE./7IMyCXbHHRu8BY1UsGeNzPUGmr/me6', 'roroms', 'roroms', 'roroms', '12345678914', NULL, 'user_image.png', NULL, NULL, '2021-04-10 05:32:24', '2021-04-10 05:32:24');
 
 --
 -- Indexes for dumped tables
@@ -833,7 +843,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `prices`
 --
 ALTER TABLE `prices`
-  MODIFY `price_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `price_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -869,7 +879,7 @@ ALTER TABLE `return_orders`
 -- AUTO_INCREMENT for table `riders`
 --
 ALTER TABLE `riders`
-  MODIFY `rider_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `rider_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sellers`
@@ -887,7 +897,7 @@ ALTER TABLE `srp`
 -- AUTO_INCREMENT for table `stocks`
 --
 ALTER TABLE `stocks`
-  MODIFY `stock_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `stock_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -899,7 +909,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

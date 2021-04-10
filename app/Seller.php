@@ -39,4 +39,9 @@ class Seller extends Model
 
         return $this->belongsTo(Org::class,'org_id','org_id');
     }
+
+    public function stocks(){
+
+        return $this->hasMany('App\Stock','seller_id','seller_id');
+    }
 }

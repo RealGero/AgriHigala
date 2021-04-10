@@ -21,6 +21,9 @@ class BrowsesController extends Controller
         $products = DB::table('products as a')
                 ->leftJoin('stocks as b','b.product_id','=','a.product_id')
                 ->leftJoin('prices as c','c.price_id','=','b.stock_id')
+                ->leftJoin('sellers as d','d.seller_id', '=','b.seller_id')
+                ->leftJoin('orgs as e','e.org_id','=','d.org_id')
+                ->join('brgys as f','f.brgy_id','=','e.brgy_id')
                 ->paginate(5);
         $brgys = Brgy::all();
         $categories = ProductType::all();

@@ -95,7 +95,7 @@ class RegisterController extends Controller
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
 
-            'first_name' => ['required', 'string', 'min:2' , 'regex:/^[a-zA-Z]+$/u'],
+            'first_name' => ['required', 'string', 'min:2'],
             'middle_name' => ['required', 'string', 'min:2' , 'regex:/^[a-zA-Z]+$/u'],
             'last_name' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/u'],
             'mobile_number' => ['required', 'string', 'digits:11','unique:users'],
@@ -108,6 +108,7 @@ class RegisterController extends Controller
             
         ]);
        
+            
         // event(new Registered($user = $this->create($request->all())));
         $user = new User;
          

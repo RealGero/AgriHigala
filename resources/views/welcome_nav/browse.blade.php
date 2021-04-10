@@ -16,7 +16,7 @@
                                             <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
                                             <h5>{{$product->product_name}}</h5>
                                             <p> &#8369; {{$product->stock_price}}</p>
-                                            <p>Brgy.1</p>
+                                            <p>{{$product->brgy_name}}</p>
                                             <a class="btn btn-success" href="#" role="button">Add to cart</a>
                                         </div>                        
                                     @endforeach

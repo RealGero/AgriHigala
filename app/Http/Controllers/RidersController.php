@@ -28,9 +28,9 @@ class RidersController extends Controller
         
         $data = $request->validate([
 
-            'first_name' => 'required|min:2',
-            'middle_name' => 'required|min:2',
-            'last_name'  => 'required|min:2',
+            'first_name' => 'required|min:2|regex:/^[a-zA-Z]+$/u',
+            'middle_name' => 'required|min:2|regex:/^[a-zA-Z]+$/u',
+            'last_name'  => 'required|min:2|regex:/^[a-zA-Z]+$/u',
             'mobile_number' => 'required|digits:11',
             'rider_image'  => 'nullable|max:1999'
             
@@ -42,18 +42,20 @@ class RidersController extends Controller
         // $seller_id = Seller::where('user_id',Auth::id())->first();
         // return $seller_id['id'];
         
-       ;
-        $mobile_number =  $request->input('mobile_number');
+       
+       
         // return 123;
         $user = new User();
         $user->f_name = $request->input('first_name');
+        $user->m_name = $request->input('middle_name');
         $user->l_name = $request->input('last_name');
+        $user->mobile_number =  $request->input('mobile_number');
         $user->username = $request->input('first_name').$request->input('last_name');;
         $user->user_type = 3;
-        $user->password = Hash::make($mobile_number);
+        $user->password = Hash::make($request->input('mobile_number'));
 
         $rider = new Rider();
-        $rider->rider_decription = $mobile_number;
+      
         $rider->seller_id   =   Auth::id();
         
       

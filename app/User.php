@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function rider(){
 
-       return $this->hasOne('App\Rider');
+       return $this->hasOne('App\Rider','user_id','user_id');
     }
 
     public function seller(){

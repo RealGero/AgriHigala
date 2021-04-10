@@ -9,9 +9,9 @@ class Price extends Model
     protected $table = "prices";
     protected $primaryKey = "price_id";
     protected $guarded = [];
+
     public function stock ()
     {
-
-     return $this->belongsTo('App\Stock');
+     return $this->belongsTo('App\Stock','stock_id','stock_id');
     }
 }

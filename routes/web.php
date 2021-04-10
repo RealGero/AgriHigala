@@ -76,15 +76,24 @@ Route::resource('users', 'UsersController');
         
 
         Route::get('/seller/dashboard','UsersController@sellerIndex');
+        
         Route::get('/seller/product/my-product', 'sellercontroller\ProductsController@productMyProduct');
-        Route::get('/seller/product/add-new-product', 'sellercontroller\ProductsController@addNewProduct');
+
         Route::get('/seller/order/order-request', 'sellercontroller\OrdersController@orderRequest');
+
+        Route::get('/seller/product/add-new-product', 'sellercontroller\ProductsController@addNewProduct');
+        Route::get('/seller/product/add-new-product/{id}', 'sellercontroller\ProductsController@getProductName');
+        Route::post('/seller/product/add-new-product', 'sellercontroller\ProductsController@storeNewProduct');
+        
         Route::get('/seller/order/order-detail', 'sellercontroller\OrdersController@orderDetails');
         Route::get('/seller/history', 'sellercontroller\OrdersController@transactionHistory');
         Route::get('/seller/return', 'sellercontroller\OrdersController@orderReturn');
         Route::get('/seller/ratings', 'sellercontroller\RatingsController@index');
         Route::get('/seller/earnings', 'sellercontroller\EarningsController@index');
         Route::get('/seller/profile', 'UsersController@sellerProfile');
+        Route::put('/seller/profile/updateImage', 'UsersController@updateSellerProfileImage');
+        Route::put('/seller/profile', 'UsersController@updateSellerDetails');
+
         Route::get('/seller/account', 'UsersController@sellerAccount');
         Route::get('/seller/rider','sellercontroller\MyRiderController@index');
     

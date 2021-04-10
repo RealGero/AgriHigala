@@ -18,7 +18,7 @@ class CreateSellersTable extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('org_id');
             $table->string('schedule_online_time');
-            $table->longText('seller_description');
+            $table->longText('seller_description')->nullable();
             $table->date('verified_at')->nullable();
             $table->timestamps();
         });

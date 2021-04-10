@@ -17,7 +17,7 @@ class CreateReturnOrdersTable extends Migration
             $table->increments('return_id');
             $table->bigInteger('order_id');      
             $table->bigInteger('reason_id');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
 

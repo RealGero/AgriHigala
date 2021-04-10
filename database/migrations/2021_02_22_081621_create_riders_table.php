@@ -17,7 +17,7 @@ class CreateRidersTable extends Migration
             $table->increments('rider_id');
             $table->bigInteger('user_id');
             $table->bigInteger('seller_id');
-            $table->longText('rider_description');
+            $table->longText('rider_description')->nullable();
             $table->date('verified_at')->nullable();
             $table->timestamps();
         });

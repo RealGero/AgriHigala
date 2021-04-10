@@ -10,4 +10,10 @@ class Unit extends Model
 
     protected $primaryKey = "unit_id";
     protected $guarded =[];
+
+
+    public function product (){
+
+        return $this->hasOne('App\Product');
+    }
 }

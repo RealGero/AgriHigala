@@ -86,9 +86,52 @@ class RegisterController extends Controller
 
     // }    
 
-    protected function store(Request $request)
+    protected function register(Request $request)
     {
-        return 321;
+         
+        $this->validate($request,[
+
+            'username' => ['required', 'string', 'max:50','unique:users'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+
+            'first_name' => ['required', 'string', 'min:2' , 'regex:/^[a-zA-Z]+$/u'],
+            'middle_name' => ['required', 'string', 'min:2' , 'regex:/^[a-zA-Z]+$/u'],
+            'last_name' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/u'],
+            'mobile_number' => ['required', 'string', 'digits:11','unique:users'],
+
+            'brgy' => ['required'],
+            'address' => ['required'],
+            'email' => 'required|unique:users|string',
+            'birthdate' =>['required','date_format:Y-m-d','before:today'],
+            'gender' =>['required'],
+            
+        ]);
+       
+        // event(new Registered($user = $this->create($request->all())));
+        $user = new User;
+         
+        $user->user_type = '4';
+        $user->username = $request->input('username');
+        $user->password = Hash::make($request->input('password'));
+        $user->f_name = $request->input('first_name');
+        $user->m_name = $request->input('middle_name');
+        $user->l_name = $request->input('last_name');
+        $user->mobile_number = $request->input('mobile_number');
+        $user->email = $request->input('email');
+        
+
+        $buyer = new Buyer;
+        $buyer->address = $request->input('address');
+        $buyer->birthdate = $request->input('birthdate');
+        $buyer->gender = $request->input('gender');
+        $buyer->brgy_id =$request->input('brgy');
+
+        
+
+        $user->save();
+        $user->buyer()->save($buyer);
+
        
     //     return 123;
     //     $user = new User;

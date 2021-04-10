@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function seller(){
 
-        return $this->hasOne('App\Seller');
+        return $this->hasOne(Seller::class,'user_id','user_id');
      }
 
      public function buyer()

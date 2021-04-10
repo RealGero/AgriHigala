@@ -16,7 +16,8 @@ class CreateProductTypesTable extends Migration
         Schema::create('product_types', function (Blueprint $table) {
             $table->increments('product_type_id');
             $table->string('product_type_name');
-            $table->longText('product_type_description');
+            $table->longText('product_type_description')->nullable();
+            $table->string('product_image')->default('default_product_image.jpg');
             $table->timestamps();
         });
     }

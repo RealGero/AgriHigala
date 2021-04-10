@@ -14,12 +14,11 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('poduct_id');
+            $table->increments('product_id');
             $table->bigInteger('product_type_id');
             $table->string('product_name');
-            $table->longText('product_description');
-            $table->string('product_image')->nullable;
-            $table->date('best_before_date');
+            $table->longText('product_description')->nullable();
+            $table->date('best_before_date')->nullable();
             $table->softDeletes();
             $table->timestamps(); 
         });

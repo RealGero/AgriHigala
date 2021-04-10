@@ -41,20 +41,19 @@ class RidersController extends Controller
        
         // $seller_id = Seller::where('user_id',Auth::id())->first();
         // return $seller_id['id'];
-        $first_name = $request->input('first_name');
-        $last_name = $request->input('last_name');
+        
+       ;
         $mobile_number =  $request->input('mobile_number');
         // return 123;
-        $user= new User();
-        $user->username = $first_name . $last_name;
-        $user->usertype = 3;
+        $user = new User();
+        $user->f_name = $request->input('first_name');
+        $user->l_name = $request->input('last_name');
+        $user->username = $request->input('first_name').$request->input('last_name');;
+        $user->user_type = 3;
         $user->password = Hash::make($mobile_number);
 
         $rider = new Rider();
-        $rider->first_name =  $first_name;
-        $rider->middle_name = $request->input('middle_name');
-        $rider->last_name =   $last_name;
-        $rider->mobile_number = $mobile_number;
+        $rider->rider_decription = $mobile_number;
         $rider->seller_id   =   Auth::id();
         
       

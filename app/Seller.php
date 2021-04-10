@@ -10,15 +10,16 @@ class Seller extends Model
     protected $primaryKey = "seller_id";
     
     
+    protected $guarded = [];
 
-    protected $fillable=[
-        'organization_name','email','mobile_number','street','barangay','schedule_online_time',
-        'seller_image','seller_description','user_id'
-    ];
+    // protected $fillable=[
+    //     'organization_name','email','mobile_number','street','barangay','schedule_online_time',
+    //     'seller_image','seller_description','user_id'
+    // ];
     public function user()
     {
 
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class,'user_id','user_id');
     }
 
     public function riders()
@@ -31,5 +32,11 @@ class Seller extends Model
     {
 
         return $this->hasMany('App\Message');
+    }
+
+    public function org()
+    {
+
+        return $this->belongsTo(Org::class,'org_id','org_id');
     }
 }

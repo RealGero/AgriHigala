@@ -21,6 +21,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
     <script src="{{ asset('js/main.js') }}" defer></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 
     <link rel="icon" href="/images/background_circle.png">
 </head>
@@ -87,8 +88,10 @@
             </div>
         </main>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="{{asset ('js/main.js')}} "> </script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js" defer></script>
     @include('include.footer')
-    <script src="{{asset ('js/main.js')}}"> </script>
+    
 </body>
 </html>

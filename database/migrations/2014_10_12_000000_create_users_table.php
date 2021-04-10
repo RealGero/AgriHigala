@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('f_name');
             $table->string('l_name');
             $table->string('m_name');
-            $table->string('mobile_number');
+            $table->string('mobile_number')->unique();
             $table->string('email')->nullable()->unique();
             $table->string('user_image')->default('user_image.png');
             $table->rememberToken();

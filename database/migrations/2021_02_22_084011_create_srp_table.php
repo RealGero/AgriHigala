@@ -14,7 +14,7 @@ class CreateSrpTable extends Migration
     public function up()
     {
         Schema::create('srp', function (Blueprint $table) {
-            $table->integer('srp_id');
+            $table->increments('srp_id');
             $table->bigInteger('product_id');
             $table->bigInteger('unit_id');
             $table->double('product_price',8,2);

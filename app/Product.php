@@ -30,4 +30,9 @@ class Product extends Model
 
 
     }
+
+    public function unit()
+    {
+        return $this->hasOne('App\Unit');
+    }
 }

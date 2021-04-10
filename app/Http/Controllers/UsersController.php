@@ -8,6 +8,7 @@ use App\Buyer;
 use App\User;
 use App\Seller;
 use App\Brgy;
+use App\Org;
 use Hash;
 use Auth;
 use Illuminate\Validation\Rule;
@@ -81,6 +82,10 @@ class UsersController extends Controller
         $id = Auth::id();
         $user = User::find($id);
         
+        $this->validate($request,[
+            'user_image' => 'max:1999',
+        ]);
+
         if($request->hasFile('user_image'))
         {
             $filenameWithExt = $request->file('user_image')->getClientOriginalName();
@@ -110,7 +115,7 @@ class UsersController extends Controller
             'first_name' => ['required', 'string', 'min:2','regex:/^[\pL\s\-]+$/u'],
             'middle_name' => ['required', 'string', 'min:2' ,'regex:/^[\pL\s\-]+$/u'],
             'last_name' => ['required', 'string', 'min:2', 'regex:/^[\pL\s\-]+$/u'],
-            'mobile_number' => ['required', 'string', 'digits:11'],
+            'mobile_number' => ['required', 'string', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
 
             'brgy' => ['required'],
             'address' => ['required'],
@@ -141,7 +146,7 @@ class UsersController extends Controller
         // $brgys = Brgy::all();
 
 
-        return redirect()->back()->with('success','Successfully uploaded a details');;
+        return redirect()->back()->with('success','Successfully edited');
     }
 
     public function edit()
@@ -228,6 +233,12 @@ class UsersController extends Controller
         $user = User::find($id);
       
        $buyer = User::find($id)->buyer;
+
+       $this->validate($request,[
+        'idfront' => 'max:1999',
+        'idback' => 'max:1999',
+        
+    ]);
  
        if($request->hasFile('idfront'))
        {
@@ -265,29 +276,126 @@ class UsersController extends Controller
 
     public function sellerProfile()
     {
+        
+       
         $id = Auth::id();
-        $user_id = User::find($id);
+        $user =  User::find($id);
+        $brgys = Brgy::all();
+        $brgy =  User::find($id)->seller;
 
+        // $brgy = User::find($id)->seller->org->brgy->brgy_name;
+      
+        
 
-        $user = new User;
-        $user->username = 'japhet';
-        $user->user_type = '2';
-        $user->password = Hash::make('1234567890');
-        $user->f_name = 'asdasd';
-        $user->m_name = 'asdasdd';
-        $user->l_name = 'asdasds';
-        $user->mobile_number = '12345678911';
-        $user->email = 'amang@gmail.com';
+    
 
-        $seller = new Seller;
-        $seller->user_id = Auth::id();
+        // $brgys = Brgy::all();
+        // $brgy_id = $brgys->find(1);
+
+        // $orgs = Org::all();
+        // $org_id = $orgs->find(2);
         
 
 
-        return view ('Seller_view.seller-profile');
+        // $user = new User;
+        // $user->username = 'gero12345';
+        // $user->user_type = '2';
+        // $user->password = Hash::make('1234567890');
+        // $user->f_name = 'asdasd';
+        // $user->m_name = 'asdasdd';
+        // $user->l_name = 'asdasds';
+        // $user->mobile_number = '12345678900';
+        // $user->email = 'gero12345@gmail.com';
+       
+       
+
+        // $seller = new Seller;
+        // $seller->schedule_online_time = 'everyday asdasd';
+        // $seller->seller_description = 'asdasdasdasdasdasd';
+        // $seller->org_id = '2';
+        
+       
+        // $user->save();
+        // $user->seller()->save($seller);
+
+      
+
+        return view ('Seller_view.seller-profile',compact('user','brgys','brgy'));
+    }
+
+    public function updateSellerDetails(Request $request)
+    {
+        $id = Auth::id();
+        $user = User::find($id);
+        $org = User::find($id)->seller->org;
+        $brgy = User::find($id)->seller->org->brgy;
+        $seller = User::find($id)->seller;
+
+        $this->validate($request,[
+            'email' => ['required',Rule::unique('users')->ignore($id, 'user_id')],
+            'mobile_number' => ['required', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
+            'address' => ['required'],
+            'brgy' => ['required'],
+            
+            // 'email' => "required|unique:users,email",
+          
+            'schedule' => 'required|string',
+            
+         ]);
+
+       
+        
+
+        $user->email = $request->input('email');
+        $user->mobile_number = $request->input('mobile_number');
+
+        $org->address = $request->input('address');
+        
+        $brgy->brgy_name = $request->input('brgy');
+
+        $seller->schedule_online_time = $request->input('schedule');
+        $seller->seller_description = $request->input('description');
+
+        $user->save();
+        $org->save();
+        $brgy->save();
+        $seller->save();
+       
+        return redirect()->back()->with('details', 'Successfully edited your details');
+    }
+
+    public function updateSellerProfileImage(Request $request)
+    {
+
+
+        $id = Auth::id();
+        $user = User::find($id);
+
+        
+        $this->validate($request,[
+            'user_image' => 'max:1999',
+        ]);
+        
+        if($request->hasFile('user_image'))
+        {
+            $filenameWithExt = $request->file('user_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('user_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('user_image')->storeAs('public/user',$filenameToStore); 
+
+             $user->user_image = $filenameToStore;
+            
+        };
+      
+       $user->save();
+
+       return redirect('/seller/profile')->with('image','Successfully uploaded an image');
     }
     public function sellerAccount()
     {
+        
+
         return view('Seller_view.seller-account');
     }
 }

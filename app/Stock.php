@@ -21,8 +21,14 @@ class Stock extends Model
         return $this->hasMany('App\Orderline');
     }
 
-    public function price ()
+    public function prices()
     {
-        return $this->hasMany('App\Price');
+        return $this->hasMany('App\Price','stock_id','stock_id');
     }
+
+    public function brgy(){
+
+        return $this->belongsTo('App\Brgy','brgy_id','brgy_id');
+    }
+
 }

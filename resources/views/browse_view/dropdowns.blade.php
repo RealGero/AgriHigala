@@ -7,12 +7,12 @@
           <div class="card-body">
             <div class="row">
               <div class="col-12 d-flex justify-content-around">
-                  <select class="form-select" aria-label="Default select example">
+                  <select class="form-select" aria-label="Default select example" name="category">
                       <option hidden>Category</option>
                       @foreach($categories as $category)
                         <option value="{{$category->product_type_id}}">{{$category->product_type_name}}</option>
                       @endforeach
-                    </select>
+                  </select>
                     <select class="form-select" aria-label="Default select example">
                       <option selected>Price</option>
                       <option value="1">One</option>
@@ -40,7 +40,3 @@
     </div>
   </div>
 </div>
-
-
-
-

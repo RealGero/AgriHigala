@@ -11,13 +11,15 @@
                         <div class="card-body">
                             <div class="row d-flex">
                                 <div class="col-2  d-flex flex-row ">
+                                    
                                     @foreach($products as $product)
                                         <div class="d-flex flex-column justify-content-center mx-4" >
-                                            <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
+                                         <a href="/buyer/browse/seller/{{$product->product_id}}"> <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td>
                                             <h5>{{$product->product_name}}</h5>
                                             <p> &#8369; {{$product->stock_price}}</p>
                                             <p>{{$product->brgy_name}}</p>
-                                            <a class="btn btn-success" href="#" role="button">Add to cart</a>
+                                             <a href="/buyer/browse/{{$product->product_id}}" class="btn btn-success">Add to Cart</a>
+                                           
                                         </div>                        
                                     @endforeach
  
@@ -43,6 +45,10 @@
   $(document).ready( function () {
     $('select[name="category"]').on('change', function(){
         window.location.href = '/buyer/browse/?category='+ this.value;
+    });
+
+    $('select[name="brgy"]').on('change', function(){
+     window.location.href = '/buyer/browse/?brgy='+ this.value;
     });
 } );
 </script>

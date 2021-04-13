@@ -20,7 +20,7 @@
                         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{count($stocks->stocks)}}</p>
                                 <span class="h6">All</span>
                             </div>
                             <div class="col-4 text-center">
@@ -58,7 +58,7 @@
                             </div>
                                 
                         </div>
-
+                    
                         <div class="row mx-3 mt-3">
                             <div class="col-6">
                                 <h4 class="card-title my-2">Orders</h4>

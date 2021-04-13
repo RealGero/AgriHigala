@@ -3,17 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Stock extends Model
 {
     protected $table = "stocks";
     protected $primaryKey = "stock_id";
     protected $guarded = [];
-   
+    use SoftDeletes;
+    protected $dates= ['deleted_at'];
 
-    public function products ()
+    public function products()
     {
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo('App\Product','product_id','product_id');
     }
 
     public function orderLines ()

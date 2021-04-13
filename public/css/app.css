@@ -11180,8 +11180,12 @@ body {
   width: 100%;
 }
 
-.product-detail img {
+.profile-seller-upper {
   width: 12rem;
+}
+
+.profile-seller-lower {
+  width: 6rem;
 }
 
 .product-detail ul {
@@ -11447,6 +11451,10 @@ body {
   table-layout: fixed;
 }
 
+.myproduct button {
+  width: 4rem;
+}
+
 .leftnav-buyer {
   width: 13rem;
   position: absolute;
@@ -11467,6 +11475,10 @@ body {
 
 .leftnav-buyer a:hover {
   font-weight: bold;
+}
+
+.addnewproduct img {
+  width: 13rem;
 }
 
 .myproduct img {

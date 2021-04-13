@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
     return view('welcome');
 });
 
@@ -28,14 +29,27 @@ Route::resource('users', 'UsersController');
 
     // Route::group(['middleware' => ['buyer']], function()
     // {
-        Route::get('/buyer/browse','BrowsesController@index');
-
+        
+      
+        Route::get('/buyer/browse/seller/{id}','BrowsesController@viewSellerDetails');
         Route::get('buyer/profile','Userscontroller@index');
         
         Route::get('/buyer/verification','buyercontroller\ProfilesController@verification');
         Route::get('/buyer/order','buyercontroller\OrdersController@index');
         Route::get('/buyer/product-detail','buyercontroller\ProductsController@index');
-        Route::get('/buyer/cart','buyercontroller\OrdersController@cartIndex');
+
+        Route::get('/cart','CartController@getCart')->name('cart.index');
+        Route::get('/buyer/cart/{id}','CartController@index');
+
+        //delete item from cart
+        Route::get('/buyer/deleteCart/{id}','CartController@deleteCart')->name('deleteCart');
+
+        Route::get('/buyer/browse','BrowsesController@index')->name('browse.index');
+        Route::get('/buyer/browse/{id}','CartController@add');
+
+        Route::get('/delete/session', 'CartController@deleteSession');
+
+
         Route::get('/buyer/cart/checkout','buyercontroller\OrdersController@checkoutIndex');
         Route::get('/buyer/order/order-received','buyercontroller\OrdersController@orderReceivedIndex');
         Route::get('/buyer/order/return','buyercontroller\OrdersController@orderReturn');
@@ -72,7 +86,13 @@ Route::resource('users', 'UsersController');
 
 //Seller-----------------------------------------------------------------------------------------
 
+        
+        // Route::post('addtocart',function(){
+        //    return Cart::add('293ad', 'Product 1', 1, 9.99);
+        // });
 
+
+// ADD TO CART--------------------------------------------------------------------------------------------------
         
 
         Route::get('/seller/dashboard','UsersController@sellerIndex');
@@ -81,9 +101,14 @@ Route::resource('users', 'UsersController');
 
         Route::get('/seller/order/order-request', 'sellercontroller\OrdersController@orderRequest');
 
+        // PRODUCT-------------------------------------------------------------------------------------------
         Route::get('/seller/product/add-new-product', 'sellercontroller\ProductsController@addNewProduct');
-        Route::get('/seller/product/add-new-product/{id}', 'sellercontroller\ProductsController@getProductName');
+        Route::get('/seller/product/add-new-product/{id}', 'sellercontroller\ProductsController@addNewProduct');
+        Route::get('/seller/product/product-name/{id}', 'sellercontroller\ProductsController@getProductName');
+        Route::get('/seller/prduct/delete-product/{id}', 'sellercontroller\ProductsController@deleteProduct');
         Route::post('/seller/product/add-new-product', 'sellercontroller\ProductsController@storeNewProduct');
+
+
         
         Route::get('/seller/order/order-detail', 'sellercontroller\OrdersController@orderDetails');
         Route::get('/seller/history', 'sellercontroller\OrdersController@transactionHistory');

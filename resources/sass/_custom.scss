@@ -268,8 +268,12 @@ body{
     width: 100%;
 }
 //product-detail view
-.product-detail img {
+.profile-seller-upper {
     width: 12rem;
+}
+.profile-seller-lower{
+
+    width: 6rem;
 }
 
 .product-detail ul {
@@ -556,6 +560,10 @@ body{
     table-layout: fixed;
 }
 
+.myproduct button{
+
+    width: 4rem;
+}
 //left bar
 .leftnav-buyer {
     // margin-top:9.30rem;
@@ -581,6 +589,12 @@ body{
 .leftnav-buyer a:hover {
     // color: #f1f1f1;
     font-weight: bold;
+}
+
+//addnewproduct
+
+.addnewproduct img {
+    width: 13rem;
 }
 
 // @media screen and (max-height: 450px) {

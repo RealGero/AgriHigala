@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->string('product_name');
             $table->longText('product_description')->nullable();
             $table->date('best_before_date')->nullable();
-            $table->softDeletes();
             $table->timestamps(); 
         });
     }

@@ -8,7 +8,7 @@
             <div class="row">
               <div class="col-12 d-flex justify-content-around">
                   <select class="form-select" aria-label="Default select example" name="category">
-                      <option hidden>Category</option>
+                    <option hidden>Category</option>
                       @foreach($categories as $category)
                         <option value="{{$category->product_type_id}}">{{$category->product_type_name}}</option>
                       @endforeach
@@ -19,8 +19,8 @@
                       <option value="2">Two</option>
                       <option value="3">Three</option>
                     </select>
-                    <select class="form-select" aria-label="Default select example">
-                      <option hidden>Barangay</option>
+                    <select class="form-select" aria-label="Default select example" name="brgy">
+                      <option hidden>Select barangay</option>
                       @foreach($brgys as $brgy)
                         <option value="{{$brgy->brgy_id}}">{{$brgy->brgy_name}}</option>
                       @endforeach

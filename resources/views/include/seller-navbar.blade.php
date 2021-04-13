@@ -67,6 +67,10 @@
            <a href="/feedback"> <i class="fa fa-envelope pr-2"></i>Inbox</a>
            <a href="/seller/rider/create"> <i class="fas fa-motorcycle pr-2"></i>Rider</a>
            <a href="/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
+           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="{{ route('logout') }}"  class="logout ml-5 font-italic" onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+           {{ __('Logout') }}</a>
          </div>
          
          <span style="cursor:pointer" onclick="openNav()">

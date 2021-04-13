@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnitsTable extends Migration
+class AddDeletedAtColumnToStocks extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateUnitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('units', function (Blueprint $table) {
-            $table->increments('unit_id');
-            $table->string('unit_name');
-            $table->longText('unit_decription')->nullable();
-            $table->timestamps();
+        Schema::table('stocks', function (Blueprint $table) {
+          
+            $table->softDeletes()->nullbale();
         });
     }
 
@@ -28,6 +26,9 @@ class CreateUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('units');
+        Schema::table('stocks', function (Blueprint $table) {
+            
+            $table->dropColumn('deleted_at');
+        });
     }
 }

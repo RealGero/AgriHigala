@@ -31,14 +31,25 @@ class RidersController extends Controller
             'first_name' => ['required','min:2',
                 function ($attribute, $value, $fail) {
                     if (preg_match('~[0-9]+~', $value)) {
-                        $fail('The '.$attribute.' is invalid.');
+                        $fail('The first name is invalid');
                     }
                     if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
-                        $fail('The '.$attribute.' is invalid.');
+                        $fail('The first name is invalid');
                     }
                 }
             ],
-            'middle_name' => 'required|min:2|regex:/^[a-zA-Z]+$/u',
+            'middle_name' => ['required','min:2',
+            
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The first name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The first name is invalid');
+                }
+            }
+        ],
+
             'last_name'  => 'required|min:2|regex:/^[a-zA-Z]+$/u',
             'mobile_number' => 'required|digits:11',
             'rider_image'  => 'nullable|max:1999'

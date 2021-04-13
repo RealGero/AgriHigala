@@ -30,7 +30,8 @@
             </div>
        
 
-        <i class="fa fa-shopping-cart  fa-2x fontawesome-color"></i>
+      <a href="/cart"><i class="fa fa-shopping-cart fa-2x fontawesome-color"> <span class="badge">{{Session::has('cart') ? Session::get('cart')->totalQty : ''}}</span></i>
+     </a>  
 
       <div id="mySidenav" class="sidenav">
           

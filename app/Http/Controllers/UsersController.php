@@ -9,6 +9,8 @@ use App\User;
 use App\Seller;
 use App\Brgy;
 use App\Org;
+use App\ProductType;
+use DB;
 use Hash;
 use Auth;
 use Illuminate\Validation\Rule;
@@ -271,7 +273,13 @@ class UsersController extends Controller
 
     public function sellerIndex(){
 
-        return view('Seller_view.seller-dashboard');
+    // $stocks =  DB::table('stocks as a')
+    //         ->join('sellers as b','b.seller_id','=','a.seller_id')
+    //         ->join('products as c','c.product_id','=','a.product_id')
+    //         ->join('product_types as d','d.product_type_id','=','c.product_type_id')
+    //         ->get();
+      $stocks = User::find(Auth::id())->seller;   
+        return view('Seller_view.seller-dashboard',compact('stocks'));
     }
 
     public function sellerProfile()
@@ -320,7 +328,7 @@ class UsersController extends Controller
 
       
 
-        return view ('Seller_view.seller-profile',compact('user','brgys','brgy'));
+        return view ('Seller_view.seller-profile',compact('user','brgys'));
     }
 
     public function updateSellerDetails(Request $request)

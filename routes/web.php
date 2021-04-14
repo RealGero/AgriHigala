@@ -43,6 +43,9 @@ Route::resource('users', 'UsersController');
 
         //delete item from cart
         Route::get('/buyer/deleteCart/{id}','CartController@deleteCart')->name('deleteCart');
+///////////////////////////
+        // Route::post::
+        Route::get('/change-qty/{id}', "CartController@changeQty")->name('change_qty');
 
         Route::get('/buyer/browse','BrowsesController@index')->name('browse.index');
         Route::get('/buyer/browse/{id}','CartController@add');

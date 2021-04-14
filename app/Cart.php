@@ -55,5 +55,6 @@ class Cart
         $this->totalPrice =  $totalPrice;
         
      }
+     
 }
 

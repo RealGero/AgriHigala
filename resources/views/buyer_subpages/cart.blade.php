@@ -30,7 +30,7 @@
                                   {{-- <h2>{{Cart::count()}} item(s) in your cart </h2> --}}
                                   @if(Session::has('cart'))
                                   @foreach($products as $product )
-                                  <tr>
+                                  <tr class="cartpage">
           
                                     {{-- <td> --}}
                                         {{-- <div class="form-check">
@@ -45,12 +45,38 @@
                                     <td> &#8369;{{number_format($product['price'])}}</td>
                                       
                                     <td> 
-                                      <div>
-                                        <button>+</button>
-                                        {{-- <span class="badge">{{$product['qty']}}</span> --}}
-                                         <input type="text" name="quality" value="{{$product['qty']}}">
-                                        <button>-</button>
-                                      </div> 
+                                      {{-- <div>
+                                        <input type="hidden" value="{{$product['item']->product_id}}" class="product_id">
+                                        <button class="btn btn-danger" id="" class="changeQuantity subtract" data-cartid = "">-</button>
+                                        <span class="badge">{{$product['qty']}}</span> 
+                                         <input type="text" class="qty-input" name="quality" value="{{$product['qty']}}" id="qty">
+                                         <button class="btn btn-success" id=""  class="changeQuantity add">+</button>
+                                         <button type="submit" class="btn btn-primary">Update</button>
+                                       
+                                      </div>   --}}
+                                      
+                                      <form action="{{route('change_qty', $product['item']->product_id)}}" class="d-flex">
+                                        <button
+                                            type="submit"
+                                            value="down"
+                                            name="change_to"
+                                            class="btn btn-danger"
+                                        >
+                                            @if($product['qty'] === 1) x @else - @endif
+                                        </button>
+                                        <input
+                                            type="number"
+                                            value="{{$product['qty']}}"
+                                            disabled>
+                                        <button
+                                            type="submit"
+                                            value="up"
+                                            name="change_to"
+                                            class="btn btn-success"
+                                        >
+                                            +
+                                        </button>
+                                    </form>
                                     </td>
                                   
                                     <td>
@@ -89,3 +115,48 @@
 
     </div>
 @endsection
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+  $('.changeQuantity').click(function(e){
+    e.preventDefault();
+
+    var quantity = $(this).closest('.cartpage').find('.qty-input').val();
+    var product_id = $(this).closest('.cartpage').find('.product_id').val();
+
+    var data = {
+
+      '_token': $('input[name = _token]').val(),
+      'quantity':quantity,
+      'product_id':product_id,
+    };
+
+    $.ajax({
+      url:'/cart',
+      type:'POST',
+      data:data;
+      success: function(response(){
+
+        window.location.reload();
+        alertify.set('notifier','position','top-right');
+        alerttify.success('response.status');
+      });
+    });
+
+  });
+
+
+
+});
+
+
+
+
+
+
+
+</script>

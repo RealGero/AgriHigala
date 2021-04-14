@@ -75,10 +75,68 @@ class CartController extends Controller
         return redirect()->route('cart.index');
 
     }
-    public function deleteSession()
-    {
-        Session::flush();
 
-        return view('Seller_view.seller-dashboard');
+    // public function deleteSession()
+    // {
+    //     Session::flush();
+
+    //     return view('Seller_view.seller-dashboard');
+    // }
+
+    public function changeQty(Request $request, $id)
+    {
+        
+        $cart = session()->get('cart');
+        // return dd($cart->items[$id]['qty']);
+        // return var_dump($cart); 
+        // 'propertyOne' => 'foo',
+        // foreach ($cart->items as $item){
+        //     if ($item['item']->product_id == $id){
+        //         return dd($item);
+        //     }
+        // }
+       
+        return dd($cart); 
+        // return dd($cart[$id]['qty']); 
+        // return dd($cart->items);
+        // return dd($cart->totalQty); 
+        // return dd($cart->items['product_id']);  
+        
+        if ($request->change_to === 'down') {
+            if (isset($cart[$product->id])) {
+                if ($cart[$product->id]['quantity'] > 1) {
+                    $cart[$product->id]['quantity']--;
+                    
+                    return $this->setSessionAndReturnResponse($cart);
+                } else {
+                    return $this->removeFromCart($product->id);
+                }
+            }
+        } else {
+           
+            $cart->items[$id]['qty']++;
+            // return dd($cart->items[$id]['qty']);
+            // $cart->items[$id]['']
+          
+            
+            $request->session()->put('cart', $updatedCart);
+            return redirect()->route('cart.index');
+            // return $this->setSessionAndReturnResponse($cart);
+
+        }
+        return back();
+    }
+ 
+
+    protected function setSession($cart)
+    {
+        session()->put('cart', $cart);
+        return redirect()->route('cart.index');
+    }
+
+    protected function setSessionAndReturnResponse($cart)
+    {
+        session()->put('cart', $cart);
+        return redirect()->route('cart.index')->with('success', "Added to Cart");
     }
 }

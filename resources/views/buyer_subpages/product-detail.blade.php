@@ -10,7 +10,15 @@
                     <a href="/buyer/browse/" class="btn btn-success mb-3" >Back</a> 
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center mb-3 ">
-                            <img src="{{ url('/storage/') }}{{ $products->stock_image ? '/stock/'. $products->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" class="profile-seller-upper" alt="">
+                            {{-- {{dd($products)}} --}}
+                            {{-- {{dd($products)}} --}}
+                            @if(is_null($products->stock_image))
+                                <img src="/storage/seller/product_type_image/{{$products->product_image}}" alt=""> 
+                            @else
+                                <img src="/storage/stock/{{$products->stock_image}}" alt="">   
+                            @endif
+                            {{-- <a href="/buyer/browse/seller/{{$products->stock_id}}">  --}}
+                            {{-- <img src="{{ url('/storage/') }}{{ $products->stock_image ? '/stock/'. $products->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" class="profile-seller-upper" alt=""> --}}
                         </div>
                     </div>
                     <div class="row">
@@ -33,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12  border-bottom d-flex justify-content-center">
-                           <a href="#" class="btn btn-success mb-3">Add to Cart</a>  
+                           <a href="/buyer/seller-detail/{{$products->product_id}}" class="btn btn-success mb-3">Add to Cart</a>  
                         </div>
                        
                     </div>

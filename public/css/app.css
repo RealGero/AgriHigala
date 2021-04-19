@@ -11188,6 +11188,10 @@ body {
   width: 6rem;
 }
 
+.product-detail img {
+  width: 7rem;
+}
+
 .product-detail ul {
   list-style-type: none;
 }
@@ -11479,6 +11483,15 @@ body {
 
 .addnewproduct img {
   width: 13rem;
+}
+
+.card-body.category-btn a {
+  width: 10rem;
+  margin: 0, 3rem;
+}
+
+.edit-Product img {
+  width: 12rem;
 }
 
 .myproduct img {

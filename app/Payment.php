@@ -24,4 +24,9 @@ class Payment extends Model
     {
         return $this->hasOne('App\Order');
     }
+
+    public function fee()
+    {
+        return $this->belongsTo('App\Fee');
+    }
 }

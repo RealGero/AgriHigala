@@ -12,11 +12,20 @@
                             <div class="row d-flex">
                                 <div class="col-2  d-flex flex-row ">
                                     
+                                 
                                     @foreach($products as $product)
+                                    
+                                        
                                         <div class="d-flex flex-column justify-content-center mx-4" >
-                                         <a href="/buyer/browse/seller/{{$product->product_id}}"> <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td>
+                                         <a href="/buyer/browse/seller/{{$product->stock_id}}"> 
+                                            @if(is_null($product->stock_image))
+                                                <img src="/storage/seller/product_type_image/{{$product->product_image}}" alt=""> </a>  
+                                            @else
+                                                <img src="/storage/stock/{{$product->stock_image}}" alt=""> </a>   
+                                            @endif
+                                            {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
                                             <h5>{{$product->product_name}}</h5>
-                                            <p> &#8369; {{$product->stock_price}}</p>
+                                            <p> &#8369; {{$product->stock_price}}</p>                                                                                                   
                                             <p>{{$product->brgy_name}}</p>
                                              <a href="/buyer/browse/{{$product->product_id}}" class="btn btn-success">Add to Cart</a>
                                            

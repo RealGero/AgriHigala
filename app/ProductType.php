@@ -15,4 +15,19 @@ class ProductType extends Model
     {
         return $this->hasMany('App\Product');
     }
+
+
+    public static function countActiveCategories()
+    {
+        
+        // $data = ProductType::find();
+
+        // if($data )
+        // {
+        //     return $data;
+        // }
+        //     return 0;
+   
+    }
 }
+

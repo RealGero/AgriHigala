@@ -24,6 +24,25 @@ class UsersController extends Controller
     // //        return redirect('/login');
     // //    }
     // }
+    
+    // update the address mobile number in checkout page
+    public function updateProfileCheckout(Request $request)
+    {
+
+        $id = Auth::id();
+        $user = User::find($id); 
+        $buyer = User::find($id)->buyer;
+
+        $user->mobile_number = $request->input('mobile_number');
+        $buyer->address = $request->input('address');
+        $buyer->brgy_id = $request->input('brgy');
+
+        $user->save();
+        $buyer->save();
+        return redirect()->back()->with('success','Successfully edited your profile');
+
+    }
+   
     public function index(){
 
         
@@ -81,6 +100,11 @@ class UsersController extends Controller
     public function updateUserImage(Request $request)
     {
         
+        $this->validate($request,[
+            'mobile_number' => ['required', 'string', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
+            'address' => ['required','string']
+         ]);
+
         $id = Auth::id();
         $user = User::find($id);
         

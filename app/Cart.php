@@ -7,7 +7,7 @@ class Cart
 
     public $items = null;
     public $totalQty = 0;
-    public $totalPrice = 0;
+    // public $totalPrice = 0;
 
 
     public function __construct($oldCart)
@@ -17,7 +17,7 @@ class Cart
         {
             $this->items = $oldCart->items;
             $this->totalQty = $oldCart->totalQty;
-            $this->totalPrice = $oldCart->totalPrice;
+            // $this->totalPrice = $oldCart->totalPrice;
 
         }
      }        
@@ -37,7 +37,7 @@ class Cart
 
         $this->items[$id] = $storedItem;
         $this->totalQty++;
-        $this->totalPrice += $item->stock_price;
+        // $this->totalPrice += $item->stock_price;
 
      }
 
@@ -49,12 +49,12 @@ class Cart
         foreach($this->items as $item)
         {
             $totalQty = $totalQty + $item['qty'];
-            $totalPrice = $totalPrice + $item['price'];
+            // $totalPrice = $totalPrice + $item['price'];
         }
         $this->totalQty = $totalQty;
-        $this->totalPrice =  $totalPrice;
+        // $this->totalPrice =  $totalPrice;
         
      }
-     
+
 }
 

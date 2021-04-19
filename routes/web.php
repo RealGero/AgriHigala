@@ -30,8 +30,10 @@ Route::resource('users', 'UsersController');
     // Route::group(['middleware' => ['buyer']], function()
     // {
         
-      
+     
         Route::get('/buyer/browse/seller/{id}','BrowsesController@viewSellerDetails');
+
+
         Route::get('buyer/profile','Userscontroller@index');
         
         Route::get('/buyer/verification','buyercontroller\ProfilesController@verification');
@@ -40,6 +42,8 @@ Route::resource('users', 'UsersController');
 
         Route::get('/cart','CartController@getCart')->name('cart.index');
         Route::get('/buyer/cart/{id}','CartController@index');
+
+
 
         //delete item from cart
         Route::get('/buyer/deleteCart/{id}','CartController@deleteCart')->name('deleteCart');
@@ -50,10 +54,15 @@ Route::resource('users', 'UsersController');
         Route::get('/buyer/browse','BrowsesController@index')->name('browse.index');
         Route::get('/buyer/browse/{id}','CartController@add');
 
+        Route::get('/buyer/seller-detail/{id}','CartController@addFromSellerProfile');
+
         Route::get('/delete/session', 'CartController@deleteSession');
+        Route::get('/checkout/{id}','OrdersController@checkoutIndex')->name('checkoutIndex')->middleware('auth');
+
+        Route::put('/checkout/change','UsersController@updateProfileCheckout');
+        // Route::get('/buyer/cart/checkout','buyercontroller\OrdersController@checkoutIndex')->name('check-out.index');
 
 
-        Route::get('/buyer/cart/checkout','buyercontroller\OrdersController@checkoutIndex');
         Route::get('/buyer/order/order-received','buyercontroller\OrdersController@orderReceivedIndex');
         Route::get('/buyer/order/return','buyercontroller\OrdersController@orderReturn');
         // Route::get('/buyer/profile/id','UsersController@showprofile');
@@ -82,7 +91,7 @@ Route::resource('users', 'UsersController');
 
         //new -----------------------------------------------------------------------------------
 
-        Route::get('/buyer/order/myorder', 'buyercontroller\OrdersController@orderMyOrder');
+        Route::get('/buyer/order/myorder', 'OrdersController@orderMyOrder');
         Route::get('/buyer/order/myreturn', 'buyercontroller\OrdersController@orderMyReturn');
         Route::get('/buyer/order/mycancellation', 'buyercontroller\OrdersController@orderMyCancellation');
     // });
@@ -101,21 +110,32 @@ Route::resource('users', 'UsersController');
         Route::get('/seller/dashboard','UsersController@sellerIndex');
         
         Route::get('/seller/product/my-product', 'sellercontroller\ProductsController@productMyProduct');
+                
+        //edit product -----------------------------------------------------
 
-        Route::get('/seller/order/order-request', 'sellercontroller\OrdersController@orderRequest');
+        Route::get('/seller/product/product-name/','sellercontroller\ProductsController@editProduct');
+        Route::get('/seller/product/product-name/{id}', 'sellercontroller\ProductsController@getProductName');
+
+        Route::get('/seller/product/edit-product/{id}','sellercontroller\ProductsController@editProduct');
+        Route::put('/seller/product/update-product/{id}','sellercontroller\ProductsController@updateProduct')->name('updateProd');
+
+    
 
         // PRODUCT-------------------------------------------------------------------------------------------
         Route::get('/seller/product/add-new-product', 'sellercontroller\ProductsController@addNewProduct');
-        Route::get('/seller/product/add-new-product/{id}', 'sellercontroller\ProductsController@addNewProduct');
-        Route::get('/seller/product/product-name/{id}', 'sellercontroller\ProductsController@getProductName');
+        Route::get('/seller/product/add-new-product/{id?}', 'sellercontroller\ProductsController@addNewProduct');
+       
         Route::get('/seller/prduct/delete-product/{id}', 'sellercontroller\ProductsController@deleteProduct');
-        Route::post('/seller/product/add-new-product', 'sellercontroller\ProductsController@storeNewProduct');
+        Route::post('/seller/product/add-new-product/', 'sellercontroller\ProductsController@storeNewProduct');
+
+                // need changes
+        Route::get('/seller/order/order-request', 'SellerOrdersController@orderRequest');
+        Route::get('/seller/order/order-detail', 'SellerOrdersController@orderDetails');
+        Route::get('/seller/history', 'SellerOrdersController@transactionHistory');
+        Route::get('/seller/return', 'SellerOrdersController@orderReturn');
 
 
-        
-        Route::get('/seller/order/order-detail', 'sellercontroller\OrdersController@orderDetails');
-        Route::get('/seller/history', 'sellercontroller\OrdersController@transactionHistory');
-        Route::get('/seller/return', 'sellercontroller\OrdersController@orderReturn');
+
         Route::get('/seller/ratings', 'sellercontroller\RatingsController@index');
         Route::get('/seller/earnings', 'sellercontroller\EarningsController@index');
         Route::get('/seller/profile', 'UsersController@sellerProfile');

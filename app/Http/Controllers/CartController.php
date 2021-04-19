@@ -13,27 +13,67 @@ class CartController extends Controller
     {
         
         return view('buyer_subpages.cart');
+
+    }
+
+    public function addFromSellerProfile(Request $request,$id)
+    {   
+      
+        // $request->session()->flush();
+        $products = DB::table('products  as a')
+        ->join('stocks as b','b.product_id','=','a.product_id')
+        ->join('prices as c','c.stock_id','=','b.stock_id')
+        ->join('sellers as d','d.seller_id', '=','b.seller_id')
+        ->join('orgs as e','e.org_id','=','d.org_id')
+        ->join('brgys as f','f.brgy_id','=','e.brgy_id')
+        ->join('units as g','g.unit_id','=','c.unit_id')
+        ->join('users as h','h.user_id' ,'=' ,'d.user_id')
+        ->join('product_types as i', 'i.product_type_id','=','a.product_type_id')
+        ->where('a.product_id', '=' ,$id)
+        ->first();
+      
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        
+        $cart->add($products,$id);
+        
+        $request->session()->put('cart', $cart);
+
+        
+        // dd( $request->session()->get('cart'));
+       
+       
+    
+    //    Cart::add($request->id,$request->name,1,$request->price,['image' => $request->image])
+    //     ->associate('App\Product');
+
+        return  redirect()->route('cart.index');
+        // ('welcome_nav.browse');
     }
     public function add(Request $request,$id)
     {   
       
-        $products = DB::table('products as a')
-        ->leftJoin('stocks as b','b.product_id','=','a.product_id')
-        ->leftJoin('prices as c','c.price_id','=','b.stock_id')
-        ->leftJoin('sellers as d','d.seller_id', '=','b.seller_id')
-        ->leftJoin('orgs as e','e.org_id','=','d.org_id')
-        ->leftJoin('brgys as f','f.brgy_id','=','e.brgy_id')
-        ->leftJoin('units as g','g.unit_id','=','c.unit_id')
-        ->leftJoin('users as h','h.user_id' ,'=' ,'d.user_id')
+        // $request->session()->flush();
+        $products = DB::table('products  as a')
+        ->join('stocks as b','b.product_id','=','a.product_id')
+        ->join('prices as c','c.stock_id','=','b.stock_id')
+        ->join('sellers as d','d.seller_id', '=','b.seller_id')
+        ->join('orgs as e','e.org_id','=','d.org_id')
+        ->join('brgys as f','f.brgy_id','=','e.brgy_id')
+        ->join('units as g','g.unit_id','=','c.unit_id')
+        ->join('users as h','h.user_id' ,'=' ,'d.user_id')
+        ->join('product_types as i', 'i.product_type_id','=','a.product_type_id')
         ->where('a.product_id', '=' ,$id)
         ->first();
-        
+      
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
-       
-        $cart->add($products, $products->product_id);
+        
+        $cart->add($products,$id);
         
         $request->session()->put('cart', $cart);
+
+        
         // dd( $request->session()->get('cart'));
        
        
@@ -53,8 +93,11 @@ class CartController extends Controller
         }
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-     
-        return view('buyer_subpages.cart',['products' => $cart->items , 'totalPrice' => $cart->totalPrice]);
+       
+       
+        // return dd($cart->items[]);
+        // return dd($cart->items);
+        return view('buyer_subpages.cart',['products' => $cart->items]);
 
     }
 
@@ -85,7 +128,7 @@ class CartController extends Controller
 
     public function changeQty(Request $request, $id)
     {
-        
+        // return $id;
         $cart = session()->get('cart');
         // return dd($cart->items[$id]['qty']);
         // return var_dump($cart); 
@@ -96,32 +139,32 @@ class CartController extends Controller
         //     }
         // }
        
-        return dd($cart); 
+        
         // return dd($cart[$id]['qty']); 
         // return dd($cart->items);
         // return dd($cart->totalQty); 
         // return dd($cart->items['product_id']);  
-        
+       
         if ($request->change_to === 'down') {
-            if (isset($cart[$product->id])) {
-                if ($cart[$product->id]['quantity'] > 1) {
-                    $cart[$product->id]['quantity']--;
+            if (isset($cart->items[$id]['item']->product_id)) {
+                if ( $cart->items[$id]['qty'] > 1) {
+                    $cart->items[$id]['qty']--;
                     
                     return $this->setSessionAndReturnResponse($cart);
-                } else {
-                    return $this->removeFromCart($product->id);
-                }
+                } 
+                // else {
+                //     return $this->removeFromCart($product->id);
+                //    return $this->deleteCart($id);
+                // }
             }
         } else {
            
             $cart->items[$id]['qty']++;
             // return dd($cart->items[$id]['qty']);
             // $cart->items[$id]['']
-          
+           
             
-            $request->session()->put('cart', $updatedCart);
-            return redirect()->route('cart.index');
-            // return $this->setSessionAndReturnResponse($cart);
+            return $this->setSessionAndReturnResponse($cart);
 
         }
         return back();
@@ -139,4 +182,6 @@ class CartController extends Controller
         session()->put('cart', $cart);
         return redirect()->route('cart.index')->with('success', "Added to Cart");
     }
+
+
 }

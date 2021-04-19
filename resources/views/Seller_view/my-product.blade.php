@@ -40,7 +40,7 @@
                                      @if(empty($product->deleted_at))
                                       <tr>
                                         <td><img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
-                                        <td>Otto</td>
+                                        <td>{{$product->stock_id}}</td>
                                         <td>{{ $product->product_name }}</td>
                                         <td>{{$product->unit_name ? $product->unit_name : '' }}</td>
                                         <td>{{$product->stock_price ? $product->stock_price : 0 }}</td>
@@ -48,8 +48,8 @@
                                         <td>{{date('M d Y', strtotime($product->created_at))}}</td>
                                         <td>{{date('M d Y', strtotime($product->expiration_date))}}</td>
                                         
-                                        <td> <a href="/seller/product/add-new-product/{{$product->product_id}}" class="pb-2"><button  class="btn btn-success btn-sm "> Edit </button> </a> 
-                                          <a href="/seller/prduct/delete-product/{{$product->product_id}}"><button  class="btn btn-danger btn-sm"> Delete </button> </a>
+                                        <td> <a href="/seller/product/edit-product/{{$product->stock_id}}" class="pb-2"><button  class="btn btn-success btn-sm "> Edit </button> </a> 
+                                          <a href="/seller/prduct/delete-product/{{$product->stock_id}}"><button  class="btn btn-danger btn-sm"> Delete </button> </a>
                                           </td>
                                       </tr>
                                       @endif

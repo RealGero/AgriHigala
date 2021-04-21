@@ -45,7 +45,7 @@ class ProductsController extends Controller
 
     public function addNewProduct(Request $request,$id=null)
     {
-        
+        $select =$id;
         $products = [];
          $productTypes = ProductType::all();
          $units = Unit::all();
@@ -70,14 +70,14 @@ class ProductsController extends Controller
 
         }elseif($id==null){
 
-            return view ('Seller_view.add-new-prod',compact('productTypes','units','brgy','srp','products','productTypeExist'));
+            return view ('Seller_view.add-new-prod',compact('productTypes','units','brgy','srp','products','productTypeExist','select'));
 
         }
         else{
             return back();
         }
 
-        return view ('Seller_view.add-new-prod',compact('productTypes','units','brgy','srp','products','productTypeExist'));
+        return view ('Seller_view.add-new-prod',compact('productTypes','units','brgy','srp','products','productTypeExist','select'));
 
       
        
@@ -136,7 +136,7 @@ class ProductsController extends Controller
 
          $price = new Price;
         $stock = new Stock;
-
+          
         $stock->stock_description = $request->input('description');
         $stock->qty_added = $request->input('stock');
         $stock->expiration_date = $request->input('expiration');

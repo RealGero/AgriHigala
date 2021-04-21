@@ -19,9 +19,9 @@ class Stock extends Model
         return $this->belongsTo('App\Product','product_id','product_id');
     }
 
-    public function orderLines ()
+    public function orderLine()
     {
-        return $this->hasMany('App\Orderline');
+        return $this->hasOne('App\Orderline');
     }
 
     public function prices()

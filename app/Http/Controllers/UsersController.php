@@ -45,50 +45,13 @@ class UsersController extends Controller
    
     public function index(){
 
-        
 
-    
 
-        // dd($user);
-        // dd($seller);
-        // $buyer = Buyer::where('usertype', '=','4')->get();
-
-        // dd($buyer);       
-        // 
-        // dd($user->buyer()->exists());
-        // dd(count());
-       
-      
-        // dd($buyer);
-        
-        // return view('profile');
     }
 
     public function store(Request $request){
 
-        // $username = $request->input('organization_name');
-        // $mobile_number = $request->input('mobile_number');
-
-        // $user= new User();
-        // $user->username = $username;
-        // $user->usertype = 2;
-        // $user->password = Hash::make($mobile_number);
-
-      
-        // $seller = new Seller();
-        // $seller->organization_name = 'asdasdasd';
-        // $seller->email = 'gfasfasd@gmail.com';
-        // $seller->mobile_number = 'gasdasd2';
-        // $seller->street = 'asdasdasd';
-        // $seller->barangay= '5123123';
-        // $seller->schedule_online_time = 'gasdasdasd';
-        // $seller->seller_image = 'lansones.jpg';
-        // $seller->seller_description= 'asdfgasd';
-
-        // $user->save();
-        // $user->seller()->save($seller);
         
-
     }
 
     private function getValidation(){
@@ -295,17 +258,7 @@ class UsersController extends Controller
        return view('showprofile.user-account',compact('user'))->with('success','Successfully uploaded an image');
     }
 
-    public function sellerIndex(){
-
-    // $stocks =  DB::table('stocks as a')
-    //         ->join('sellers as b','b.seller_id','=','a.seller_id')
-    //         ->join('products as c','c.product_id','=','a.product_id')
-    //         ->join('product_types as d','d.product_type_id','=','c.product_type_id')
-    //         ->get();
-      $stocks = User::find(Auth::id())->seller;   
-        return view('Seller_view.seller-dashboard',compact('stocks'));
-    }
-
+   
     public function sellerProfile()
     {
         

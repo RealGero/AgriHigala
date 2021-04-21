@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->bigInteger('product_type_id');
             $table->string('product_name');
             $table->longText('product_description')->nullable();
-            $table->date('best_before_date')->nullable();
+            $table->softDeletes(); 
             $table->timestamps(); 
         });
     }

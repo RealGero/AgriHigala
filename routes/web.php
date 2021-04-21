@@ -36,9 +36,11 @@ Route::resource('users', 'UsersController');
 
         Route::get('buyer/profile','Userscontroller@index');
         
-        Route::get('/buyer/verification','buyercontroller\ProfilesController@verification');
-        Route::get('/buyer/order','buyercontroller\OrdersController@index');
-        Route::get('/buyer/product-detail','buyercontroller\ProductsController@index');
+        // Route::get('/buyer/verification','buyercontroller\ProfilesController@verification');
+
+        // Route::get('/buyer/order','OrdersController@index');
+
+        // Route::get('/buyer/product-detail','seller\ProductsController@index');
 
         Route::get('/cart','CartController@getCart')->name('cart.index');
         Route::get('/buyer/cart/{id}','CartController@index');
@@ -58,13 +60,15 @@ Route::resource('users', 'UsersController');
 
         Route::get('/delete/session', 'CartController@deleteSession');
         Route::get('/checkout/{id}','OrdersController@checkoutIndex')->name('checkoutIndex')->middleware('auth');
+        Route::post('/place-order/{id}' ,'OrdersController@clickedPlaceOrder');
+
 
         Route::put('/checkout/change','UsersController@updateProfileCheckout');
         // Route::get('/buyer/cart/checkout','buyercontroller\OrdersController@checkoutIndex')->name('check-out.index');
 
 
-        Route::get('/buyer/order/order-received','buyercontroller\OrdersController@orderReceivedIndex');
-        Route::get('/buyer/order/return','buyercontroller\OrdersController@orderReturn');
+        // Route::get('/buyer/order/order-received','buyercontroller\OrdersController@orderReceivedIndex');
+        // Route::get('/buyer/order/return','buyercontroller\OrdersController@orderReturn');
         // Route::get('/buyer/profile/id','UsersController@showprofile');
         Route::get('/buyer/message','buyercontroller\MessagesController@index');
         Route::get('/buyer/history','buyercontroller\HistoriesController@index');
@@ -89,12 +93,23 @@ Route::resource('users', 'UsersController');
 
         Route::get('/buyer/order/order-view-details','buyercontroller\OrdersController@viewOrderDetails');
 
-        //new -----------------------------------------------------------------------------------
+        Route::get('/buyer/order/myorder/{id?}', 'OrdersController@orderMyOrder')->name('buyer.order');
+        Route::get('/buyer/order/vieworder/{id}','OrdersController@viewMoreOrder')->name('buyer.orderView.index');
+        Route::put('/buyer/order/uploadImage/{id}','OrdersController@uploadImageInViewOrder');
 
-        Route::get('/buyer/order/myorder', 'OrdersController@orderMyOrder');
+        Route::put('/buyer/order/online-cod', 'OrdersController@changeToCod');
+        Route::post('buyer/send-image/{id}','OrdersController@paymentImage')->name('payment.image');
+
+        // Route::get('buyer/order/payment','OrdersController@paymentIndex')->name('payment.index');
+        //new -----------------------------------------------------------------------------------
+        // Route::get('/buyer/placeholder','OrdersController@clickedPlaceOrder');
+
         Route::get('/buyer/order/myreturn', 'buyercontroller\OrdersController@orderMyReturn');
         Route::get('/buyer/order/mycancellation', 'buyercontroller\OrdersController@orderMyCancellation');
     // });
+
+        // order------------------------------------------------------------------------
+      
 
 //Seller-----------------------------------------------------------------------------------------
 
@@ -107,7 +122,7 @@ Route::resource('users', 'UsersController');
 // ADD TO CART--------------------------------------------------------------------------------------------------
         
 
-        Route::get('/seller/dashboard','UsersController@sellerIndex');
+        Route::get('/seller/dashboard','DashboardsController@sellerIndex')->name('sellerdashboard');
         
         Route::get('/seller/product/my-product', 'sellercontroller\ProductsController@productMyProduct');
                 

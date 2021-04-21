@@ -9,24 +9,21 @@ class Payment extends Model
     protected $table = "payments";
     protected $primaryKey = "payment_id";
     protected $guarded = [];
-
-    public function cod()
-    {
-        return $this->hasOne('App\CashOnDelivery');
-    }
-
-    public function gcash()
-    {
-        return $this->hasOne('App\GCash');
-    }
+    protected $dates = [
+        
+        'created_at',
+        'updated_at',
+    ];
 
     public function order()
     {
-        return $this->hasOne('App\Order');
+        return $this->belongsTo('App\Order','order_id','order_id');
     }
 
     public function fee()
     {
         return $this->belongsTo('App\Fee');
     }
+
+
 }

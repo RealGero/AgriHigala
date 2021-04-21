@@ -18,6 +18,7 @@ class CreateProductTypesTable extends Migration
             $table->string('product_type_name');
             $table->longText('product_type_description')->nullable();
             $table->string('product_image')->default('default_product_image.jpg');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

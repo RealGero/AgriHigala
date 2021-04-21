@@ -39,7 +39,7 @@ class LoginController extends Controller
             case 2:
                 // $seller_id = Seller::find
                 // session(['seller_id',''])
-                return '/seller/dashboard';
+                return redirect()->route('sellerdashboard');
             case 3:
                 return  '/rider/dashboard';
             case 4:

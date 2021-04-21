@@ -18,6 +18,8 @@ class CreateReturnOrdersTable extends Migration
             $table->bigInteger('order_id');      
             $table->bigInteger('reason_id');
             $table->longText('description')->nullable();
+            $table->date('accepted_at')->nullable();
+            $table->date('denied_at')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
 

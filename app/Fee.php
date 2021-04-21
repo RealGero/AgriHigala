@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fee extends Model
 {
-    use SoftDeletes;
 
-    protected $table = "fee";
+
+    protected $table = "fees";
     protected $primaryKey = "fee_id";
     protected $guarded = [];
-    protected $dates = ['deleted_at'];
+
 
     public function payment()
     {

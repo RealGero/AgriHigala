@@ -18,6 +18,7 @@ class CreatePricesTable extends Migration
             $table->bigInteger('stock_id');
             $table->bigInteger('unit_id');
             $table->double('stock_price',8,2);
+            $table->double('discount_price',8,2)->nullable();
             $table->timestamps();
           
 

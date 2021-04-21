@@ -21,7 +21,7 @@
                                 </div>
                             </div>
                            
-                        <form action="" method="POST" enctype="multipart/form-data">
+                     
                             @csrf
                             <div class="row d-flex justify-content-center">
                                 <div class="col-2">
@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-4">
                                     <i class="fa fa-store"></i>
-                                    Name of store &nbsp; | &nbsp;
+                                    Seller: {{\App\Seller::getSellerName($seller)}}
                                     <i class="far fa-comment"></i>
                                     Chat Now
                                 </div>
@@ -67,7 +67,7 @@
                                     <table class="table table-borderless">
                                         <thead>
                                         <tr>
-                                            {{-- <th></th> --}}
+                                            <th></th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Price</th>
                                             <th scope="col">Unit</th>
@@ -76,22 +76,31 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        
-                                            @foreach ($carts as $cart)
-                                            {{-- {{dd($cart->items)}} --}}
                                             @php
-                                                $sub_total = $cart['price'] * $cart['qty'];
+                                             $total = 0;
+                                            @endphp
+                                            @foreach ($carts as $cart)
                                                
-                                             @endphp
-                                        <tr>
-                                            {{-- <td><img src="/images/lansones.jpg" alt=""></td> --}}
-                                            <td>{{ucfirst($cart['item']->f_name)}} {{ucfirst($cart['item']->l_name)}}</td>
-                                            <td>&#8369;{{number_format($cart['item']->stock_price)}}</td>
-                                            <td> {{$cart['item']->unit_name}}</td>
-                                            <td>{{$cart['qty']}}</td>
-                                           <td>&#8369;{{number_format($sub_total)}}</td> 
+                                            {{-- {{dd($cart->items)}} --}}
+                                         
+                                            
+                                             @if($seller == $cart['item']->seller_id)
 
-                                        </tr>
+                                             @php 
+                                                $sub_total = $cart['price'] * $cart['qty'];
+                                                $total += $sub_total;
+                                                // return print_r($total);
+                                             @endphp
+                                            <tr>
+                                                <td><img src="{{ $cart['item']->stock_image ? '/storage/stock/'. $cart['item']->stock_image : '/storage/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </td>
+                                                <td>{{$cart['item']->product_name}}</td>
+                                                <td>&#8369;{{number_format($cart['price'])}}</td>
+                                                <td> {{$cart['item']->unit_name}}</td>
+                                                <td>{{$cart['qty']}}</td>
+                                            <td>&#8369;{{number_format($sub_total)}}</td> 
+
+                                            </tr>
+                                            @endif
                                         @endforeach
                                         </tbody>
                                     </table>
@@ -115,17 +124,31 @@
                                         <li class="d-none" id="gcash"> <span class="font-weight-bold" >G-Cash Number:</span>  <input type="text" class="rounded" min="11"></li>
                                     </ul>
                                 </div>
-                                <div class="col-6 button-payment">
-                                    <a href="" class="btn btn-primary btn-sm" id="gcash-btn" role="button">Gcash</a>
-                                    <a href="" class="btn btn-primary btn-sm " id="cod-btn" >Cash on Delivery</a>
+                                <form action="{{action('OrdersController@clickedPlaceOrder',[$seller])}}" method="POST" enctype="multipart/form-data"> 
+                                    @csrf
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="CashOnDelivery" value="1" checked>
+                                        <label class="form-check-label" for="CashOnDelivery">
+                                          Cash on delivery
+                                        </label>
+                                      </div>
+                           
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="payment-online" value="2" >
+                                        <label class="form-check-label" for="payment-online">
+                                         Payment Online
+                    
+                                        </label>
+                                      </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <a href="/buyer/order/myorder" class="btn btn-primary btn-sm checkout-btn ">Checkout</a>
+                                             <button type="submit"  class="btn btn-primary btn-sm checkout-btn ">Place order</button> 
                                         </div>
                                     </div>
-        
+                                </form>
                                 </div>
-                            </form>
+                           
                           @else
                              <div class="row">
                                  <div class="col-8 mx-auto ">

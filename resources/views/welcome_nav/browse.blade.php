@@ -27,7 +27,7 @@
                                             <h5>{{$product->product_name}}</h5>
                                             <p> &#8369; {{$product->stock_price}}</p>                                                                                                   
                                             <p>{{$product->brgy_name}}</p>
-                                             <a href="/buyer/browse/{{$product->product_id}}" class="btn btn-success">Add to Cart</a>
+                                             <a href="/buyer/browse/{{$product->stock_id}}" class="btn btn-success">Add to Cart</a>
                                            
                                         </div>                        
                                     @endforeach

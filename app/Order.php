@@ -9,9 +9,16 @@ class Order extends Model
     protected $table= "orders";
     protected $primaryKey = "order_id";
     protected $guarded = [];
+
+    protected $dates = [
+
+    'created_at',
+    'updated_at',
+    ];
+    
     public function payment()
     {
-        return $this->belongsTo('App\Payment');
+        return $this->hasOne('App\Payment','order_id','order_id');
     }
 
     public function buyer()
@@ -21,7 +28,7 @@ class Order extends Model
 
     public function orderLines()
     {
-        return $this->hasMany('App\OrderLine');
+        return $this->hasMany('App\OrderLine','order_id','order_id');
     }
 
     public function transaction()

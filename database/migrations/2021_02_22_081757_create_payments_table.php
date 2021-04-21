@@ -15,8 +15,13 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->increments('payment_id');
+            $table->bigInteger('order_id');
             $table->bigInteger('fee_id');
-            $table->integer('payment_method');
+            $table->double('payment_order',8,2);
+            $table->double('payment_total',8,2);
+            $table->string('payment_image')->nullable();
+            $table->date('paid_at')->nullable();
+            $table->enum('payment_method',['cod','online']);
             $table->timestamps();
         });
     }

@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Auth;
 use Session;
 use App\Cart;
+use App\Fee;
+use App\Order;
+use App\Payment;
+use App\OrderLine;
 use DB;
 use App\User;
 class OrdersController extends Controller
@@ -19,16 +23,20 @@ class OrdersController extends Controller
     //    }
     }
     
-    public function index (){
 
-        return view('buyer_pages.order');
+
+    // public function index (){
+
+
+    //     return 123;
+    //     return view('buyer_pages.order');
         
-    }
+    // }
 
-    public function cartIndex(){
+    // public function cartIndex(){
 
-        return view('buyer_subpages.cart');
-    }
+    //     return view('buyer_subpages.cart');
+    // }
 
     public function checkoutIndex($id)
     {
@@ -58,33 +66,287 @@ class OrdersController extends Controller
         $oldCart = Session::get('cart');
         $newcart = new Cart($oldCart);
         $cartCounts =$newcart->items;
-        // return dd( $cartCounts[]);
-        $total = 0;
-        // $total += $sub_total;
-        foreach($cartCounts as $cart )
-        {
-
-            $sub_total = $cart['price'] * $cart['qty'];
-            $total += $sub_total;
-           
-//             echo "<pre>events: ";
-// print_r($cart);
-// echo"</pre>";
-        };
-        
-        // return dd($total);
-       
-        
-        // return dd($cart->items[9]);
-    // return dd($user);
-        // return dd($cart->items);
+        // $total = 0;  
+        $seller = $id;
+     
       
         // return view('buyer_subpages.cart',['products' => $cart->items]);
         
         
-        return view('buyer_subpages.checkout',['carts' => $cartCounts, 'user'=>$user,'total'=>$total, 'sub_total' => $sub_total]);
+        return view('buyer_subpages.checkout',['carts' => $cartCounts, 'user'=>$user, 'seller' => $seller ]);
     }
 
+    public function clickedPlaceOrder(Request $request, $id)
+    {
+
+        // return $id;
+       $cart =  $request->session()->get('cart');
+        $cartCounts = $cart->items;
+        $total= 0;
+
+        if($cartCounts)
+        {
+            $fee = Fee::where('seller_id',$id)->latest('created_at')->first(); 
+
+            $order = new Order;
+            $order->buyer_id = Auth::id();
+            $order->save();
+   
+            foreach($cartCounts as $cartCount)
+            {   
+             
+                
+                // return dd($cartCount);
+                    if($cartCount['item']->seller_id == $id)
+                    {
+                     
+                       
+                        $stock_id = $cartCount['item']->stock_id;
+                    //    return print_r($cartCount[$stock_id]); die;
+                        $orderLine = new OrderLine;
+                        $orderLine->stock_id = $cartCount['item']->stock_id;
+                        $orderLine->order_qty = $cartCount['qty'];
+
+                        $order->orderLines()->save($orderLine);
+              
+                        $sub_total = $cartCount['price'] * $cartCount['qty'];
+                        $total += $sub_total;
+
+                        $cart = $request->session()->get('cart');
+                        if(array_key_exists($stock_id,$cart->items))
+                        {
+                            unset($cart->items[$stock_id]);
+                        }
+                        $oldCart =  $request->session()->get('cart');
+
+                        $updatedCart = new Cart($oldCart);
+                        $updatedCart->updatePriceAndQuantity();
+
+                        $request->session()->put('cart', $updatedCart);
+
+                     
+                    }
+                    
+                   
+            }
+          
+            $payment = new Payment;
+    
+            $payment->fee_id = $fee->fee_id;
+            $payment->payment_order = $total;
+            $payment->payment_total = $total + $fee->fee_delivery + $fee->fee_other;
+            
+            
+            $order->payment()->save($payment);
+           
+            if($request->input('payment_method') == 1)
+            {
+                    
+                return redirect()->route('buyer.order')->with('success' ,'Order Added! Please wait for seller confirmation');
+               
+            }
+    
+                
+            elseif($request->input('payment_method') == 2){
+
+              
+                // return ($buyer_id);
+                $seller = DB::table('seller_banks as a')
+                ->join('sellers as b','b.seller_id','a.seller_id')
+                ->where('a.seller_id',$id)->first();
+
+
+
+                $payment = DB::table('payments as a')
+                ->join('orders as b','b.order_id','=','a.order_id')
+                // ->leftJoin('buyers as c','c.buyer_id','b.buyer_id')
+                ->where('b.buyer_id','=', Auth::id())
+                ->latest('a.created_at')
+                ->first();
+                
+                
+                // return dd($payment->buyer_id);
+
+            
+                return view('buyer_subpages.payment',compact('seller','payment'));
+            }
+
+        }
+    }
+        // return dd($cartCounts);
+       
+        
+    //     public function paymentIndex()
+    //    {
+
+        
+    //     return view('buyer_subpages.payment');
+
+    //    }
+
+        // $a = reset($cart->items);
+        // $seller_id = $a['item']->seller_id;
+        // return dd($cart);
+       
+
+        // return ($cart->items['item']->seller_id);
+        // $oldCart = $cart['items'];
+       
+      
+        // $fee_id = 
+
+        // $payment = new Payment;
+        // $payment->fee_id = 
+        // $order = new Order;
+        //     $order->payment_id =    
+        //     $order->buyer_id =    
+
+     
+        // elseif () {
+            
+        // }
+        // else{
+
+        // }
+       
+    public function changeToCod(Request $request,$id)
+    {
+        
+        $paymentCod = Payment::find($id);
+
+      
+        $paymentCod->payment_method = 'cod';
+
+        $paymentCod->save();
+
+        return redirect()->route('buyer.order')->with('success','Order Added! Please wait for seller confirmation');
+
+    }
+
+      public function paymentImage(Request $request,$id)
+      {
+        
+        // $this->validate($request,[
+        //     'payment-img' => ['required', 'max:1999']
+        //  ]);
+         
+        $payment = Payment::find($id);
+      
+        if($request->hasFile('payment-img'))
+        {
+            $filenameWithExt = $request->file('payment-img')->getClientOriginalName();
+           
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('payment-img')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('payment-img')->storeAs('public/payment',$filenameToStore); 
+            
+
+             $payment->payment_image = $filenameToStore;
+
+        }
+        
+        $payment->payment_method = 'online';
+        $payment->save();
+     
+
+       
+
+        return redirect()->route('buyer.order')->with('success','Order Added! Please wait for seller confirmation');
+      }  
+
+      public function orderMyOrder($id=null)
+    {
+       
+        $status = $id;
+        switch ($status) {
+            // requesting
+            case '1':
+                $orders = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->whereNull('a.accepted_at')
+                ->sortByDesc('a.order_id')
+                ->get();
+               
+            break;
+
+            // pending
+            case '2':
+                $orders = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->whereNotNull('a.accepted_at')
+                ->whereNull('a.packed_at')
+                ->get();
+            break;
+
+            // delivery
+            case '3':
+                $orders = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->whereNotNull('a.packed_at')
+                ->whereNull('a.received_at')
+                ->get();
+            break;
+
+            // recieved
+            case '4':
+                $orders = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->whereNotNull('a.received_at')
+                ->whereNull('a.completed_at')
+                ->get();
+
+            break;
+            
+            default:
+                
+                $orders = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->orderBy('a.created_at','desc')
+                ->get();
+                break;
+            // ->select('a.order_id','a.created_at','b.payment_total')
+            // ->join('orderlines as c','c.order_id','a.order_id')
+            // ->join('stocks as d','d.stock_id','c.stock_id')
+            // ->join('sellers as e','e.seller_id','d.seller_id')
+           
+        }
+        
+        
+        return view('buyer_subpages.myorders-order',compact('status','orders'));
+    }
+
+    public function viewMoreOrder($id)
+    {
+        // return $id;
+        $order = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->join('fees as c','c.fee_id','b.fee_id')
+                ->join('sellers as d','d.seller_id','c.seller_id')
+                ->join('riders as e','e.seller_id','d.seller_id')
+                ->join('orgs as f','f.org_id','d.org_id')
+                ->where('a.order_id',$id)
+                ->first();
+        dd($order);
+        
+         $orderLine = DB::table('orderlines as a')
+                ->join('stocks as b','b.stock_id','a.stock_id')
+                ->join('products as c','c.product_id','b.product_id')
+                ->join('product_types as d','d.product_type_id','c.product_type_id')
+                ->join('prices as e','e.stock_id','b.stock_id')
+                ->join('units as f','f.unit_id','e.unit_id')
+                ->where('a.order_id',$id)
+                ->get();  
+        // return dd($orderLine);
+        // return dd($orderLine);
+        return view('buyer_subpages.myorders-viewmore',compact('order','orderLine'));
+    }
+    
+    public function uploadImageInViewOrder()
+    {
+
+
+    }
 
     public function orderReceivedIndex()
 
@@ -104,12 +366,7 @@ class OrdersController extends Controller
     }
 
 
-    public function orderMyOrder ()
-    {
-
-        
-        return view('buyer_subpages.myorders-order');
-    }
+    
 
     public function orderMyReturn()
     {

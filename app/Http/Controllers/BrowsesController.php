@@ -39,7 +39,7 @@ class BrowsesController extends Controller
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
             ->where('b.product_name', 'LIKE', "%".$_GET['s']."%")
-            ->latest('b.created_at')
+            ->latest('c.created_at')
             ->paginate(5);
         }
         elseif(isset($_GET['category'])){
@@ -50,7 +50,7 @@ class BrowsesController extends Controller
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
             ->where('a.product_type_id', '=', $_GET['category'])
-            ->latest('b.created_at')
+            ->latest('c.created_at')
             ->paginate(5);
         }
         elseif(isset($_GET['brgy'])){
@@ -61,7 +61,7 @@ class BrowsesController extends Controller
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
             ->where('f.brgy_id', '=', $_GET['brgy'])
-            ->latest('b.created_at')
+            ->latest('c.created_at')
              ->paginate(5);
         }
         else{
@@ -72,7 +72,7 @@ class BrowsesController extends Controller
                 ->join('orgs as e','e.org_id','=','d.org_id')
                 ->join('brgys as f','f.brgy_id','=','e.brgy_id')
                 ->join('product_types as g','g.product_type_id','=','b.product_type_id')
-                ->latest('b.created_at')
+                ->latest('c.created_at')
                 ->paginate(5);
                
         }

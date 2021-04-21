@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCodTable extends Migration
+class CreateBuyerMailingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateCodTable extends Migration
      */
     public function up()
     {
-        Schema::create('cod', function (Blueprint $table) {
-            $table->increments('cod_id');
-            $table->bigInteger('payment_id');
+        Schema::create('buyer_mailing', function (Blueprint $table) {
+            $table->increments('buyer_mailing_id');
+            $table->bigInteger('buyer_id');
             $table->bigInteger('brgy_id');
             $table->string('address');
+            $table->string('mobile_number');
+            $table->string('email')->nullable();
             $table->timestamps();
-           
-           
         });
     }
 
@@ -31,6 +31,6 @@ class CreateCodTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cash_on_deliveries');
+        Schema::dropIfExists('buyer_mailing');
     }
 }

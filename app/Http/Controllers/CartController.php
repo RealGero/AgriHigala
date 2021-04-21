@@ -63,7 +63,7 @@ class CartController extends Controller
         ->join('units as g','g.unit_id','=','c.unit_id')
         ->join('users as h','h.user_id' ,'=' ,'d.user_id')
         ->join('product_types as i', 'i.product_type_id','=','a.product_type_id')
-        ->where('a.product_id', '=' ,$id)
+        ->where('b.stock_id', '=' ,$id)
         ->first();
       
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
@@ -93,11 +93,29 @@ class CartController extends Controller
         }
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-       
-       
+        
+        $cartCounts = $cart->items;
+
+      
+        $sellers = [];
+        
+        foreach($cartCounts as $cartCount)
+        {
+
+            array_push($sellers,$cartCount['item']->seller_id);
+            //  $sellerInfo =  array(
+            //     'id' => $cartCount['item']->seller_id,
+            //     'name' => $cartCount['item']->username,
+            //   );
+           
+        };
+        $sellers= array_unique($sellers);
+    //    $sellerInfo =  array_unique(array_column($sellers['id']));
+    //    return dd($sellers);
+      
         // return dd($cart->items[]);
         // return dd($cart->items);
-        return view('buyer_subpages.cart',['products' => $cart->items]);
+        return view('buyer_subpages.cart',['products' => $cart->items, 'sellers' => $sellers]);
 
     }
 

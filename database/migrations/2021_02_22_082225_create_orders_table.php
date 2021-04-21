@@ -15,11 +15,12 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('order_id');
-            $table->bigInteger('payment_id');
-            $table->bigInteger('buyer_id')->nullable();
-            $table->bigInteger('rider_id');
-            $table->date('packed_at');
-            $table->date('received_at');
+            $table->bigInteger('buyer_id');
+            $table->bigInteger('rider_id')->nullable();
+            $table->date('accepted_at')->nullable();
+            $table->date('packed_at')->nullable();
+            $table->date('received_at')->nullable();
+            $table->date('completed_at')->nullable();
             $table->timestamps();
         });
     }

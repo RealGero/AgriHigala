@@ -20,26 +20,26 @@
                         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p>{{count($stocks->stocks)}}</p>
+                                <p></p>
                                 <span class="h6">All</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{count($meats)}}</p>
                                 <span class="h6">Meat</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{count($vegetables)}}</p>
                                 <span class="h6">Vegetable</span>
                             </div>
                         </div>
         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{count($fruits)}}</p>
                                 <span class="h6">Fuits</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{count($fishes)}}</p>
                                 <span class="h6">Fish</span>
                             </div>
                             <div class="col-4 text-center">

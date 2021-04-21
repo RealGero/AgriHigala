@@ -312,8 +312,9 @@ body{
     width: 37%;
 }
 .checkout-btn{
+    width: 7rem;
     margin-top: 6rem;
-    font-size: 1.5rem;
+    font-size: 1rem;
     margin-left: 10rem;
 }
 
@@ -331,6 +332,15 @@ body{
 .container-return img{
     width: 7rem;
     
+}
+
+//buyer view more details
+
+.viewmore img{
+    width:7rem;
+}
+.viewmore table{
+    table-layout: fixed;
 }
 
 //show seller from buyer

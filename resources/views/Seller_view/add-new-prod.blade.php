@@ -13,9 +13,9 @@
                         @endphp
                          <span class="h5 mt-2     d-flex justify-content-center">Choose Category</span>
                         <div class="card-body category-btn d-flex justify-content-center mx-3"> 
-                
+                            {{-- {{dd($categories)}} --}}
                             @foreach ($categories as $category)
-                                <a href="/seller/product/add-new-product/{{$category->product_type_id}}" class="btn btn-primary mx-1">{{ucfirst($category->product_type_name)}}</a>
+                                <a href="/seller/product/add-new-product/{{$category->product_type_id}}" class="btn {{$select == $category->product_type_id ? 'btn-primary' : 'btn-outline-primary' }}   mx-1">{{ucfirst($category->product_type_name)}}</a>
                             @endforeach
                         </div>
                     </div>

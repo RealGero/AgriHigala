@@ -130,17 +130,18 @@ class OrdersController extends Controller
                    
             }
           
-            $payment = new Payment;
-    
-            $payment->fee_id = $fee->fee_id;
-            $payment->payment_order = $total;
-            $payment->payment_total = $total + $fee->fee_delivery + $fee->fee_other;
-            
-            
-            $order->payment()->save($payment);
+          
            
             if($request->input('payment_method') == 1)
             {
+                $payment = new Payment;
+    
+                $payment->fee_id = $fee->fee_id;
+                $payment->payment_order = $total;
+                $payment->payment_total = $total + $fee->fee_delivery + $fee->fee_other;
+                
+                
+                $order->payment()->save($payment);
                     
                 return redirect()->route('buyer.order')->with('success' ,'Order Added! Please wait for seller confirmation');
                
@@ -149,6 +150,12 @@ class OrdersController extends Controller
                 
             elseif($request->input('payment_method') == 2){
 
+                $payment = new Payment;
+                $payment->payment_method='online';
+                $payment->fee_id = $fee->fee_id;
+                $payment->payment_order = $total;
+                $payment->payment_total = $total + $fee->fee_delivery + $fee->fee_other;
+                $order->payment()->save($payment);
               
                 // return ($buyer_id);
                 $seller = DB::table('seller_banks as a')
@@ -243,12 +250,12 @@ class OrdersController extends Controller
             
 
              $payment->payment_image = $filenameToStore;
-
+             $payment->payment_method = 'online';
+             $payment->save();
+          
         }
         
-        $payment->payment_method = 'online';
-        $payment->save();
-     
+        
 
        
 
@@ -265,9 +272,9 @@ class OrdersController extends Controller
                 $orders = DB::table('orders as a')
                 ->join('payments as b','b.order_id','a.order_id')
                 ->whereNull('a.accepted_at')
-                ->sortByDesc('a.order_id')
+                ->orderBy('a.order_id','desc')
                 ->get();
-               
+            //    dd($orders);
             break;
 
             // pending
@@ -276,6 +283,7 @@ class OrdersController extends Controller
                 ->join('payments as b','b.order_id','a.order_id')
                 ->whereNotNull('a.accepted_at')
                 ->whereNull('a.packed_at')
+                ->orderBy('a.order_id','desc')
                 ->get();
             break;
 
@@ -285,6 +293,7 @@ class OrdersController extends Controller
                 ->join('payments as b','b.order_id','a.order_id')
                 ->whereNotNull('a.packed_at')
                 ->whereNull('a.received_at')
+                ->orderBy('a.order_id','desc')
                 ->get();
             break;
 
@@ -294,6 +303,7 @@ class OrdersController extends Controller
                 ->join('payments as b','b.order_id','a.order_id')
                 ->whereNotNull('a.received_at')
                 ->whereNull('a.completed_at')
+                ->orderBy('a.order_id','desc')
                 ->get();
 
             break;
@@ -320,14 +330,14 @@ class OrdersController extends Controller
     {
         // return $id;
         $order = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
-                ->join('fees as c','c.fee_id','b.fee_id')
-                ->join('sellers as d','d.seller_id','c.seller_id')
-                ->join('riders as e','e.seller_id','d.seller_id')
+                ->leftJoin('payments as b','b.order_id','a.order_id')
+                ->leftJoin('fees as c','c.fee_id','b.fee_id')
+                ->leftJoin('sellers as d','d.seller_id','c.seller_id')
+                ->leftJoin('riders as e','e.seller_id','d.seller_id')
                 ->join('orgs as f','f.org_id','d.org_id')
                 ->where('a.order_id',$id)
                 ->first();
-        dd($order);
+        // dd($order);
         
          $orderLine = DB::table('orderlines as a')
                 ->join('stocks as b','b.stock_id','a.stock_id')
@@ -342,9 +352,27 @@ class OrdersController extends Controller
         return view('buyer_subpages.myorders-viewmore',compact('order','orderLine'));
     }
     
-    public function uploadImageInViewOrder()
+    public function uploadImageInViewOrder(Request $request,$id)
     {
+        $payment = Payment::find($id);
 
+        if($request->hasFile('online-payment-img'))
+        {
+            $filenameWithExt = $request->file('online-payment-img')->getClientOriginalName();
+           
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('online-payment-img')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('online-payment-img')->storeAs('public/payment',$filenameToStore); 
+            
+
+             $payment->payment_image = $filenameToStore;
+             $payment->payment_method = 'online';
+             $payment->save();
+          
+        }
+
+        return redirect()->back()->with('success','Successfully Uploaded a Payment Photo, Wait for the confirmation Thank you!');
 
     }
 

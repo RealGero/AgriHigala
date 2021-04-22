@@ -6,6 +6,11 @@
         <div class="viewmore">
             <div class="row">
                 <div class="col-12 mx-auto">
+                    @if(session()->has('success'))
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+                     @endif
                     <div class="card">
                         <div class="card-body">
                             @foreach ($orderLine as $orderLines) 
@@ -36,8 +41,8 @@
                                 </div>
                             @endforeach
                             
-                            <div class="row">
-                                <div class="col-3 d-flex flex-column">
+                            <div class="row ">
+                                <div class="col-3 d-flex flex-column justify-content-around">
                                     
                                     <span>Other Fee &#8369;{{number_format($order->fee_other)}}</span>
                                     <span>Delivery fee: &#8369;{{number_format($order->fee_delivery)}}</span>
@@ -49,10 +54,10 @@
                                     <span>Payment method: {{ucfirst($order->payment_method)}}</span>
                                 </div>
                                 @if($order->payment_method == 'online')
-                                <div class="col-5">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="online">
+                                <div class="col-3">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#online-img">
                                         Upload Photo
-                                      </button>
+                                    </button>
                                 </div>
                                 @endif
                             </div>
@@ -63,9 +68,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-
-
+    @include('modals.modal-online')
 @endsection

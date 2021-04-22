@@ -44,7 +44,10 @@
                                         <div class="row">
                                             <button type="submit" class="btn btn-success">Submit Photo</button>
                                         </div>
-                                      </form> 
+                                      </form>   
+                                </div>
+                                <div class="col-2">
+                                    <a href="{{route('buyer.order',[$payment->order_id])}}">Skip for now>></a>     
                                 </div>
                             </div>
                             <div class="row">

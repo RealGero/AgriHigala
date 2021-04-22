@@ -13,8 +13,19 @@ class Fee extends Model
     protected $guarded = [];
 
 
-    public function payment()
+    public function payments()
     {
-        return $this->hasOne('App\Payment','fee_id','fee_id');
+        return $this->hasMany('App\Payment','fee_id','fee_id');
+    }
+
+    public function brgy()
+    {
+        return $this->belongsTo('App\Brgy');
+
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo('App\Seller');
     }
 }

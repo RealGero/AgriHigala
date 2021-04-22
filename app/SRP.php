@@ -14,4 +14,9 @@ class SRP extends Model
     {
         return $this->belongsTo('App\Product');
     }
+
+    public function unit(){
+        return $this->belongsTo('App\Unit');
+
+    }
 }

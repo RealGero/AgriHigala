@@ -11251,6 +11251,10 @@ body {
   table-layout: fixed;
 }
 
+img.payment-online {
+  width: 20rem;
+}
+
 .follow-chat a {
   width: 5rem;
 }

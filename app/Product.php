@@ -15,6 +15,7 @@ class Product extends Model
    
    
     protected $dates = ['deleted_at'];
+    
     public function productType()
     {
         return $this->belongsTo('App\ProductType');
@@ -35,8 +36,4 @@ class Product extends Model
 
     }
 
-    public function unit()
-    {
-        return $this->hasOne('App\Unit');
-    }
 }

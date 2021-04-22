@@ -25,5 +25,10 @@ class Rider extends Model
         return $this->belongsTo('App\Seller');
     }
 
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
+
 
 }

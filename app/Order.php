@@ -31,13 +31,20 @@ class Order extends Model
         return $this->hasMany('App\OrderLine','order_id','order_id');
     }
 
-    public function transaction()
-    {
-        return $this->hasOne('App\Transaction');
-    }
+    
 
     public function returnOrder()
     {
         return $this->hasOne('App\ReturnOrder');
+    }
+
+    public function rider()
+    {
+        return $this->belongsTo('App\Rider');
+    }
+
+    public function rating()
+    {
+        return $this->hasOne('App\Rating');
     }
 }

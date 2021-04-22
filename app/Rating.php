@@ -10,8 +10,8 @@ class Rating extends Model
     protected $primaryKey = "rating_id";
     protected $guarded = [];
    
-    public function transaction()
+    public function order()
     {
-        return $this->belongsTo('App\Transaction');
+        return $this->belongsTo('App\Order');
     }
 }

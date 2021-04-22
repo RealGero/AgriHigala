@@ -37,4 +37,9 @@ class Buyer extends Model
     {
         return $this->belongsTo(Brgy::class);
     }
+
+    public function buyerMailing()
+    {
+        return $this->hasOne('App\BuyerMaling');
+    }
 }

@@ -12,8 +12,16 @@ class Unit extends Model
     protected $guarded =[];
 
 
-    public function product (){
+   
 
-        return $this->hasOne('App\Product');
+    public function srps()
+    {
+
+        return $this->hasMany('App\Srp');
+    }
+
+    public function prices()
+    {
+        return $this->hasMany('App\Price');
     }
 }

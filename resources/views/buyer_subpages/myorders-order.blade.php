@@ -25,8 +25,9 @@
                             </ul>
                         </div>
                     </div> 
+                    {{-- {{dd($orders)}} --}}
                     @foreach($orders as $order)
-
+                    
                     @php
                     $orderLines = \App\OrderLine::getOrderLines($order->order_id);    
                     
@@ -100,6 +101,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <a href={{url('/buyer/order/vieworder/'.$order->order_id)}}>View more..</a>
+                                            
                                         </div>
                                     </div>
                                 </div>

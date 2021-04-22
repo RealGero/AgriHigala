@@ -45,9 +45,14 @@ class Seller extends Model
         return $this->hasMany('App\Stock','seller_id','seller_id');
     }
 
-    public function selleranks ()
+    public function sellerBanks ()
     {
         return $this->hasMany('App\SellerBank');
+    }
+
+    public function fees()
+    {
+        return $this->hasMany('App\Fee');
     }
 
     public static function getSellerName($id)

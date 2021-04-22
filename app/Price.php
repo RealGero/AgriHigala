@@ -13,5 +13,11 @@ class Price extends Model
     public function stock ()
     {
      return $this->belongsTo('App\Stock','stock_id','stock_id');
+
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo('App\Unit');
     }
 }

@@ -9,6 +9,7 @@ class Message extends Model
     protected $table = "messages";
     protected $primaryKey = "message_id";
     protected $guarded = [];
+    
     public function seller()
     {
         return $this->belongsTo('App\Seller');

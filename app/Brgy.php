@@ -12,9 +12,9 @@ class Brgy extends Model
     protected $guarded =[];
 
 
-    public function buyer()
+    public function buyers()
     {
-        return $this->hasOne(Buyer::class,'brgy_id','brgy_id');
+        return $this->hasMany(Buyer::class,'brgy_id','brgy_id');
     }
 
     public function orgs()
@@ -22,8 +22,10 @@ class Brgy extends Model
         return $this->hasMany(Org::class,'brgy_id','brgy_id');
     }
 
-    public function stock()
+    
+
+    public function fees()
     {
-        return $this->hasOne('App\Stock','brgy_id','brgy_id');
+        return $this->hasMany('App\Fee');
     }
 }

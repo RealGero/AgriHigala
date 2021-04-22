@@ -9,11 +9,11 @@ class Payment extends Model
     protected $table = "payments";
     protected $primaryKey = "payment_id";
     protected $guarded = [];
-    protected $dates = [
+    // protected $dates = [
         
-        'created_at',
-        'updated_at',
-    ];
+    //     'created_at',
+    //     'updated_at',
+    // ];
 
     public function order()
     {

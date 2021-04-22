@@ -95,7 +95,8 @@ Route::resource('users', 'UsersController');
 
         Route::get('/buyer/order/myorder/{id?}', 'OrdersController@orderMyOrder')->name('buyer.order');
         Route::get('/buyer/order/vieworder/{id}','OrdersController@viewMoreOrder')->name('buyer.orderView.index');
-        Route::put('/buyer/order/uploadImage/{id}','OrdersController@uploadImageInViewOrder');
+        // Route::get('/buyer/order/uploadImage/{id}','OrdersController@uploadImageInViewOrder');
+        Route::put('/buyer/order/uploadPayment/{id}','OrdersController@uploadImageInViewOrder');
 
         Route::put('/buyer/order/online-cod', 'OrdersController@changeToCod');
         Route::post('buyer/send-image/{id}','OrdersController@paymentImage')->name('payment.image');

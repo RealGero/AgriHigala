@@ -31,4 +31,6 @@ class Rider extends Model
     }
 
 
+    
+
 }

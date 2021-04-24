@@ -11562,6 +11562,14 @@ img.payment-online {
   width: 6rem;
 }
 
+.view-order img {
+  width: 6rem;
+}
+
+.view-order table {
+  table-layout: fixed;
+}
+
 .footer {
   width: 100%;
   background-color: white;

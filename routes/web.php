@@ -157,6 +157,7 @@ Route::resource('users', 'UsersController');
 
                 // need changes
         Route::get('/seller/order/order-request', 'OrdersController@orderRequest')->name('order.request.index');
+        Route::get('/seller/order/order-request/{id}', 'OrdersController@sellerOrderRequest')->name('orderRequestwithId');
         Route::get('/seller/order/order-detail', 'SellerOrdersController@orderDetails');
         Route::get('/seller/history', 'SellerOrdersController@transactionHistory');
         Route::get('/seller/return', 'SellerOrdersController@orderReturn');
@@ -175,18 +176,19 @@ Route::resource('users', 'UsersController');
         Route::put('/seller/profile', 'UsersController@updateSellerDetails');
 
         Route::get('/seller/account', 'UsersController@sellerAccount');
-        Route::get('/seller/rider','sellercontroller\MyRiderController@index');
-    
-    
-
-
-
-//Rider------------------------------------------------------------------------------------------
-
-
-
-        Route::get('/seller/rider/create','RidersController@index');
-        Route::post('/seller/rider/create','RidersController@store');
+        // Route::get('/seller/rider','sellercontroller\MyRiderController@index');
+        
+        
+        
+        
+        
+        //Rider------------------------------------------------------------------------------------------
+        
+        
+        
+        Route::get('seller/view-rider','RidersController@viewSellerRider')->name('rider.index') ;      
+        Route::get('/seller/rider/create','RidersController@index')->name('rider.create');
+        Route::post('/seller/rider/create','RidersController@store')->name('rider.store');
       
 
         Route::get('/rider/dashboard','Riderscontroller@dashboard');

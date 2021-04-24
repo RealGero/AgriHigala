@@ -9,6 +9,7 @@ use App\User;
 use App\Buyer;
 use App\Seller;
 use Hash;
+use DB;
 class RidersController extends Controller
 {
     public function __construct()
@@ -17,6 +18,18 @@ class RidersController extends Controller
     //    {
     //        return redirect('/login');
     //    }
+     }
+     public function viewSellerRider()
+     {  
+        $id = Auth::id();
+        $seller_id = User::find($id)->seller->seller_id;
+         $riders = DB::table('users as a')
+            ->join('riders as b','b.user_id','a.user_id')
+            ->where('b.seller_id', $seller_id)
+            ->get();
+
+
+        return view('Seller_view.view-rider',compact('riders'));
      }
      public function index()
      {
@@ -50,7 +63,17 @@ class RidersController extends Controller
             }
         ],
 
-            'last_name'  => 'required|min:2|regex:/^[a-zA-Z]+$/u',
+        'last_name' => ['required','min:2',
+            
+        function ($attribute, $value, $fail) {
+            if (preg_match('~[0-9]+~', $value)) {
+                $fail('The last name is invalid');
+            }
+            if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                $fail('The last name is invalid');
+            }
+        }
+    ],
             'mobile_number' => 'required|digits:11',
             'rider_image'  => 'nullable|max:1999'
             
@@ -62,7 +85,9 @@ class RidersController extends Controller
         // $seller_id = Seller::where('user_id',Auth::id())->first();
         // return $seller_id['id'];
         
-       
+        $id = Auth::id();
+
+        $sellerId = User::find($id)->seller->seller_id;
        
         // return 123;
         $user = new User();
@@ -75,8 +100,9 @@ class RidersController extends Controller
         $user->password = Hash::make($request->input('mobile_number'));
 
         $rider = new Rider();
-      
-        $rider->seller_id   =   Auth::id();
+
+
+        $rider->seller_id   =   $sellerId;
         
       
         if($request->hasFile('rider_image'))

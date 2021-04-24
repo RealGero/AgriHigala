@@ -87,9 +87,11 @@ class OrdersController extends Controller
         if($cartCounts)
         {
             $fee = Fee::where('seller_id',$id)->latest('created_at')->first(); 
+           $auth_id =  Auth::id();
+            $buyer_id = User::find($auth_id)->buyer->buyer_id;
 
             $order = new Order;
-            $order->buyer_id = Auth::id();
+            $order->buyer_id =   $buyer_id;
             $order->save();
    
             foreach($cartCounts as $cartCount)
@@ -378,6 +380,46 @@ class OrdersController extends Controller
 
 
     // Serller Order Side -----------------------------------------------------------------------
+    public function orderRequest()
+    {
+
+        $title = 'order';
+
+        // GET ORDER, PAYMENT, & RETURN ORDER
+        $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
+            ->where('a.completed_at', null)
+            ->where('c.return_id', null)
+            ->paginate(10);
+
+        return view('Seller_view.order-request',compact('orders','title'));
+    }
+
+    public function sellerOrderRequest (Request $request, $id){
+        
+        // CHECK IF THERE'S A RESPONSE
+        $response = $request->input('response');
+        if ($response == 'accept'){
+            $order = Order::find($id);
+            $order->accepted_at = now();
+            $order->save();
+            request()->session()->flash('success','Order accepted');
+        }
+        elseif ($response == 'reject') {
+            $order = Order::find($id);
+            $order->completed_at = now();
+            $order->save();
+            request()->session()->flash('success','Order rejected');
+        }
+        else{
+            request()->session()->flash('error','Error occurred while updating order');
+        }
+        return redirect()->route('order.request.index',[$id]);
+    }
+
     public function orderReceivedIndex()
 
     {

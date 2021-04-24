@@ -11498,6 +11498,20 @@ img.payment-online {
   width: 13rem;
 }
 
+.card-size {
+  height: 100%;
+}
+
+.owned {
+  border-left: 5px solid #79B243;
+  color: #79B243;
+}
+
+.not-owned {
+  border-left: 5px solid #694E40;
+  color: #694E40;
+}
+
 .card-body.category-btn a {
   width: 10rem;
   margin: 0, 3rem;

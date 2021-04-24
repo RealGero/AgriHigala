@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRidersTable extends Migration
+class CreateInboxTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateRidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('riders', function (Blueprint $table) {
-            $table->increments('rider_id');
-            $table->bigInteger('user_id');
+        Schema::create('inbox', function (Blueprint $table) {
+            $table->increments('inbox_id');
+            $table->bigInteger('buyer_id');
             $table->bigInteger('seller_id');
-            $table->longText('rider_description')->nullable();
-            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateRidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('riders');
+        Schema::dropIfExists('inbox');
     }
 }

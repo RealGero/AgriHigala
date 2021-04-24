@@ -9,6 +9,7 @@
                 <div class="card-body">
                     <a href="/buyer/browse/" class="btn btn-success mb-3" >Back</a> 
                     <div class="row">
+                   
                         <div class="col-12 d-flex justify-content-center mb-3 ">
                             {{-- {{dd($products)}} --}}
                             {{-- {{dd($products)}} --}}
@@ -57,13 +58,13 @@
                         </div>
                         <div class="col-4 product-detail-btn">
                             <a href="#" class="btn btn-success btn-md">Follow</a>  
-                            <a href="#" class="btn btn-success btn-md">Chat</a>  
+                            <a href="/buyer/message/{{$products->seller_id}}" class="btn btn-success btn-md">Chat</a>  
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
 
-                            Google Map
+                          
                         </div>
                     </div>
                 </div>

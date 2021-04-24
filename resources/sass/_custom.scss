@@ -619,7 +619,22 @@ img.payment-online {
 //     .leftnav-buyer  a {font-size: 18px;}
 //   }
 
+//Message card size
 
+.card-size{
+
+    height: 100%;
+}
+
+// owned message
+.owned{
+    border-left: 5px solid #79B243;
+   color:  #79B243;
+}
+.not-owned {
+    border-left: 5px solid #694E40;
+    color: #694E40;
+}
 //SELEER VIEW ------------------------------------------------------------------------------------
 .card-body.category-btn a {
     width: 10rem;

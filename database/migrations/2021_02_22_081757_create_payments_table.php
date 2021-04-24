@@ -20,7 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->double('payment_order',8,2);
             $table->double('payment_total',8,2);
             $table->string('payment_image')->nullable();
-            $table->date('paid_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->enum('payment_method',['cod','online']);
             $table->timestamps();
         });

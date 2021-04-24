@@ -76,6 +76,7 @@ class BrowsesController extends Controller
                 ->paginate(5);
                
         }
+        // return dd($products);
         $id = Auth::id();
        
         $brgys = Brgy::all();
@@ -98,7 +99,7 @@ class BrowsesController extends Controller
                 ->join('units as g','g.unit_id','=','c.unit_id')
                 ->join('users as h','h.user_id' ,'=' ,'d.user_id')
                 ->join('product_types as i','i.product_type_id','=','b.product_type_id')
-                ->select('b.product_id','i.product_image','a.stock_id','a.stock_image','f.brgy_name','b.product_name','g.unit_name','c.stock_price','a.qty_added','a.created_at','a.expiration_date','h.f_name','h.m_name','h.l_name','h.user_image')
+                ->select('a.seller_id','b.product_id','i.product_image','a.stock_id','a.stock_image','f.brgy_name','b.product_name','g.unit_name','c.stock_price','a.qty_added','a.created_at','a.expiration_date','h.f_name','h.m_name','h.l_name','h.user_image')
                 ->where('a.stock_id','=',$id)
                 ->first();
                

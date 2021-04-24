@@ -42,4 +42,9 @@ class Buyer extends Model
     {
         return $this->hasOne('App\BuyerMaling');
     }
+
+    public function inboxes()
+    {
+        return $this->hasMany('App\Inbox');
+    }
 }

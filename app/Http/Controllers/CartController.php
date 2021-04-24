@@ -87,18 +87,14 @@ class CartController extends Controller
 
     public function getCart()
     {
-        if(!Session::has('cart')){
-
-            return view('buyer_subpages.cart');
-        }
+        $sellers = [];
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-        
-        $cartCounts = $cart->items;
+    
+        if(Session::has('cart')){
+    
+            $cartCounts = $cart->items;
 
-      
-        $sellers = [];
-        
         foreach($cartCounts as $cartCount)
         {
 
@@ -110,6 +106,9 @@ class CartController extends Controller
            
         };
         $sellers= array_unique($sellers);
+          
+        }
+        
     //    $sellerInfo =  array_unique(array_column($sellers['id']));
     //    return dd($sellers);
       

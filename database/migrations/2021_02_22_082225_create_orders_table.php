@@ -17,10 +17,10 @@ class CreateOrdersTable extends Migration
             $table->increments('order_id');
             $table->bigInteger('buyer_id');
             $table->bigInteger('rider_id')->nullable();
-            $table->date('accepted_at')->nullable();
-            $table->date('packed_at')->nullable();
-            $table->date('received_at')->nullable();
-            $table->date('completed_at')->nullable();
+            $table->timestamp('accepted_at')->nullable();
+            $table->timestamp('packed_at')->nullable();
+            $table->timestamp('delivered_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }

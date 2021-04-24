@@ -20,7 +20,7 @@ class CreateStocksTable extends Migration
             $table->longText('stock_description')->nullable();
             $table->integer('qty_added');
             $table->string('stock_image')->nullable();
-            $table->date('expiration_date');
+            $table->timestamp('expiration_date');
             $table->softDeletes();
             $table->timestamps();
 

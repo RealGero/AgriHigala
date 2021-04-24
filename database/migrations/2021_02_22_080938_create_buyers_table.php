@@ -23,7 +23,7 @@ class CreateBuyersTable extends Migration
             $table->enum('gender',['Male','Female','Prefer not to say'])->nullable();
             $table->string('valid_id_front')->default('default-id-front.jpg');
             $table->string('valid_id_back')->default('default-id-back.jpg');
-            $table->date('verified_at')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         });
     }

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+        // INBOX == PEOPLE , MESSAGE == CHAT ----------------------------------------------
 Route::get('/', function () {
 
     return view('welcome');
@@ -70,7 +72,10 @@ Route::resource('users', 'UsersController');
         // Route::get('/buyer/order/order-received','buyercontroller\OrdersController@orderReceivedIndex');
         // Route::get('/buyer/order/return','buyercontroller\OrdersController@orderReturn');
         // Route::get('/buyer/profile/id','UsersController@showprofile');
-        Route::get('/buyer/message','buyercontroller\MessagesController@index');
+        // Route::get('/buyer/message','buyercontroller\MessagesController@index');
+
+
+
         Route::get('/buyer/history','buyercontroller\HistoriesController@index');
 
         Route::get('/buyer/profile/edit','UsersController@edit');
@@ -88,7 +93,8 @@ Route::resource('users', 'UsersController');
         Route::get('/about','buyercontroller\PagesController@aboutUs');
         Route::get('/contact','buyercontroller\PagesController@contactUs');
         Route::get('/buyer/discount','buyercontroller\DiscountsController@index');
-        Route::get('/feedback','buyercontroller\PagesController@feedback');
+        Route::get('/buyer/feedback','FeedBacksController@buyerFeedbackIndex')->name('buyerFeedback.index');
+        Route::post('/buyer/feedback','FeedBacksController@buyerFeedbackStore')->name('buyerFeedback.store');
         Route::get('/customer-service','buyercontroller\PagesController@customerService');
 
         Route::get('/buyer/order/order-view-details','buyercontroller\OrdersController@viewOrderDetails');
@@ -99,7 +105,7 @@ Route::resource('users', 'UsersController');
         Route::put('/buyer/order/uploadPayment/{id}','OrdersController@uploadImageInViewOrder');
 
         Route::put('/buyer/order/online-cod', 'OrdersController@changeToCod');
-        Route::post('buyer/send-image/{id}','OrdersController@paymentImage')->name('payment.image');
+        Route::post('/buyer/send-image/{id}','OrdersController@paymentImage')->name('payment.image');
 
         // Route::get('buyer/order/payment','OrdersController@paymentIndex')->name('payment.index');
         //new -----------------------------------------------------------------------------------
@@ -107,6 +113,11 @@ Route::resource('users', 'UsersController');
 
         Route::get('/buyer/order/myreturn', 'buyercontroller\OrdersController@orderMyReturn');
         Route::get('/buyer/order/mycancellation', 'buyercontroller\OrdersController@orderMyCancellation');
+
+        Route::get('/buyer/chat/{id}','MessagesController@buyerInboxMessage')->name('buyer.chat');
+        Route::get('/buyer/message/{id}', 'MessagesController@buyerMessage')->name('buyerMessage.index');
+        Route::get('/buyer/inbox', 'InboxController@buyerInboxIndex');
+        Route::post('/buyer/message/{id}', 'MessagesController@buyerMessageStore')->name('buyerMessage.store');
     // });
 
         // order------------------------------------------------------------------------
@@ -145,12 +156,17 @@ Route::resource('users', 'UsersController');
         Route::post('/seller/product/add-new-product/', 'sellercontroller\ProductsController@storeNewProduct');
 
                 // need changes
-        Route::get('/seller/order/order-request', 'SellerOrdersController@orderRequest');
+        Route::get('/seller/order/order-request', 'OrdersController@orderRequest')->name('order.request.index');
         Route::get('/seller/order/order-detail', 'SellerOrdersController@orderDetails');
         Route::get('/seller/history', 'SellerOrdersController@transactionHistory');
         Route::get('/seller/return', 'SellerOrdersController@orderReturn');
 
+        // Route::get('/seller/inbox/','MessagesController@sellerMessage')->name('sellerMessage.index');
+        Route::get('/seller/inbox','InboxController@sellerInboxIndex')->name('sellerInbox.index');
+        Route::get('/seller/message/{id}','MessagesController@sellerMessageIndex')->name('sellerMessage.index');
 
+        Route::get('/seller/feedback', 'FeedBacksController@sellerFeedbackIndex')->name('sellerFeedback.index');
+        Route::post('/seller/feedback', 'FeedBacksController@sellerFeedbackStore')->name('sellerFeedback.store');
 
         Route::get('/seller/ratings', 'sellercontroller\RatingsController@index');
         Route::get('/seller/earnings', 'sellercontroller\EarningsController@index');

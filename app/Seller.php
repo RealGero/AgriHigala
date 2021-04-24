@@ -55,6 +55,11 @@ class Seller extends Model
         return $this->hasMany('App\Fee');
     }
 
+    public function inboxes()
+    {
+        return $this->hasMany('App\Inbox');
+    }
+
     public static function getSellerName($id)
     {
      $seller= Seller::find($id)->user->username;

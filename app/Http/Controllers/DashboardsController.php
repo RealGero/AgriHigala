@@ -15,7 +15,7 @@ class DashboardsController extends Controller
             ->join('sellers as b','b.seller_id','=','a.seller_id')
             ->join('products as c','c.product_id','=','a.product_id')
             ->join('product_types as d','d.product_type_id','=','c.product_type_id')
-            ->join('users d','d.user_id','=','b.user_id')
+            ->join('users as e','e.user_id','=','b.user_id')
             ->where([
                 ['b.user_id' , '=', $id],
                 ['d.product_type_id', '=', 'fish']

@@ -25,10 +25,7 @@ class PagesController extends Controller
         return view('buyer_pages.contactus');
 
     }
-    public function feedback()
-    {
-        return view ('buyer_pages.feedback');
-    }
+  
 
     public function customerService()
     {

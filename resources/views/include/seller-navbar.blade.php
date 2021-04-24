@@ -1,6 +1,7 @@
 
+    
     <div class="col-6 right-side">
-        <a href="/buyer/browse"><i class="fa fa-search  fa-2x fontawesome-color"></i></a>
+        {{-- <a href="/buyer/browse"><i class="fa fa-search  fa-2x fontawesome-color"></i></a> --}}
        
 
         <div class="dropdown ">
@@ -30,7 +31,7 @@
             </div>
        
 
-        <i class="fa fa-shopping-cart  fa-2x fontawesome-color"></i>
+        {{-- <i class="fa fa-shopping-cart  fa-2x fontawesome-color"></i> --}}
 
         <div id="mySidenav" class="sidenav">
            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -62,11 +63,15 @@
             </div>
          
           
-           <a href="/buyer/discount"> <i class="fas fa-star pr-2"></i>Ratings</a>
+           <a href="/seller/ratings"> <i class="fas fa-star pr-2"></i>Ratings</a>
            <a href="/seller/earnings"> <i class="fas fa-chart-bar pr-2"></i>Earnings</a>
-           <a href="/feedback"> <i class="fa fa-envelope pr-2"></i>Inbox</a>
+           <a href="{{route('sellerFeedback.index')}}"> <i class="fas fa-thumbs-up pr-2"></i>Feedback</a>
+
+         
+           <a href="{{route('sellerInbox.index')}}"> <i class="fa fa-envelope pr-2"></i>Inbox</a>
+
            <a href="/seller/rider/create"> <i class="fas fa-motorcycle pr-2"></i>Rider</a>
-           <a href="/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
+           <a href="seller/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <a href="{{ route('logout') }}"  class="logout ml-5 font-italic" onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">

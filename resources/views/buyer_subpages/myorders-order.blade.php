@@ -41,12 +41,12 @@
                         $order_status = 'Pending';
                         $badge = 'badge-primary';
     
-                    }elseif($order->packed_at != null && $order->received_at == null)
+                    }elseif($order->packed_at != null && $order->delivered_at == null)
                     {
                         $order_status = 'Delevering';
                         $badge = 'badge-primary';
     
-                    }elseif($order->received_at != null && $order->completed == null)
+                    }elseif($order->delivered_at != null && $order->completed == null)
                     {
                         $order_status = 'Received';
                         $badge = 'badge-info';

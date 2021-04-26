@@ -10,6 +10,7 @@ use App\Buyer;
 use App\Seller;
 use Hash;
 use DB;
+use Illuminate\Validation\Rule;
 class RidersController extends Controller
 {
     public function __construct()
@@ -18,6 +19,11 @@ class RidersController extends Controller
     //    {
     //        return redirect('/login');
     //    }
+     }
+
+     public function createRider()
+     {
+         return view('Seller_view.createrider');
      }
      public function viewSellerRider()
      {  
@@ -31,14 +37,186 @@ class RidersController extends Controller
 
         return view('Seller_view.view-rider',compact('riders'));
      }
-     public function index()
+     public function profileIndex()
      {
 
-        return view ('Seller_view.createrider');
+        $id = Auth::id();
+        $rider_id = User::find($id)->rider->rider_id; 
+        $rider = DB::table('users as a')
+            ->join('riders as b','b.user_id','a.user_id')
+            ->where('b.rider_id',$rider_id)
+            ->first();
+
+        $seller = DB::table('users as a')
+            ->join('sellers as b','b.user_id','a.user_id')
+            ->join('riders as c','c.seller_id','b.seller_id')
+            ->join('orgs as d','d.org_id','b.org_id')
+            ->where('c.rider_id',$rider_id)
+            ->first();
+
+
+        return view ('Rider_view.rider-profile',compact('seller','rider'));
      }
+
+     public function imageUpdate(Request $request)
+     {
+        
+
+        $id = Auth::id();
+        $user = User::find($id);
+        
+        $this->validate($request,[
+            'user_image' => 'max:1999',
+        ]);
+
+        if($request->hasFile('user_image'))
+        {
+            $filenameWithExt = $request->file('user_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('user_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('user_image')->storeAs('public/user',$filenameToStore); 
+
+             $user->user_image = $filenameToStore;
+            
+        };
+      
+       $user->save();
+
+       return redirect()->back()->with('image','Successfully uploaded an image');
+     }
+
+     public function profileUpdate(Request $request)
+     {
+       
+        $id = Auth::id();
+        $user = User::find($id);
+    
+         $this->validate($request,[
+            'first_name' => ['required','min:2',
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The first name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The first name is invalid');
+                }
+            }
+        ],
+        
+        'middle_name' => ['required','min:2',
+            
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The first name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The first name is invalid');
+                }
+            }
+        ],
+        'last_name' => ['required','min:2',
+                
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The last name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The last name is invalid');
+                }
+            }
+        ],
+
+            'mobile_number' => ['required', 'string', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
+            'username' => ['required',Rule::unique('users')->ignore($id, 'user_id')],
+        
+            'email' => ['required',Rule::unique('users')->ignore($id, 'user_id')],  
+         ]);
+        
+      
+        $rider = User::find($id)->rider;
+
+
+        $user->f_name = $request->input('first_name');
+        $user->m_name = $request->input('middle_name');
+        $user->l_name = $request->input('last_name');
+        $user->mobile_number = $request->input('mobile_number');
+        $user->email = $request->input('email');
+        $user->username = $request->input('username');
+
+        $rider->rider_description = $request->input('description');
+  
+
+        $user->save();
+        $rider->save();
+
+        return redirect()->back()->with('details','Successfully Edit your profile!');
+
+     }
+
+     public function passwordUpdate(Request $request)
+     {
+
+        $this->validate($request,[
+
+            'current_password'=> 'required',
+            'new_password'=>'required|string|min:8',
+            'password_confirmation' =>'required|min:8|same:new_password'
+    
+            ]);
+
+        if(!(Hash::check($request->get('current_password'),Auth::user()->password)))
+        {
+            return redirect()->back()->with('error','The current password does not match with your old password');
+        }
+
+        if(strcmp($request->get('current_password'),$request->get('new_password'))==0)
+        {
+            return redirect()->back()->with('error','The current password cannot be the same with the new password');
+        }
+
+
+
+        $user = Auth::user();
+
+        $user->password = bcrypt($request->get('new_password'));
+        $user->save();
+
+        return redirect()->back()->with('password','Password successfully changed');
+     }
+
+    public function updateRiderProfileImage()
+    {
+
+        $id = Auth::id();
+        $user = User::find($id);
+
+        
+        $this->validate($request,[
+            'user_image' => 'max:1999',
+        ]);
+        
+        if($request->hasFile('user_image'))
+        {
+            $filenameWithExt = $request->file('user_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('user_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('user_image')->storeAs('public/user',$filenameToStore); 
+
+             $user->user_image = $filenameToStore;
+            
+        };
+      
+       $user->save();
+
+       return redirect('/seller/profile')->with('image','Successfully uploaded an image');
+    }
+
      public function store(Request $request)
      {
         
+        $id = Auth::id();
         $data = $request->validate([
 
             'first_name' => ['required','min:2',
@@ -74,7 +252,8 @@ class RidersController extends Controller
             }
         }
     ],
-            'mobile_number' => 'required|digits:11',
+            'email' => ['required',Rule::unique('users')->ignore($id, 'user_id')],
+            'mobile_number' => ['required', 'string', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
             'rider_image'  => 'nullable|max:1999'
             
         ]);
@@ -94,15 +273,16 @@ class RidersController extends Controller
         $user->f_name = $request->input('first_name');
         $user->m_name = $request->input('middle_name');
         $user->l_name = $request->input('last_name');
+        $user->email = $request->input('email');
         $user->mobile_number =  $request->input('mobile_number');
-        $user->username = $request->input('first_name').$request->input('last_name');;
+        $user->username = str_replace(' ','',$request->input('first_name').$request->input('last_name'));
         $user->user_type = 3;
         $user->password = Hash::make($request->input('mobile_number'));
 
         $rider = new Rider();
 
 
-        $rider->seller_id   =   $sellerId;
+        $rider->seller_id   =  $sellerId;
         
       
         if($request->hasFile('rider_image'))
@@ -187,7 +367,21 @@ class RidersController extends Controller
 
     public function orders()
     {
-        return view('Rider_view.orders-summary');
+        $id = Auth::id();
+        $rider_id = User::find($id)->rider->rider_id;
+
+        $orders = DB::table('orders as a')
+        ->leftJoin('payments as b','b.order_id','a.order_id')
+        ->leftJoin('fees as c','c.fee_id','b.fee_id')
+        ->leftJoin('sellers as d','d.seller_id','c.seller_id')
+        ->leftJoin('riders as e','e.seller_id','d.seller_id')
+        ->join('orgs as f','f.org_id','d.org_id')
+        ->where('a.rider_id',$rider_id)
+        ->get();
+        
+        dd($orders);
+        
+        return view('Rider_view.rider-order',compact('orders'));
 
 
     }

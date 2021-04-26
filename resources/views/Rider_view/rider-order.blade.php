@@ -11,7 +11,7 @@
                         <div class="card-body">
                             <div class="row m-3">
                                 <div class="col-12 d-flex flex-column">
-                                    <span class="h5"> Order ID: </span>
+                                    <span class="h5"> Order ID: <span>{{$orders->order_id}}</span> </span>
                                     <span class="h5">Customer Name:</span>
                                     <span class="h5">Adress:</span>
                                 </div>

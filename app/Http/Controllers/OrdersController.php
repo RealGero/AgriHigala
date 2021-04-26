@@ -294,7 +294,7 @@ class OrdersController extends Controller
                 $orders = DB::table('orders as a')
                 ->join('payments as b','b.order_id','a.order_id')
                 ->whereNotNull('a.packed_at')
-                ->whereNull('a.received_at')
+                ->whereNull('a.delivered_at')
                 ->orderBy('a.order_id','desc')
                 ->get();
             break;
@@ -303,7 +303,7 @@ class OrdersController extends Controller
             case '4':
                 $orders = DB::table('orders as a')
                 ->join('payments as b','b.order_id','a.order_id')
-                ->whereNotNull('a.received_at')
+                ->whereNotNull('a.delivered_at')
                 ->whereNull('a.completed_at')
                 ->orderBy('a.order_id','desc')
                 ->get();
@@ -398,7 +398,7 @@ class OrdersController extends Controller
         return view('Seller_view.order-request',compact('orders','title'));
     }
 
-    public function sellerOrderRequest (Request $request, $id){
+    public function sellerOrderRequest(Request $request, $id){
         
         // CHECK IF THERE'S A RESPONSE
         $response = $request->input('response');
@@ -419,6 +419,66 @@ class OrdersController extends Controller
         }
         return redirect()->route('order.request.index',[$id]);
     }
+
+    public function orderPacked(Request $request,$id)
+    {
+          // VALIDATOR FOR RIDER
+          $validated = $request->validate([
+            'rider' => ['required']
+        ]);
+
+        // CHECK IF THERE'S A RESPONSE
+        $response = $request->input('response');
+        if ($response == 'packed'){
+            $order = Order::find($id);
+            $order->rider_id = $request->input('rider');
+            $order->packed_at = now();
+            $order->save();
+            request()->session()->flash('success','Order packed');
+        }
+
+        return redirect()->route('order.request.index',[$id]);
+    }
+
+    public function sellerViewmore($id)
+    {
+        $title = 'order';
+
+        // FIND ORDER
+        $order = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->join('sellers as e','e.seller_id','d.seller_id')
+            ->join('orgs as f','f.org_id','e.org_id')
+            ->select('f.org_name','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
+            ->where('a.order_id', $id)
+            ->first();
+
+            $orderLine = DB::table('orderlines as a')
+            ->join('stocks as b','b.stock_id','a.stock_id')
+            ->join('products as c','c.product_id','b.product_id')
+            ->join('product_types as d','d.product_type_id','c.product_type_id')
+            ->join('prices as e','e.stock_id','b.stock_id')
+            ->join('units as f','f.unit_id','e.unit_id')
+            ->where('a.order_id',$id)
+            ->get();
+
+            return view('seller_view.seller-viewmore',compact('order','title','orderLine'));
+
+        // if ($order){
+           
+        // }
+        // else{
+        //     request()->session()->flash('error','Order not found');
+        //     return redirect()->route('');
+        // }
+    }
+
+    // Order ----- RIDER SIDE -------------------------------------------------------------------
+
+    
+
 
     public function orderReceivedIndex()
 

@@ -380,6 +380,12 @@ img.payment-online {
 .container-return table{
     table-layout: fixed;
 }
+    // ratings from buyer -------------------------
+.buyer-ratings select,option{
+//     font-family: 'Arial', 'Font Awesome 5 Pro';
+//     font-weight: 900;
+// }
+}
 //reviews of a seller
 .card-reviews  {
     width: 34rem;
@@ -689,6 +695,14 @@ img.payment-online {
 
 }
 
+.seller-viewmore img{
+    width: 6rem;
+}
+.seller-viewmore table{
+    table-layout: fixed;
+
+}
+
 //seller to rider view
 
 .view-order img{
@@ -701,7 +715,14 @@ img.payment-online {
 }
 
 
+
+
 //Rider ----------------------------------------------------------------------------------------------
+.rider-profile img{
+
+    width: 6.5rem;
+}
+
 
 //footer
 .footer{

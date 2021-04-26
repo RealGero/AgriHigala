@@ -1,4 +1,4 @@
-
+@auth
     <div class="col-6 right-side">
         <a href="/buyer/browse"><i class="fa fa-search  fa-2x fontawesome-color"></i></a>
        
@@ -35,9 +35,9 @@
 
       <div id="mySidenav" class="sidenav">
           
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+          {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
-         </form>
+         </form> --}}
            <div>
             <a class="" data-toggle="collapse" href="#account-items" aria-expanded="false" aria-controls="product-items">
               <i class="fas fa-user pr-2"></i>Account
@@ -71,5 +71,5 @@
          <span style="cursor:pointer" onclick="openNav()">
            <i class="fa fa-bars fa-2x fontawesome-color"></i></span>
    </div> 
-
+@endauth
 

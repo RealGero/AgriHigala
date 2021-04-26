@@ -89,7 +89,7 @@ class UsersController extends Controller
       
        $user->save();
 
-        return redirect('/buyer/profile/edit')->with('success','Successfully uploaded an image');
+        return redirect()->route('buyer.profile.edit')->with('success','Successfully uploaded an image');
 
     }
 
@@ -161,10 +161,10 @@ class UsersController extends Controller
     public function userAccount()
     {
         
-        // $id = Auth::id();
-        // $user = User::find($id);
+        $id = Auth::id();
+        $user = User::find($id);
        
-        return view('showprofile.user-account');
+        return view('showprofile.user-account',compact('user'));
     }
 
     public function updateAccountUsername(Request $request)
@@ -195,12 +195,12 @@ class UsersController extends Controller
 
         if(!(Hash::check($request->get('current_password'),Auth::user()->password)))
         {
-            return redirect('/buyer/user/account')->with('error','The current password does not match with your old password');
+            return redirect()->route('buyer.useraccount')->with('error','The current password does not match with your old password');
         }
 
         if(strcmp($request->get('current_password'),$request->get('new_password'))==0)
         {
-            return redirect('/buyer/user/account')->with('error','The current password cannot be the same with the new password');
+            return redirect()->route('buyer.useraccount')->with('error','The current password cannot be the same with the new password');
         }
 
 
@@ -210,7 +210,7 @@ class UsersController extends Controller
         $user->password = bcrypt($request->get('new_password'));
         $user->save();
 
-        return redirect('/buyer/user/account')->with('password','Password successfully changed');
+        return redirect()->route('buyer.useraccount')->with('password','Password successfully changed');
     }
 
     public function updateValidId(Request $request)
@@ -262,7 +262,7 @@ class UsersController extends Controller
     public function sellerProfile()
     {
         
-       
+    
         $id = Auth::id();
         $user =  User::find($id);
         $brgys = Brgy::all();
@@ -317,6 +317,39 @@ class UsersController extends Controller
         $seller = User::find($id)->seller;
 
         $this->validate($request,[
+            'first_name' => ['required','min:2',
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The first name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The first name is invalid');
+                }
+            }
+        ],
+        
+        'middle_name' => ['required','min:2',
+            
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The first name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The first name is invalid');
+                }
+            }
+        ],
+        'last_name' => ['required','min:2',
+                
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The last name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The last name is invalid');
+                }
+            }
+        ],
             'email' => ['required',Rule::unique('users')->ignore($id, 'user_id')],
             'mobile_number' => ['required', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
             'address' => ['required'],
@@ -329,7 +362,9 @@ class UsersController extends Controller
          ]);
 
        
-        
+        $user->f_name = $request->input('first_name');
+        $user->m_name = $request->input('middle_name');
+        $user->l_name = $request->input('last_name');
 
         $user->email = $request->input('email');
         $user->mobile_number = $request->input('mobile_number');
@@ -375,12 +410,65 @@ class UsersController extends Controller
       
        $user->save();
 
-       return redirect('/seller/profile')->with('image','Successfully uploaded an image');
+       return redirect()->route('seller.profile')->with('image','Successfully uploaded an image');
     }
     public function sellerAccount()
     {
+        $id = Auth::id();
+        $seller = User::find($id);
+
+        return view('Seller_view.seller-account',compact('seller'));
+    }
+
+    public function sellerAccountUpdate(Request $request)
+    {
+        $id = Auth::id();
+        $user = User::find($id);
+
+        $this->validate($request,[
+           
+            'current_password'=> '',
+            'new_password'=>'string|min:8',
+            'password_confirmation' =>'min:8|same:new_password'
+    
+            ]);
+
+        if(!(Hash::check($request->get('current_password'),Auth::user()->password)))
+        {
+            return redirect()->back()->with('error','The current password does not match with your old password');
+        }
+
+        if(strcmp($request->get('current_password'),$request->get('new_password'))==0)
+        {
+            return redirect()->back()->with('error','The current password cannot be the same with the new password');
+        }
+
+
+
+        $user = Auth::user();
+
+        $user->password = bcrypt($request->get('new_password'));
+      
+        $user->save();
+
+        return redirect()->back()->with('success','Account updated successfully');
+
+    }
+
+    public function sellerUpdateUsername(Request $request)
+    {
+        $id = Auth::id();
+        $user = User::find($id);
+        $this->validate($request,[
+        'username' => ['required',Rule::unique('users')->ignore($id, 'user_id')],
+        ]);
         
 
-        return view('Seller_view.seller-account');
+        $user->username = $request->input('username');
+        $user->save();
+
+        return redirect()->back()->with('success','Account updated successfully');
     }
+
+
 }

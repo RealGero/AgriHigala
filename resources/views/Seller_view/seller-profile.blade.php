@@ -33,6 +33,27 @@
                    
                     <div class="row profile-input">
                       <div class="col-12">
+                        <input type="text" class="form-control @error('first_name') is-invalid @enderror" placeholder="first name" name="first_name" value="{{$user->f_name}}">
+                        <div class="text-danger"> {{$errors->first('first_name')}}</div>
+                      </div>
+                    </div>   
+
+                    <div class="row profile-input">
+                      <div class="col-12">
+                        <input type="text" class="form-control @error('middle_name') is-invalid @enderror" placeholder="Middle name" name="middle_name" value="{{$user->m_name}}">
+                        <div class="text-danger"> {{$errors->first('middle_name')}}</div>
+                      </div>
+                    </div>
+
+                    <div class="row profile-input">
+                      <div class="col-12">
+                        <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Last name" name="last_name" value="{{$user->l_name}}">
+                        <div class="text-danger"> {{$errors->first('last_name')}}</div>
+                      </div>
+                    </div>
+
+                    <div class="row profile-input">
+                      <div class="col-12">
                         <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{$user->email}}">
                         <div class="text-danger"> {{$errors->first('email')}}</div>
                       </div>

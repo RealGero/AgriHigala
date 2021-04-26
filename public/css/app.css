@@ -11562,12 +11562,24 @@ img.payment-online {
   width: 6rem;
 }
 
+.seller-viewmore img {
+  width: 6rem;
+}
+
+.seller-viewmore table {
+  table-layout: fixed;
+}
+
 .view-order img {
   width: 6rem;
 }
 
 .view-order table {
   table-layout: fixed;
+}
+
+.rider-profile img {
+  width: 6.5rem;
 }
 
 .footer {

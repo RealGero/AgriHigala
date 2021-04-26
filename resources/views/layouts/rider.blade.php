@@ -18,16 +18,12 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
-  
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
     <script src="{{ asset('js/main.js') }}" defer></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 
     <link rel="icon" href="/images/background_circle.png">
- 
-
- 
- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
 </head>
 <body>
     <div>
@@ -35,8 +31,7 @@
                 <div class="container-fluid">
                     <div class="row">
                        @include('include.navbar-left')
-                       @include('include.navbar-right')
-                      
+                       @include('include.rider-navbar')
                        
                     </div> 
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -79,8 +74,7 @@
                                             </form>
                                         </div>
                                 </li>
-                                @include('include.dropdown')
-                                
+                               
                                 @endguest
                             </ul>
                         </div>
@@ -89,71 +83,15 @@
             </nav>    
         <main class="py-4">
             <div class="container">
-             
-                @yield('content')
+                 @yield('content')
+
             </div>
-            {{-- <div class="container">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="leftnav-buyer">
-                            <div>
-                                <a class="" data-toggle="collapse" href="#myaccount-items" aria-expanded="false" aria-controls="product-items">
-                                My Account
-                                </a>
-                            </div>
-                            <div class="collapse" id="myaccount-items">
-                                <div class="d-flex flex-column myaccount-collapse text-white">
-                                    <a href="/buyer/profile">Account</a> 
-                                    <a href="/buyer/user/account">Profile</a>
-                                </div>
-                            </div>
-                           
-                            <div>
-                                <a class="" data-toggle="collapse" href="#myorder-items" aria-expanded="false" aria-controls="product-items">
-                                My Orders
-                                </a>
-                            </div>
-                            <div class="collapse" id="myorder-items">
-                                <div class="d-flex flex-column text-white">
-                                    <a href="/buyer/order">Orders</a> 
-                                    <a href="/seller/product/add-new-product">Returns</a>
-                                    <a href="/seller/product/add-new-product">Cancellations</a>
-                                </div>
-                            </div>
-                            <a href="#clients">My Reviews</a>
-                            <a href="#clients">My Message</a>
-                            <a href="#contact">My Notification</a>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        @yield('content')
-                    </div>
-                </div>
-                <div class="row">
-                    @include('include.footer')
-                </div>
-            </div> --}}
         </main>
     </div>
-
-    @include('include.footer')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
-    <script src="{{asset ('js/main.js')}}"> </script>
-    <script src="jquery.rateyo.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
- 
-<script>
- 
- 
-    $(function () {
-        $(".rateyo").rateYo().on("rateyo.change", function (e, data) {
-            var rating = data.rating;
-            $(this).parent().find('.score').text('score :'+ $(this).attr('data-rateyo-score'));
-            $(this).parent().find('.result').text('ratings :'+ rating);
-            $(this).parent().find('input[comment=ratings]').val(rating); //add rating value to input field
-        });
-    });
- 
-</script>
+    <script src="{{asset ('js/main.js')}} "> </script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js" defer></script>
+    @include('include.footer')
+    
 </body>
 </html>

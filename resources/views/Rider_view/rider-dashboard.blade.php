@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.rider')
 
 
 @section('content')
@@ -18,15 +18,19 @@
                             </div>
                         </div>
                         <div class="row my-3">
-                            <div class="col-4 text-center">
+                            <div class="col-3 text-center">
                                 <p>0</p>
                                 <span class="h6">All</span>
                             </div>
-                            <div class="col-4 text-center">
+                            <div class="col-3 text-center">
                                 <p>0</p>
                                 <span class="h6">Delivering</span>
                             </div>
-                            <div class="col-4 text-center">
+                            <div class="col-3 text-center">
+                                <p>0</p>
+                                <span class="h6">Completed</span>
+                            </div>
+                            <div class="col-3 text-center">
                                 <p>0</p>
                                 <span class="h6">Return</span>
                             </div>

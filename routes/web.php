@@ -38,12 +38,7 @@ Route::resource('users', 'UsersController');
 
         Route::get('buyer/profile','Userscontroller@index');
         
-        // Route::get('/buyer/verification','buyercontroller\ProfilesController@verification');
-
-        // Route::get('/buyer/order','OrdersController@index');
-
-        // Route::get('/buyer/product-detail','seller\ProductsController@index');
-
+      
         Route::get('/cart','CartController@getCart')->name('cart.index');
         Route::get('/buyer/cart/{id}','CartController@index');
 
@@ -78,15 +73,15 @@ Route::resource('users', 'UsersController');
 
         Route::get('/buyer/history','buyercontroller\HistoriesController@index');
 
-        Route::get('/buyer/profile/edit','UsersController@edit');
-        Route::put('/buyer/profile/edit','UsersController@update');
+        Route::get('/buyer/profile/edit','UsersController@edit')->name('buyer.profile.edit');
+        Route::put('/buyer/profile/edit','UsersController@update')->name('buyer.profile.update');
         Route::put('/buyer/profile/updateimage','UsersController@updateUserImage');
         Route::put('buyer/accout/updateid','UsersController@updateValidId');
         Route::post('/buyer/profile','UsersController@store');
        
 
 
-        Route::get('/buyer/user/account','UsersController@userAccount');
+        Route::get('/buyer/user/account','UsersController@userAccount')->name('buyer.useraccount');
         Route::put('/buyer/user/account','UsersController@updateAccountUsername');
         Route::put('/buyer/user/password','UsersController@updateAccountPassword');
 
@@ -121,7 +116,12 @@ Route::resource('users', 'UsersController');
     // });
 
         // order------------------------------------------------------------------------
-      
+        // Ratings===========================================================
+        Route::get('/buyer/ratings', 'RatingsController@buyerIndex')->name('buyer.ratings.index');
+        Route::post('/buyer/ratings', 'RatingsController@buyerStore')->name('buyer.ratings.store');
+   
+
+
 
 //Seller-----------------------------------------------------------------------------------------
 
@@ -155,9 +155,11 @@ Route::resource('users', 'UsersController');
         Route::get('/seller/prduct/delete-product/{id}', 'sellercontroller\ProductsController@deleteProduct');
         Route::post('/seller/product/add-new-product/', 'sellercontroller\ProductsController@storeNewProduct');
 
-                // need changes
+        Route::get('/seller/order/viewmore/{id}','OrdersController@sellerViewmore')->name('sellerViewMore');       
         Route::get('/seller/order/order-request', 'OrdersController@orderRequest')->name('order.request.index');
         Route::get('/seller/order/order-request/{id}', 'OrdersController@sellerOrderRequest')->name('orderRequestwithId');
+        Route::get('/seller/order/order-packed/{id}', 'OrdersController@orderPacked')->name('orderPacked');
+
         Route::get('/seller/order/order-detail', 'SellerOrdersController@orderDetails');
         Route::get('/seller/history', 'SellerOrdersController@transactionHistory');
         Route::get('/seller/return', 'SellerOrdersController@orderReturn');
@@ -169,14 +171,18 @@ Route::resource('users', 'UsersController');
         Route::get('/seller/feedback', 'FeedBacksController@sellerFeedbackIndex')->name('sellerFeedback.index');
         Route::post('/seller/feedback', 'FeedBacksController@sellerFeedbackStore')->name('sellerFeedback.store');
 
-        Route::get('/seller/ratings', 'sellercontroller\RatingsController@index');
+    
         Route::get('/seller/earnings', 'sellercontroller\EarningsController@index');
-        Route::get('/seller/profile', 'UsersController@sellerProfile');
+
+        Route::get('/seller/profile', 'UsersController@sellerProfile')->name('seller.profile');
         Route::put('/seller/profile/updateImage', 'UsersController@updateSellerProfileImage');
         Route::put('/seller/profile', 'UsersController@updateSellerDetails');
 
-        Route::get('/seller/account', 'UsersController@sellerAccount');
+        Route::get('/seller/account', 'UsersController@sellerAccount')->name('seller.account');
+        Route::put('/seller/account/update', 'UsersController@sellerAccountUpdate')->name('seller.update');
+        Route::put('/seller/account/username' ,'UsersController@sellerUpdateUsername');
         // Route::get('/seller/rider','sellercontroller\MyRiderController@index');
+        Route::get('/seller/ratings', 'RatingsController@sellerIndex')->name('seller.ratings.index');
         
         
         
@@ -187,12 +193,20 @@ Route::resource('users', 'UsersController');
         
         
         Route::get('seller/view-rider','RidersController@viewSellerRider')->name('rider.index') ;      
-        Route::get('/seller/rider/create','RidersController@index')->name('rider.create');
+        Route::get('/seller/rider/create','RidersController@createRider')->name('rider.create');
         Route::post('/seller/rider/create','RidersController@store')->name('rider.store');
       
+        Route::get('/rider/profile/','RidersController@profileIndex')->name('rider.profile.index');      
+        Route::put('/rider/profile/edit','RidersController@profileUpdate')->name('rider.profile.update');      
+        Route::put('/rider/profile/image','RidersController@imageUpdate')->name('rider.image.update'); 
+        
+        
+        Route::get('/rider/account','RidersController@accountIndex')->name('account.index');
+        Route::put('/rider/password','RidersController@passwordUpdate')->name('rider.changepassword');
+
+        Route::get('/rider/orders', 'RidersController@orders')->name('rider.order.index');
 
         Route::get('/rider/dashboard','Riderscontroller@dashboard');
-        Route::get('/rider/orders', 'RidersController@orders');
         Route::get('/rider/history', 'RidersController@orderDetails');
    
 

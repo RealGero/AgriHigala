@@ -12,12 +12,12 @@
                            <div class="row mt-3">
                                <div class="col-12">
                                 <table class="table">
-                                
                                     <thead>
                                       <tr>
                                         <th scope="col">Order ID</th>
                                         <th scope="col">Buyer</th>
                                         <th scope="col">Address</th>
+                                        <th scope="col">Mobile #</th>
                                         <th scope="col">Total</th>
                                         <th scope="col">Status</th>
                                       </tr>
@@ -31,7 +31,11 @@
                                     @endphp
                                       <tbody>
                                         <tr>
-                                          <td>{{$order->order_id}}</td>
+                                          <td>
+                                            {{$order->order_id}} <br>
+                                           <a href="{{route('sellerViewMore',[$order->order_id])}}"><small class="font-italic">View More</small> </a>
+
+                                          </td>
                                           <td><span class="text-capitalize">{{$buyer->f_name}} {{$buyer->l_name}}</span>
                                             <br>
                                             <small>({{$buyer->username}})</small></td>
@@ -39,6 +43,7 @@
                                             <br>
                                           <small class="text-capitalize">{{$buyer->address}}</small>  
                                           </td>
+                                          <td> {{$buyer->mobile_number}} </td>
                                           <td>  &#8369;{{number_format($order->payment_total)}}</td>
                                           <td>
                                             @if($order->order_accepted_at == null)
@@ -56,47 +61,31 @@
                                                   <input type="submit" name="decline" value="Decline" id="" class="btn btn-danger btn-sm d-block"> 
                                                </form>
                                              @elseif($order->order_accepted_at != null && $order->packed_at == null)
-                                                <form action="">
+                                                <form action="{{route('orderPacked',[$order->order_id])}}">
                                                   @csrf
-                                                  <input type="submit" name="packed_at" value="Packed_at" class="m-2 btn btn-primary btn-sm d-block">
-                                                  <select class="form-control">
-                                                    <option disabled selected>--- Select Rider ---</option>
+                                                  @method('PUT')
+                                                  <select class="form-control" name="rider" required>
+                                                    <option disabled selected><small> Select Rider</small></option>
                                                     @if($riders)
                                                       @foreach ($riders as $rider)
                                                       <option value="{{$rider->rider_id}}">{{$rider->f_name}} {{$rider->l_name}}</option>
                                                       @endforeach
-                                                   @endif
+                                                    <input type="hidden" name="response" value="packed">
+                                                    <input type="submit" name="packed_at" value="Packed_at" class="m-2 btn btn-primary btn-sm d-block">
+                                                      @endif
                                                   </select>
                                                 </form>
+                                                  @elseif($order->order_accepted_at != null && $order->packed_at != null && $order->delivered_at == null)    
+                                                    <span> Delivering </span>
+                                                
                                               @endif
                                           </td>
                                         </tr>
-                                        {{-- <tr>
-                                          <td>Mark</td>
-                                          <td>Otto</td>
-                                          <td>@mdo</td>
-                                          <td>@mdo</td>
-                                          <td><select class="form-control form-control-sm">
-                                              <option>Delivery Otion</option>
-                                              <option>By seller</option>
-                                              <option>By System</option>
-                                            </select>
-                                              <a class="btn btn-primary btn-sm d-block" href="#" role="button">Deliver now</a>
-                                          </td>
-                                        </tr> --}}
-                                        {{-- <tr>
-                                          <td>Mark</td>
-                                          <td>Otto</td>
-                                          <td>@mdo</td>
-                                          <td>@mdo</td>
-                                          <td> <i class="fas fa-check text-primary"> </i> <span class="text-primary"> Shipped</span> 
-                                          </td>
-                                        </tr> --}}
+                                        @endforeach 
                                       </tbody>
-                                     @endforeach 
-                                  </table>
-                               </div>
-                           </div>
+                                  </table>      
+                               </div>   
+                           </div>  
                         </div>
                     </div>
                 </div>

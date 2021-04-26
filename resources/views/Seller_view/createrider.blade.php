@@ -3,13 +3,15 @@
 @section('content')
     <div class="container">
         <div class="createrider">
+          <a href="{{route('rider.index')}}" class="btn btn-primary">Back</a>
             <div class="col-6 mx-auto">
-              @if(session()->has('message'))
+                       @if(session()->has('message'))
                           <div class="alert alert-success my-3">
                             {{session()->get('message')}}
                           </div>
                         @endif
                 <div class="card p-3">
+    
                     <div class="col-12">
                         
                         <span class="h4 mt-3 d-flex justify-content-center"> Add rider</span>
@@ -45,6 +47,13 @@
                                   </div>
                                  
                               </div>
+                              <div class="row profile-input">
+                                <div class="col-12">
+                                  <input type="text" class="form-control  @error('email') is-invalid @enderror" placeholder="Email" name = "email" value="{{old('email')}}">
+                                  <div class="text-danger">{{$errors->first('email')}}</div>
+                                </div>
+                               
+                            </div>
                               <div class="form-group">
                                 <label for="image">Image</label>
                                 <input type="file" class="form-control-file  @error('rider_image') is-invalid @enderror" id="image" name="rider_image">

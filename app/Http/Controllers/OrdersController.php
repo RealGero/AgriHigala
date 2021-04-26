@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use DB;
 use Auth;
 use Session;
 use App\Cart;
@@ -11,8 +12,6 @@ use App\Fee;
 use App\Order;
 use App\Payment;
 use App\OrderLine;
-use DB;
-use App\User;
 class OrdersController extends Controller
 {
     public function __construct()

@@ -28,16 +28,20 @@ class ProductTypesController extends Controller
         });
     }
     
+    // INDEX
     public function index(){
+
         $categories=ProductType::orderBy('product_type_id')->paginate(10);
         return view('admin.categories.index',compact('categories'));
     }
 
+    // CREATE
     public function create(){
 
         return view('admin.categories.create');
     }
 
+    // STORE
     public function store(Request $request){
 
         // PRODUCT TYPE TABLE VALIDATOR
@@ -61,10 +65,12 @@ class ProductTypesController extends Controller
         return redirect()->route('admin.categories.index');
     }
 
+    // SHOW
     public function show($id){
-        //
+        return back();
     }
 
+    // EDIT
     public function edit($id){
         $category = ProductType::find($id);
         if ($category){
@@ -76,6 +82,7 @@ class ProductTypesController extends Controller
         }
     }
     
+    // UPDATE
     public function update(Request $request, $id){
         // PRODUCT TYPE TABLE VALIDATOR
         $validated = $request->validate([
@@ -97,6 +104,7 @@ class ProductTypesController extends Controller
         return redirect()->route('admin.categories.index');
     }
     
+    // DESTROY
     public function destroy($id){
         $category = ProductType::find($id);
         $category->delete();

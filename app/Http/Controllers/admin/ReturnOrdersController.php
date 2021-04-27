@@ -5,14 +5,32 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Order;
 use App\ReturnOrder;
 
 class ReturnOrdersController extends Controller
 {
-    /* 
-    INDEX
-    */
+    protected $check_auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
+
+    // INDEX
     public function index()
     {
         // SET TITLE
@@ -31,9 +49,7 @@ class ReturnOrdersController extends Controller
         return view('admin.orders.index',compact('orders', 'title'));
     }
 
-    /* 
-    SHOW
-    */
+    // SHOW
     public function show($id)
     {
         // SET TITLE
@@ -57,13 +73,12 @@ class ReturnOrdersController extends Controller
         }
     }
 
+    // CREATE
     public function create(){
-        return redirect()->route('admin.returns.index');
+        return back();
     }
 
-    /* 
-    STORE
-    */
+    // STORE
     public function store(Request $request){
         
         // VALIDATOR FOR REASON

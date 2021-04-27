@@ -31,6 +31,7 @@ class ProductsController extends Controller
         });
     }
     
+    // INDEX
     public function index(){
         $products = DB::table('products as a')
             ->join('product_types as b', 'a.product_type_id', '=', 'b.product_type_id')
@@ -39,11 +40,13 @@ class ProductsController extends Controller
         return view('admin.products.index',compact('products'));
     }
 
+    // CREATE
     public function create()
     {
-        return view('admin.products.create');
+        return back();
     }
 
+    // STORE
     public function store(Request $request)
     {
         // PRODUCT TABLE VALIDATOR
@@ -54,7 +57,7 @@ class ProductsController extends Controller
         
         // CREATE PRODUCT
         $product = new Product;
-        $product->product_id = $request->input('category');
+        $product->product_type_id = $request->input('category');
         $product->product_name = $request->input('product_name');
         $product->product_description = $request->input('product_description');
         $product->save();
@@ -82,11 +85,13 @@ class ProductsController extends Controller
         return redirect()->route('admin.products.index');
     }
 
+    // SHOW
     public function show($id)
     {
-        //
+        return back();
     }
 
+    // EDIT
     public function edit($id){
 
         // GET PRODUCT & SRP
@@ -103,6 +108,7 @@ class ProductsController extends Controller
         }
     }
 
+    // UPDATE
     public function update(Request $request, $id)
     {
         // PRODUCT TABLE VALIDATOR
@@ -145,6 +151,7 @@ class ProductsController extends Controller
         return redirect()->route('admin.products.index');
     }
 
+    // DESTROY
     public function destroy($id)
     {
         $product = Product::find($id);

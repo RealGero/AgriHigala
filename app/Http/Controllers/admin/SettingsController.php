@@ -5,12 +5,32 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\FeedBack;
 use App\CustomerService;
 
 class SettingsController extends Controller
 {
+    protected $check_auth;
 
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
+
+    // FEEDBACK
     public function feedbacks(){
 
         // GET RATINGS
@@ -19,6 +39,7 @@ class SettingsController extends Controller
         return view('admin.settings.feedback',compact('feedbacks'));
     }
 
+    // ANNOUNCEMENT
     public function announcements(){
 
         // SET TITLE
@@ -36,11 +57,13 @@ class SettingsController extends Controller
         return view('admin.settings.announcements',compact('announcements', 'title'));
     }
 
+    // CREATE ANNOUNCEMENT
     public function createAnnouncements(){
 
         return view('admin.settings.create-announcement');
     }
 
+    // STORE ANNOUNCEMENT
     public function storeAnnouncements(Request $request){
         
         // VALIDATOR FOR ANNOUNCEMENT
@@ -62,6 +85,7 @@ class SettingsController extends Controller
         return redirect()->route('admin.announcements');
     }
 
+    // DESTROY ANNOUNCEMENT
     public function destroyAnnouncements($id){
 
         $announcement = CustomerService::find($id);
@@ -77,6 +101,7 @@ class SettingsController extends Controller
         return redirect()->route('admin.announcements');
     }
 
+    // CUSTOMER SERVICE
     public function customerService(){
 
         // SET TITLE
@@ -101,6 +126,7 @@ class SettingsController extends Controller
         return view('admin.settings.announcements', compact('announcements', 'title'));
     }
 
+    // REPLY CUSTOMER SERVICE
     public function replyCustomerService($id){
         
         // GET CUSTOMER MESSAGE
@@ -113,6 +139,7 @@ class SettingsController extends Controller
         return view('admin.settings.create-cs', compact('message'));
     }
 
+    // STORE CUSTOMER SERVICE
     public function storeCustomerService(Request $request){
         
         // VALIDATOR FOR CUSTOMER SERVICE

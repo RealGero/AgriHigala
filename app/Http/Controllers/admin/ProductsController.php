@@ -6,17 +6,36 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use App\Product;
 use App\SRP;
 
 class ProductsController extends Controller
 {
+    protected $check_auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
     
     public function index(){
         $products = DB::table('products as a')
-                    ->join('product_types as b', 'a.product_type_id', '=', 'b.product_type_id')
-                    ->where('a.deleted_at', NULL)
-                    ->paginate(10);
+            ->join('product_types as b', 'a.product_type_id', '=', 'b.product_type_id')
+            ->where('a.deleted_at', NULL)
+            ->paginate(10);
         return view('admin.products.index',compact('products'));
     }
 

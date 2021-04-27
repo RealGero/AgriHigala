@@ -18,6 +18,15 @@ class AdminsController extends Controller
 
     // LOGIN FORM
     public function showAdminLoginForm(){
+
+        // // CHECK IF AUTHENTICATED & ADMIN
+        // if (Auth::check()){
+        //     return back();
+        // }
+        // else{
+        //     return view('admin.auth.login');
+        // }
+
         return view('admin.auth.login');
     }
 

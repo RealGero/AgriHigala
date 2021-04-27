@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Admin;
 use App\Seller;
@@ -15,12 +16,40 @@ use App\Buyer;
 
 class UsersController extends Controller{
 
-    public function index(){
-        $users=User::orderBy('user_id','ASC')->paginate(10);
-        return view('admin.users.index')->with('users',$users);
+    protected $check_auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
     }
 
+    // INDEX
+    public function index(){
+
+        // GET USERS
+        $users=User::orderBy('user_id','ASC')->paginate(10);
+
+        if ($users){
+            return view('admin.users.index')->with('users',$users);
+        }
+        return back();
+    }
+
+    // CREATE
     public function create($id=null){
+
         // CHECK TO $id IS VALID
         if (is_null($id)){
             $user_type = 0;
@@ -31,6 +60,7 @@ class UsersController extends Controller{
         return view('admin.users.create',compact('user_type'));
     }
 
+    // STORE
     public function store(Request $request){
 
         // USER TABLE VALIDATOR
@@ -137,11 +167,14 @@ class UsersController extends Controller{
         
     }
 
+    // SHOW
     public function show($id){
-        //
+        return redirect()->route('admin.users.index');
     }
     
+    // EDIT
     public function edit($id) {
+        
         // CHECK USER TYPE
         $checkUserType = User::find($id)->user_type;
 
@@ -190,7 +223,9 @@ class UsersController extends Controller{
         return view('admin.users.edit',compact('user'));
     }
 
+    // UPDATE
     public function update(Request $request, $id){
+        
         // USER TABLE VALIDATOR
         $validated = $request->validate([
             'username' => ['required','string','min:2','regex:/^\S*$/u',Rule::unique('users')->ignore($id, 'user_id')],
@@ -285,12 +320,18 @@ class UsersController extends Controller{
         return redirect()->route('admin.users.index');
     }
 
+    // DELETE
     public function destroy($id){
+        
         $user = User::find($id);
         $user->delete();
-
-        request()->session()->flash('success','Successfully deleted user');
-            
+        
+        if ($user){
+            request()->session()->flash('success','Successfully deleted user');
+        }else{
+            request()->session()->flash('error','Error occurred while deleting user');
+        }
         return redirect()->route('admin.users.index');
+            
     }
 }

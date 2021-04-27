@@ -1,5 +1,10 @@
 <?php
+<<<<<<< Updated upstream
+=======
 
+// use Illuminate\Support\Facades\Route;
+
+>>>>>>> Stashed changes
 /*
 |--------------------------------------------------------------------------
 | Web Routes

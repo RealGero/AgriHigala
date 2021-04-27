@@ -77,7 +77,10 @@
                                                 </form>
                                                   @elseif($order->order_accepted_at != null && $order->packed_at != null && $order->delivered_at == null)    
                                                     <span> Delivering </span>
-                                                
+                                                  @elseif($order->packed_at == null && $order->completed_at != null)
+                                                     <span> Canceled Order </span>
+                                                  @elseif($order->packed_at == null && $order->completed_at == null)
+                                                      <span> Delivered</span>
                                               @endif
                                           </td>
                                         </tr>

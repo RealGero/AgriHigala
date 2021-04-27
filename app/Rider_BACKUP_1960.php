@@ -4,7 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 class Rider extends Model
 {
     protected $table = "riders";

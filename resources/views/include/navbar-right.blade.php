@@ -1,4 +1,4 @@
-@auth
+
     <div class="col-6 right-side">
         <a href="/buyer/browse"><i class="fa fa-search  fa-2x fontawesome-color"></i></a>
        
@@ -71,5 +71,5 @@
          <span style="cursor:pointer" onclick="openNav()">
            <i class="fa fa-bars fa-2x fontawesome-color"></i></span>
    </div> 
-@endauth
+
 

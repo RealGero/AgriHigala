@@ -308,7 +308,15 @@ class OrdersController extends Controller
                 ->get();
 
             break;
-            
+
+            case '5':
+                $orders = DB::table('orders as a')
+                ->join('payments as b','b.order_id','a.order_id')
+                ->whereNotNull('a.delivered_at')
+                ->whereNotNull('a.delivered_at')
+                ->orderBy('a.order_id','desc')
+                ->get();
+                break;
             default:
                 
                 $orders = DB::table('orders as a')
@@ -375,6 +383,36 @@ class OrdersController extends Controller
 
         return redirect()->back()->with('success','Successfully Uploaded a Payment Photo, Wait for the confirmation Thank you!');
 
+    }
+
+    public function orderMyOrderCancel(Request $request,$id)
+    {
+        $response = $request->input('response');
+        if ($response == 'cancel'){
+            $order = Order::find($id);
+            $order->completed_at = now();
+            $order->save();
+            request()->session()->flash('success','Order cancelled');
+        }
+
+        return redirect()->route('buyer.order');
+
+    }
+
+    public function orderMyOrderReceived(Request $request,$id)
+    {
+        
+        $response = $request->input('response');
+        if ($response == 'received'){
+
+            $order = Order::find($order_id = $id);
+            $order->completed_at = now();
+            $order->save();
+            
+            request()->session()->flash('success','Order complete');
+        }
+
+        return redirect()->route('buyer.ratings.index',[$id]);
     }
 
 

@@ -8,6 +8,7 @@ use App\Rider;
 use App\User;
 use App\Buyer;
 use App\Seller;
+use App\Order;
 use Hash;
 use DB;
 use Illuminate\Validation\Rule;
@@ -371,18 +372,32 @@ class RidersController extends Controller
         $rider_id = User::find($id)->rider->rider_id;
 
         $orders = DB::table('orders as a')
-        ->leftJoin('payments as b','b.order_id','a.order_id')
-        ->leftJoin('fees as c','c.fee_id','b.fee_id')
-        ->leftJoin('sellers as d','d.seller_id','c.seller_id')
-        ->leftJoin('riders as e','e.seller_id','d.seller_id')
-        ->join('orgs as f','f.org_id','d.org_id')
+        ->join('payments as b','b.order_id','a.order_id')
+        ->join('fees as c','c.fee_id','b.fee_id')
+        ->join('buyers as d','d.buyer_id','a.buyer_id')
+        ->join('riders as e','e.rider_id','a.rider_id')
+        ->join('users as f','f.user_id','d.user_id')
+        ->join('brgys as g','g.brgy_id','d.brgy_id')
         ->where('a.rider_id',$rider_id)
         ->get();
         
-        dd($orders);
+        // dd($orders);
         
         return view('Rider_view.rider-order',compact('orders'));
 
+
+    }
+    public function riderDeliveredAt(Request $request,$id)
+    {
+        $response = $request->input('response');
+        if ($response == 'delivered'){
+            $order = Order::find($id);
+            $order->delivered_at = now();
+            $order->save();
+            request()->session()->flash('success','Order Delivered');
+        }
+
+        return redirect()->route('rider.order.index',[$id]);
 
     }
 

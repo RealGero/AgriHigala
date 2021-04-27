@@ -8,6 +8,11 @@
                   {{ session()->get('success') }}
                 </div>
             @endif
+            @if(session()->has('thanks'))
+                <div class="alert alert-success">
+                  {{ session()->get('thanks') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-2 container-fluid">
                      @include('include.leftside_buyer')
@@ -21,7 +26,8 @@
                                 <li> <a href="{{route('buyer.order',[1])}}">Request &nbsp; &nbsp;|</a> </li>
                                 <li> <a href="{{route('buyer.order',[2])}}">Pending &nbsp; &nbsp;|</a> </li>
                                 <li> <a href="{{route('buyer.order',[3])}}">Delivery &nbsp; &nbsp;|</a> </li>
-                                <li> <a href="{{route('buyer.order',[4])}}">Recieved</a> </li>
+                                <li> <a href="{{route('buyer.order',[4])}}">Recieved &nbsp; &nbsp;| </a> </li>
+                                <li> <a href="{{route('buyer.order',[5])}}">Completed</a> </li>
                             </ul>
                         </div>
                     </div> 
@@ -46,11 +52,16 @@
                         $order_status = 'Delevering';
                         $badge = 'badge-primary';
     
-                    }elseif($order->delivered_at != null && $order->completed == null)
+                    }elseif($order->delivered_at != null && $order->completed_at == null)
                     {
                         $order_status = 'Received';
                         $badge = 'badge-info';
+                    }elseif($order->delivered_at != null && $order->completed_at != null)
+                    {
+                        $order_status = 'Completed';
+                        $badge = 'badge-success';
                     }
+                
     
                      @endphp    
                     <div class="card my-3">
@@ -98,6 +109,29 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            @if($order->packed_at == null && $order->completed_at == null)
+                                                <form action="{{route('buyer.order.cancel',[$order->order_id])}}" method="POST">
+                                                    @method('PUT')
+
+                                                    <input type="hidden" name="response" value="cancel">
+                                                    <input type="submit" value="Cancel Order" class="btn btn-sm btn-primary">
+                                                </form>
+                                            @elseif($order->packed_at == null && $order->completed_at != null)
+                                                <span class="text-danger">Canceled Order</span>
+                                        
+                                             @elseif($order->delivered_at != null && $order->completed_at == null)   
+                                                <form action="{{route('buyer.order.received',[$order->order_id])}}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="response" value="received">
+                                                    <input type="submit" value="Received" class="btn btn-sm btn-primary">
+                                                </form>
+
+                                            @endif
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <a href={{url('/buyer/order/vieworder/'.$order->order_id)}}>View more..</a>

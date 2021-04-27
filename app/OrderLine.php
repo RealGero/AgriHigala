@@ -24,32 +24,37 @@ class OrderLine extends Model
     public static function getOrderLines($id)
     {
         $orderLine = DB::table('orderlines as a')
-                ->join('stocks as b','b.stock_id','a.stock_id')
-                ->join('products as c','c.product_id','b.product_id')
-                ->join('product_types as d','d.product_type_id','c.product_type_id')
-                ->where('a.order_id',$id)
-                ->get();
+            ->join('stocks as b','b.stock_id','a.stock_id')
+            ->join('products as c','c.product_id','b.product_id')
+            ->join('product_types as d','d.product_type_id','c.product_type_id')
+            ->where('a.order_id',$id)
+            ->get();
 
         $quantity = DB::table('orderlines')
-                ->where('order_id',$id)
-                ->sum('order_qty');
-
-
-       
+            ->where('order_id',$id)
+            ->sum('order_qty');
 
         if($orderLine)
         {
             $data = (object)[];
-
             $data->orderLine = $orderLine;
             $data->quantity = $quantity;
     
             return $data;
         }
 
-            return 0;
+        return 0;
     }
 
+    public static function getOrderQuantity($id){
+        $data = OrderLine::where('order_id', $id)
+            ->sum('order_qty');
+
+        if($data){
+            return $data;
+        }
+        return 0;
+    }
     
 
 }

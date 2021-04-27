@@ -51,18 +51,16 @@ class Order extends Model
 
     public static function getBuyerWaddress($id)
     {
+        $data = DB::table('users as a')
+            ->join('buyers as b', 'a.user_id', '=', 'b.user_id')
+            ->join('brgys as c', 'c.brgy_id', 'b.brgy_id')
+            ->where('b.buyer_id', $id)
+            ->first();
 
-       
-            $data = DB::table('users as a')
-                ->join('buyers as b', 'a.user_id', '=', 'b.user_id')
-                ->join('brgys as c', 'c.brgy_id', 'b.brgy_id')
-                ->where('b.buyer_id', $id)
-                ->first();
-    
-            if($data){
-                return $data;
-            }
-            return 0;
+        if($data){
+            return $data;
+        }
+        return 0;
     }
 
     public static function getRiders($id)
@@ -81,5 +79,26 @@ class Order extends Model
         return $data;
         }
         return false;
+    }
+
+    public static function countOrder($order){
+
+        switch($order)
+        {
+            case 'active':
+                $data=Order::whereNull('delivered_at')->count();
+                if($data){
+                    return $data;
+                }
+
+            case 'complete':
+                $data=Order::whereNotNull('delivered_at')->count();
+                if($data){
+                    return $data;
+                }
+                
+            default:
+                return 0;
+        }
     }
 }

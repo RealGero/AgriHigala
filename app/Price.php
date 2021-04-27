@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Price extends Model
 {
@@ -19,5 +20,17 @@ class Price extends Model
     public function unit()
     {
         return $this->belongsTo('App\Unit');
+    }
+
+    public static function getLatestPrice($id){
+        $data = DB::table('prices as a')
+            ->join('units as b', 'a.unit_id', 'b.unit_id')
+            ->where('a.stock_id', $id)
+            ->latest('a.created_at')
+            ->first();
+        if($data){
+            return $data;
+        }
+        return 0;
     }
 }

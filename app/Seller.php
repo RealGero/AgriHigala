@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Seller as Authenticatable;
+use Illuminate\Support\Facades\DB;
+
 class Seller extends Model
 {
     protected $table = "sellers";
@@ -65,5 +67,46 @@ class Seller extends Model
      $seller= Seller::find($id)->user->username;
      return $seller;
     } 
+
+    public static function countActiveSeller(){
+        $data = DB::table('users as a')
+            ->join('sellers as b', 'a.user_id', '=', 'b.user_id')
+            ->where('a.deleted_at', null)
+            ->count();
+
+        if($data){
+            return $data;
+        }
+        return 0;
+    }
+
+    public static function getActiveSeller(){
+        $data = DB::table('users as a')
+            ->join('sellers as b', 'a.user_id', 'b.user_id')
+            ->select('b.seller_id', 'a.username', 'a.f_name', 'a.l_name')
+            ->where('a.deleted_at', null)
+            ->orderBy('a.f_name')
+            ->orderBy('a.l_name')
+            ->get();
+
+        if($data){
+            return $data;
+        }
+        return false;
+    }
+
+    public static function getSellerFromPayment($id){
+        $data = DB::table('payments as a')
+            ->join('fees as b', 'a.fee_id', 'b.fee_id')
+            ->join('sellers as c', 'b.seller_id', 'c.seller_id')
+            ->join('users as d', 'c.user_id', 'd.user_id')
+            ->where('a.payment_id', $id)
+            ->first();
+
+        if($data){
+            return $data;
+        }
+        return 0;
+    }
    
 }

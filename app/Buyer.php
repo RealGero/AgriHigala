@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Buyer extends Model
 {
@@ -28,7 +29,7 @@ class Buyer extends Model
         return $this->hasMany('App\Order');
     }
 
-    public function messeages()
+    public function messages()
     {
         return $this->hasMany('App\Message');
     }
@@ -46,5 +47,29 @@ class Buyer extends Model
     public function inboxes()
     {
         return $this->hasMany('App\Inbox');
+    }
+
+    public static function countActiveBuyer(){
+        $data = DB::table('users as a')
+            ->join('buyers as b', 'a.user_id', '=', 'b.user_id')
+            ->where('a.deleted_at', null)
+            ->count();
+
+        if($data){
+            return $data;
+        }
+        return 0;
+    }
+
+    public static function getBuyer($id){
+        $data = DB::table('users as a')
+            ->join('buyers as b', 'a.user_id', '=', 'b.user_id')
+            ->where('b.buyer_id', $id)
+            ->first();
+
+        if($data){
+            return $data;
+        }
+        return 0;
     }
 }

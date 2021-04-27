@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ProductType extends Model
 {
@@ -15,19 +16,14 @@ class ProductType extends Model
     {
         return $this->hasMany('App\Product');
     }
+    
+    public static function getCategoryList(){
+        $data = ProductType::orderBy('product_type_name')->get();
 
-
-    public static function countActiveCategories()
-    {
-        
-        // $data = ProductType::find();
-
-        // if($data )
-        // {
-        //     return $data;
-        // }
-        //     return 0;
-   
+        if ($data){
+            return $data;
+        }
+        return 0;
     }
 }
 

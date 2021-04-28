@@ -12,6 +12,8 @@ use App\Fee;
 use App\Order;
 use App\Payment;
 use App\OrderLine;
+use App\User;
+use App\ReturnOrder;
 class OrdersController extends Controller
 {
     public function __construct()
@@ -77,7 +79,7 @@ class OrdersController extends Controller
 
     public function clickedPlaceOrder(Request $request, $id)
     {
-
+       
         // return $id;
        $cart =  $request->session()->get('cart');
         $cartCounts = $cart->items;
@@ -90,7 +92,7 @@ class OrdersController extends Controller
             $buyer_id = User::find($auth_id)->buyer->buyer_id;
 
             $order = new Order;
-            $order->buyer_id =   $buyer_id;
+            $order->buyer_id = $buyer_id;
             $order->save();
    
             foreach($cartCounts as $cartCount)
@@ -150,28 +152,30 @@ class OrdersController extends Controller
     
                 
             elseif($request->input('payment_method') == 2){
-
+              
                 $payment = new Payment;
                 $payment->payment_method='online';
                 $payment->fee_id = $fee->fee_id;
                 $payment->payment_order = $total;
                 $payment->payment_total = $total + $fee->fee_delivery + $fee->fee_other;
+            
                 $order->payment()->save($payment);
-              
                 // return ($buyer_id);
                 $seller = DB::table('seller_banks as a')
                 ->join('sellers as b','b.seller_id','a.seller_id')
                 ->where('a.seller_id',$id)->first();
 
 
-
-                $payment = DB::table('payments as a')
-                ->join('orders as b','b.order_id','=','a.order_id')
+                // $auth = Auth::id();
+                // $buyer_id = User::find($auth)->buyer->buyer_id;
+                // $payment = DB::table('payments')
+                // ->join('orders as b','b.order_id','=','a.order_id')
                 // ->leftJoin('buyers as c','c.buyer_id','b.buyer_id')
-                ->where('b.buyer_id','=', Auth::id())
-                ->latest('a.created_at')
-                ->first();
+                // ->where('b.buyer_id','=',$buyer_id)
+                // ->latest('a.created_at')
+                // ->get();
                 
+           
                 
                 // return dd($payment->buyer_id);
 
@@ -265,14 +269,19 @@ class OrdersController extends Controller
 
       public function orderMyOrder($id=null)
     {
-       
+        $buyer_id = Auth::id();
+        $buyer = User::find($buyer_id)->buyer->buyer_id;
         $status = $id;
         switch ($status) {
             // requesting
             case '1':
                 $orders = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
                 ->whereNull('a.accepted_at')
+                ->where('a.buyer_id',$buyer)
                 ->orderBy('a.order_id','desc')
                 ->get();
             //    dd($orders);
@@ -281,9 +290,13 @@ class OrdersController extends Controller
             // pending
             case '2':
                 $orders = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
                 ->whereNotNull('a.accepted_at')
                 ->whereNull('a.packed_at')
+                ->where('a.buyer_id',$buyer)
                 ->orderBy('a.order_id','desc')
                 ->get();
             break;
@@ -291,9 +304,13 @@ class OrdersController extends Controller
             // delivery
             case '3':
                 $orders = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
                 ->whereNotNull('a.packed_at')
                 ->whereNull('a.delivered_at')
+                ->where('a.buyer_id',$buyer)
                 ->orderBy('a.order_id','desc')
                 ->get();
             break;
@@ -301,9 +318,14 @@ class OrdersController extends Controller
             // recieved
             case '4':
                 $orders = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
-                ->whereNotNull('a.delivered_at')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                 ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+                 ->whereNotNull('a.delivered_at')
+                 ->where('c.return_id', null)
                 ->whereNull('a.completed_at')
+                ->where('a.buyer_id',$buyer)
                 ->orderBy('a.order_id','desc')
                 ->get();
 
@@ -311,17 +333,35 @@ class OrdersController extends Controller
 
             case '5':
                 $orders = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
-                ->whereNotNull('a.delivered_at')
-                ->whereNotNull('a.delivered_at')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+                 ->whereNotNull('a.completed_at')
                 ->orderBy('a.order_id','desc')
+                ->where('a.buyer_id',$buyer)
+                ->get();
+                break;
+
+            case '6':
+                $orders = DB::table('orders as a')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+                ->orderBy('a.created_at','desc')
+                ->where('c.return_id','<>', null)
                 ->get();
                 break;
             default:
                 
                 $orders = DB::table('orders as a')
-                ->join('payments as b','b.order_id','a.order_id')
-                ->orderBy('a.created_at','desc')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+                 ->orderBy('a.created_at','desc')
+                 ->where('a.buyer_id',$buyer)
                 ->get();
                 break;
             // ->select('a.order_id','a.created_at','b.payment_total')
@@ -338,6 +378,9 @@ class OrdersController extends Controller
     public function viewMoreOrder($id)
     {
         // return $id;
+        $buyer_id = Auth::id();
+        $buyer = User::find($buyer_id)->buyer->buyer_id;
+       
         $order = DB::table('orders as a')
                 ->leftJoin('payments as b','b.order_id','a.order_id')
                 ->leftJoin('fees as c','c.fee_id','b.fee_id')
@@ -345,10 +388,12 @@ class OrdersController extends Controller
                 ->leftJoin('riders as e','e.seller_id','d.seller_id')
                 ->join('orgs as f','f.org_id','d.org_id')
                 ->where('a.order_id',$id)
+                ->where('a.buyer_id',$buyer)
                 ->first();
+     
         // dd($order);
         
-         $orderLine = DB::table('orderlines as a')
+         $orderLines = DB::table('orderlines as a')
                 ->join('stocks as b','b.stock_id','a.stock_id')
                 ->join('products as c','c.product_id','b.product_id')
                 ->join('product_types as d','d.product_type_id','c.product_type_id')
@@ -356,9 +401,10 @@ class OrdersController extends Controller
                 ->join('units as f','f.unit_id','e.unit_id')
                 ->where('a.order_id',$id)
                 ->get();  
+        // return dd($orderLines);
         // return dd($orderLine);
-        // return dd($orderLine);
-        return view('buyer_subpages.myorders-viewmore',compact('order','orderLine'));
+       
+        return view('buyer_subpages.myorders-viewmore',compact('order','orderLines'));
     }
     
     public function uploadImageInViewOrder(Request $request,$id)
@@ -415,23 +461,55 @@ class OrdersController extends Controller
         return redirect()->route('buyer.ratings.index',[$id]);
     }
 
+    
+
+     public function buyerOrderReturnStore(Request $request,$id)
+     {
+
+      
+        $response = $request->input('response');
+        $id = $request->input('order');
+        $order = Order::find($id);
+
+        if ($response == 'return' && $order){
+            // CREATE RETURN ORDER
+            $return = new ReturnOrder;
+            $return->order_id = $id;
+            $return->reason_id = $request->input('reason');
+            $return->description = $request->input('description');
+            $return->save();
+     }
+        return redirect()->route('buyer.order');
+    }
 
     // Serller Order Side -----------------------------------------------------------------------
+
     public function orderRequest()
     {
-
+        $id = Auth::id();
+        $seller = User::find($id)->seller->seller_id;
         $title = 'order';
 
         // GET ORDER, PAYMENT, & RETURN ORDER
-        $orders = DB::table('orders as a')
-            ->join('payments as b', 'a.order_id', 'b.order_id')
-            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
-            ->join('fees as d', 'b.fee_id', 'd.fee_id')
-            ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
-            ->where('a.completed_at', null)
-            ->where('c.return_id', null)
-            ->paginate(10);
+        // $orders = DB::table('orders as a')
+        //     ->join('payments as b', 'a.order_id', 'b.order_id')
+        //     ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        //     ->join('fees as d', 'b.fee_id', 'd.fee_id')
+        //     ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
+        //     ->where('a.completed_at', null)
+        //     ->where('c.return_id', null)
+        //     ->where('d.seller_id', $seller)
+        //     ->paginate(10);
 
+        $orders = DB::table('orders as a')
+        ->join('payments as b', 'a.order_id', 'b.order_id')
+        ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        ->join('fees as d', 'b.fee_id', 'd.fee_id')
+        ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+         ->orderBy('a.created_at','desc')
+         ->where('d.seller_id',$seller)
+        ->get();
+        // print_r($orders);die;
         return view('Seller_view.order-request',compact('orders','title'));
     }
 
@@ -479,6 +557,8 @@ class OrdersController extends Controller
 
     public function sellerViewmore($id)
     {
+        $seller_id = Auth::id();
+        $seller = User::find($seller_id)->seller->seller_id;
         $title = 'order';
 
         // FIND ORDER
@@ -490,6 +570,7 @@ class OrdersController extends Controller
             ->join('orgs as f','f.org_id','e.org_id')
             ->select('f.org_name','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
             ->where('a.order_id', $id)
+            ->where('d.seller_id',$seller)
             ->first();
 
             $orderLine = DB::table('orderlines as a')
@@ -499,9 +580,13 @@ class OrdersController extends Controller
             ->join('prices as e','e.stock_id','b.stock_id')
             ->join('units as f','f.unit_id','e.unit_id')
             ->where('a.order_id',$id)
+            // ->where('d.seller_id',$seller)
             ->get();
 
             return view('seller_view.seller-viewmore',compact('order','title','orderLine'));
+
+
+
 
         // if ($order){
            
@@ -511,6 +596,9 @@ class OrdersController extends Controller
         //     return redirect()->route('');
         // }
     }
+
+
+
 
     // Order ----- RIDER SIDE -------------------------------------------------------------------
 
@@ -524,10 +612,7 @@ class OrdersController extends Controller
 
     }
 
-    public function orderReturn()
-    {
-        return view('buyer_subpages.orders-return');
-    }
+   
 
     public function viewOrderDetails()
     {
@@ -537,12 +622,7 @@ class OrdersController extends Controller
 
     
 
-    public function orderMyReturn()
-    {
-
-        return view('buyer_subpages.myorders-return');
-
-    }
+   
     public function orderMyCancellation()
     {
         return view('buyer_subpages.myorders-cancellation');

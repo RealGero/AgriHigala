@@ -378,6 +378,7 @@ class RidersController extends Controller
         ->join('riders as e','e.rider_id','a.rider_id')
         ->join('users as f','f.user_id','d.user_id')
         ->join('brgys as g','g.brgy_id','d.brgy_id')
+        ->select('c.*','d.address','a.*','b.*','g.brgy_name','f.*','e.*','f.f_name as buyer_fname','f.m_name as buyer_mname','f.l_name as buyer_lname')
         ->where('a.rider_id',$rider_id)
         ->get();
         

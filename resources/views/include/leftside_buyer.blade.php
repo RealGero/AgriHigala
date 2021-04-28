@@ -18,9 +18,9 @@
  </div>
   <div class="collapse" id="myorder-items">
     <div class="d-flex flex-column text-white pl-3">
-       <a href="/buyer/order">Orders</a> 
-        <a href="/seller/product/add-new-product">Returns</a>
-        <a href="/seller/product/add-new-product">Cancellations</a>
+       <a href="{{route('buyer.order')}}">Orders</a> 
+        {{-- <a href="{{route('buyer.return.index')}}">Returns</a> --}}
+        <a href="">Cancellations</a>
     </div>
 </div>
 

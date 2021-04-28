@@ -7,11 +7,16 @@
     <div class="container">
         <div class="container-return">
             <div class="row">
-                <div class="col-10 mx-auto">
+                <div class="col-2">
+                    @include('include.leftside_buyer')
+                </div>
+                <div class="col-9 mx-auto">
                     <h4>My Orders>Return</h4>
+                    
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
+                                
                                 <div class="col-12"> 
                                     <a class="btn btn-primary" href="/buyer/order" role="button">Back</a>
                                  </div>
@@ -26,7 +31,7 @@
                                         <th scope="col">Price</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Unit</th>
-                                        <th scope="col">Shipping fee</th>
+                                      
                                         <th scope="col">Date</th>
                                       </tr>
                                     </thead>
@@ -38,7 +43,7 @@
                                         <td>@mdo</td>
                                         <td>@mdo</td>
                                         <td>@mdo</td>
-                                        <td>@mdo</td>
+                                        
                                       </tr>
                                     </tbody>
                                   </table>

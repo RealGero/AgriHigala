@@ -56,9 +56,9 @@
            </div>
            <div class="collapse" id="order-items">
                 <div class="d-flex flex-column navigation-items text-white">
-                   <a href="/seller/order/order-request"> My orders</a> 
+                   <a href="{{route('order.request.index')}}"> My orders</a> 
                     <a href="/seller/history">History</a> 
-                    <a href="/seller/return">Return</a> 
+                    <a href="{{route('seller.return.index')}}">Return</a> 
                 </div>
             </div>
          

@@ -62,14 +62,14 @@ class UsersController extends Controller
 
     public function updateUserImage(Request $request)
     {
-        
-        $this->validate($request,[
-            'mobile_number' => ['required', 'string', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
-            'address' => ['required','string']
-         ]);
-
         $id = Auth::id();
         $user = User::find($id);
+        // $this->validate($request,[
+        //     'mobile_number' => ['required', 'string', 'digits:11',Rule::unique('users')->ignore($id, 'user_id')],
+        //     'address' => ['required','string']
+        //  ]);
+
+        
         
         $this->validate($request,[
             'user_image' => 'max:1999',
@@ -96,7 +96,7 @@ class UsersController extends Controller
     public function update(Request $request)
     {
         
-      
+   
         $id = Auth::id();
         $user = User::find($id);
     

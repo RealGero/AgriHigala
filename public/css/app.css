@@ -11300,6 +11300,14 @@ img.payment-online {
   border: 1px solid #426d49;
 }
 
+.seller-order-return img {
+  width: 6rem;
+}
+
+.seller-order-return table {
+  table-layout: fixed;
+}
+
 .other-msg {
   max-width: 20rem;
   display: inline-block;

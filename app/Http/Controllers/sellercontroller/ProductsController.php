@@ -26,15 +26,16 @@ class ProductsController extends Controller
     }
     public function productMyProduct()
     {
-     
+        $id = Auth::id();
+        $seller_id = User::find($id)->seller->seller_id;
         $products = DB::table('stocks as a')
                     ->join('products as b', 'b.product_id', '=', 'a.product_id')
                     ->join('srp as c', 'c.product_id','=', 'b.product_id')
                     ->join('units as d', 'd.unit_id','=','c.unit_id')
                     ->join('prices as e','e.price_id', '=','d.unit_id')
-                    ->select('a.stock_id','b.product_id','a.stock_image','b.product_name','d.unit_name','e.stock_price','a.qty_added','a.created_at','a.expiration_date','a.deleted_at')->get();
-
-        
+                    ->select('a.stock_id','b.product_id','a.stock_image','b.product_name','d.unit_name','e.stock_price','a.qty_added','a.created_at','a.expiration_date','a.deleted_at')
+                    ->where('a.seller_id',$seller_id)
+                    ->get();
         Product::all();
         $stock = Stock::all();
         $unit = Unit::all();

@@ -63,10 +63,10 @@ Route::resource('users', 'UsersController');
 
         Route::put('/checkout/change','UsersController@updateProfileCheckout');
         // Route::get('/buyer/cart/checkout','buyercontroller\OrdersController@checkoutIndex')->name('check-out.index');
-
+        // Route::get('/buyer/order/return/','ReturnsController@buyerOrderReturn')->name('buyer.return.index');
+        Route::post('/buyer/order/return/store/{id}','OrdersController@buyerOrderReturnStore')->name('buyer.return.store');
 
         // Route::get('/buyer/order/order-received','buyercontroller\OrdersController@orderReceivedIndex');
-        // Route::get('/buyer/order/return','buyercontroller\OrdersController@orderReturn');
         // Route::get('/buyer/profile/id','UsersController@showprofile');
         // Route::get('/buyer/message','buyercontroller\MessagesController@index');
 
@@ -75,7 +75,7 @@ Route::resource('users', 'UsersController');
         Route::get('/buyer/history','buyercontroller\HistoriesController@index');
 
         Route::get('/buyer/profile/edit','UsersController@edit')->name('buyer.profile.edit');
-        Route::put('/buyer/profile/edit','UsersController@update')->name('buyer.profile.update');
+        Route::put('/buyer/profile/update','UsersController@update')->name('buyer.profile.update');
         Route::put('/buyer/profile/updateimage','UsersController@updateUserImage');
         Route::put('buyer/accout/updateid','UsersController@updateValidId');
         Route::post('/buyer/profile','UsersController@store');
@@ -109,7 +109,9 @@ Route::resource('users', 'UsersController');
         //new -----------------------------------------------------------------------------------
         // Route::get('/buyer/placeholder','OrdersController@clickedPlaceOrder');
 
-        Route::get('/buyer/order/myreturn', 'buyercontroller\OrdersController@orderMyReturn');
+        // Route::get('/buyer/order/myreturn', 'buyercontroller\OrdersController@orderMyReturn');
+
+
         Route::get('/buyer/order/mycancellation', 'buyercontroller\OrdersController@orderMyCancellation');
 
         Route::get('/buyer/chat/{id}','MessagesController@buyerInboxMessage')->name('buyer.chat');
@@ -165,7 +167,8 @@ Route::resource('users', 'UsersController');
 
         Route::get('/seller/order/order-detail', 'SellerOrdersController@orderDetails');
         Route::get('/seller/history', 'SellerOrdersController@transactionHistory');
-        Route::get('/seller/return', 'SellerOrdersController@orderReturn');
+        Route::get('/seller/return', 'ReturnsController@sellerOrderReturn')->name('seller.return.index');
+        Route::put('/seller/return/request/{id}', 'ReturnsController@sellerOrderReturnRequest')->name('seller.return.request');
 
         // Route::get('/seller/inbox/','MessagesController@sellerMessage')->name('sellerMessage.index');
         Route::get('/seller/inbox','InboxController@sellerInboxIndex')->name('sellerInbox.index');

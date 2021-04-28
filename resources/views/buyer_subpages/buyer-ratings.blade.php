@@ -14,12 +14,11 @@
                                 <div class="form-group">
                                     @csrf
                                     <select class="form-select form-select-sm form-control my-3" name="rating" aria-label=".form-select-sm example" required>
-                                        <option selected>Rate the product</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
+                                        <option value="5" selected>5</option>
                                         <option value="4">4</option>
-                                        <option value="5">5</option>
+                                        <option value="3">3</option>
+                                        <option value="2">2</option>
+                                        <option value="1">1</option>
                                     </select>
                                     <label for="exampleFormControlTextarea1">Provide a comment please!</label>
                                     <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="6" required>
@@ -27,10 +26,17 @@
                                     </textarea>
                                    
                                     <input type="hidden" name="order" value="{{$id}}">
-
-                                    <input type="submit" value="Submit" class="btn btn-success mt-3 d-inline">
-
-                                  </div>   
+                                    </div> 
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="submit" value="Submit" class="btn btn-success">
+                                     
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="d-flex justify-content-end"> <a href="{{route('buyer.order')}}" class="btn btn-info">Back to Order</a></span>   
+                                    </div>
+                                </div>
+                                   
                             </form>
                         </div>
                      </div>

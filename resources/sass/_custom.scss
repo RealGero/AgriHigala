@@ -381,11 +381,7 @@ img.payment-online {
     table-layout: fixed;
 }
     // ratings from buyer -------------------------
-.buyer-ratings select,option{
-//     font-family: 'Arial', 'Font Awesome 5 Pro';
-//     font-weight: 900;
-// }
-}
+
 //reviews of a seller
 .card-reviews  {
     width: 34rem;
@@ -397,6 +393,14 @@ img.payment-online {
     object-fit: cover;
     object-position: center;
     border: 1px solid #426d49;
+}
+
+//seller orders return
+.seller-order-return img{
+    width: 6rem;
+}
+.seller-order-return table{
+    table-layout: fixed;
 }
 
 //chat message

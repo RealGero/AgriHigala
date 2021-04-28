@@ -20,7 +20,6 @@ class CreateReturnOrdersTable extends Migration
             $table->longText('description')->nullable();
             $table->timestamp('accepted_at')->nullable();
             $table->timestamp('denied_at')->nullable();
-            $table->string('status')->nullable();
             $table->timestamps();
 
         });

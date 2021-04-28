@@ -16,7 +16,7 @@
                             <div class="row m-3">
                                 <div class="col-7">      
                                    <div><span class="font-weight-bold"> Order ID: </span><span> {{$order->order_id}}</span> </div> 
-                                   <div><span class="font-weight-bold">Customer Name: </span><span class="text-capitalize"> {{$order->f_name}} {{$order->f_name[0]}}. {{$order->f_name}}</span> </div>
+                                   <div><span class="font-weight-bold">Customer Name: </span><span class="text-capitalize"> {{$order->buyer_fname}} {{$order->buyer_mname[0]}}. {{$order->buyer_lname}}</span> </div>
                                    <div><span class="font-weight-bold">Address: </span><span>{{$order->brgy_name}}, {{$order->address}}</span> </div> 
                                    <div><span class="font-weight-bold">Mobile Number: </span> <span>{{$order->mobile_number}}</span> </div>  
                                 </div>

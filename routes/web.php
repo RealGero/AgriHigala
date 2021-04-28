@@ -273,6 +273,13 @@ Route::prefix('admin')->group(function () {
     // CUSTOMER SERVICE
     Route::get('/customer-service', 'admin\SettingsController@customerService')->name('admin.customer-service');
     Route::get('/customer-service/{id}', 'admin\SettingsController@replyCustomerService')->name('admin.customer-service.reply');
-    Route::post('/customer-service/store', 'admin\SettingsController@storeCustomerService')->name('admin.customer-service.store');
+    Route::post('/customer-service/store', 'admin\SettingsController@storeCustomerService')->name('admin.customer-service.store');    
+
+    
 
 });
+
+// NOTIFICATION
+Route::post('/notifications/get', 'NotificationsController@get')->name('notifications.get');
+Route::post('/notifications/read/{id}', 'NotificationsController@read')->name('notifications.read');
+Route::post('/notifications/read-all/', 'NotificationsController@readAll')->name('notifications.read.all');

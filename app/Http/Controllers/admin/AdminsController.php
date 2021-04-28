@@ -11,10 +11,6 @@ use App\Admin;
 
 class AdminsController extends Controller
 {
-    
-    public function __construct() {
-        
-    }
 
     // LOGIN FORM
     public function showAdminLoginForm(){

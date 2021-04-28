@@ -2,37 +2,63 @@
     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-bell fa-fw"></i>
         <!-- Counter - Alerts -->
-        {{-- <span class="badge badge-danger badge-counter">
-            @if(count(Auth::user()->unreadNotifications) >5 )<span data-count="5" class="count">5+</span>
+        <span class="badge badge-danger badge-counter">
+            @if(count(Auth::user()->unreadNotifications) >10 )<span data-count="10" class="count">10+</span>
             @else 
                 <span class="count" data-count="{{count(Auth::user()->unreadNotifications)}}">{{count(Auth::user()->unreadNotifications)}}</span>
             @endif
-        </span> --}}
+        </span>
       </a>
       <!-- Dropdown - Alerts -->
       <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">
-          Notifications Center
-        </h6>
-        {{-- @foreach(Auth::user()->unreadNotifications as $notification)
-            <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{route('admin.notification',$notification->id)}}">
-                <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                    <i class="fas {{$notification->data['fas']}} text-white"></i>
+        <h6 class="dropdown-header">Notifications Center</h6>
+        @php
+            $unreadNotifications = Auth::user()->unreadNotifications
+        @endphp
+        {{-- NOTIFICATION --}}
+        @if (count($unreadNotifications)>0)
+            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Notifications</a>
+            @foreach ($unreadNotifications as $notification)
+                <form action="{{route('notifications.read', [$notification->id])}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="action_url" value='{{$notification->data['announcement']['action_url']}}'>
+                    <div class="dropdown-item w-100">
+                        <button name="read_{{$notification->id}}" id="read_{{$notification->id}}" type="submit" class="btn btn-block btn-sm btn-link text-left shadow-none" role="link"> 
+                            <span>
+                                {{$notification->data['announcement']['title']}}
+                                {{$notification->data['announcement']['table_id']}}
+                                {{$notification->data['announcement']['subtitle']}}
+                            </span>
+                            <div class="small text-gray-500">{{$notification->created_at->format('F d, Y h:i A')}}</div>
+                        </button>
                     </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">{{$notification->created_at->format('F d, Y h:i A')}}</div>
-                    <span class="@if($notification->unread()) font-weight-bold @else small text-gray-500 @endif">{{$notification->data['title']}}</span>
-                </div>
-            </a>
-            @if($loop->index+1==5)
-                @php 
-                    break;
-                @endphp
-            @endif
-        @endforeach --}}
+                </form>
 
-        {{-- <a class="dropdown-item text-center small text-gray-500" href="{{route('all.notification')}}">Show All Notifications</a> --}}
+                {{-- ONLY RECENT 10 NOTIFICATIONS --}}
+                @if($loop->index+1==10)
+                    @php 
+                        break;
+                    @endphp
+                @endif
+            @endforeach
+
+            {{-- MARK ALL AS READ --}}
+            <form action="{{route('notifications.read.all')}}" method="POST">
+                @csrf
+                <div class="dropdown-item w-100">
+                    <button name="read_all" id="read_all" type="submit" class="btn btn-block btn-sm btn-link small text-left shadow-none text-gray-500" role="link"> 
+                        <span>Mark all as read</span>
+                    </button>
+                </div>
+            </form>
+        @else
+            {{-- NO NOTIFICATIONS --}}
+            <div class="dropdown-item d-flex align-items-center">
+                <span class="text-muted font-italic">No new notifications</span>
+            </div>
+            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Notifications</a>
+        @endif
+
+        
       </div>
 </div>

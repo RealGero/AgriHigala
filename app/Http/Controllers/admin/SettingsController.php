@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\FeedBack;
 use App\CustomerService;
+use App\User;
+use App\Notifications\NewAnnouncement;
 
 class SettingsController extends Controller
 {
@@ -77,6 +79,20 @@ class SettingsController extends Controller
         $announcement->save();
 
         if ($announcement){
+            // SET NOTIFY
+            $notify_user = Auth::id(); // ID sa e-notify; NOT NULL
+            $notify_info = $announcement; // Query gihimu; NOT NULL
+            $notify_title = 'Announcement'; // Title or table; NOT NULL
+            $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+            $notify_subtitle = 'New announcement'; // Title description; NOT NULL            
+            $notify_url = false ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+            
+            $notify_info->title = $notify_title;
+            $notify_info->table_id = $notify_table_id.': ';
+            $notify_info->subtitle = $notify_subtitle;
+            $notify_info->action_url = $notify_url;
+            User::find($notify_user)->notify(new NewAnnouncement($notify_info));
+
             request()->session()->flash('success','Announcement sent');
         }else{
             request()->session()->flash('error','Announcement not sent');

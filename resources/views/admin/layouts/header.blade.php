@@ -49,15 +49,7 @@
 
       <!-- Nav Item - Alerts -->
       <li class="nav-item dropdown no-arrow mx-1">
-       @include('admin.notification.show')
-      </li>
-
-      <!-- Nav Item - Messages -->
-      {{-- <li class="nav-item dropdown no-arrow mx-1" id="messageT" data-url="{{route('messages.five')}}">
-        @include('admin.message.message')
-      </li> --}}
-      <li class="nav-item dropdown no-arrow mx-1" id="messageT" data-url="#">
-        {{-- @include('admin.message.message') --}}
+        @include('admin.notification.show')
       </li>
 
       <div class="topbar-divider d-none d-sm-block"></div>

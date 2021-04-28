@@ -5,12 +5,33 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Order;
 use App\ReturnOrder;
 
 class HistoryController extends Controller
 {
 
+    protected $check_auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
+
+    // INDEX
     public function index()
     {
         // SET TITLE
@@ -26,21 +47,22 @@ class HistoryController extends Controller
             // ->get();
             ->paginate(10);
 
-        // dd($orders);
-
         return view('admin.orders.index',compact('orders', 'title'));
     }
     
+    //CREATE
     public function create()
     {
-        return redirect()->route('admin.returns.index');
+        return back();
     }
     
+    // STORE
     public function store(Request $request)
     {
-        return redirect()->route('admin.returns.index');
+        return back();
     }
     
+    // SHOW
     public function show($id)
     {
         // SET TITLE
@@ -65,19 +87,21 @@ class HistoryController extends Controller
         }
     }
     
-
+    // EDIT
     public function edit($id)
     {
-        return redirect()->route('admin.returns.index');
+        return back();
     }
     
+    // UPDATE
     public function update(Request $request, $id)
     {
-        return redirect()->route('admin.returns.index');
+        return back();
     }
     
+    // DESTROY
     public function destroy($id)
     {
-        return redirect()->route('admin.returns.index');
+        return back();
     }
 }

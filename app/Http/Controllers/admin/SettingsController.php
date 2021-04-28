@@ -5,12 +5,34 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\FeedBack;
 use App\CustomerService;
+use App\User;
+use App\Notifications\NewAnnouncement;
 
 class SettingsController extends Controller
 {
+    protected $check_auth;
 
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
+
+    // FEEDBACK
     public function feedbacks(){
 
         // GET RATINGS
@@ -19,6 +41,7 @@ class SettingsController extends Controller
         return view('admin.settings.feedback',compact('feedbacks'));
     }
 
+    // ANNOUNCEMENT
     public function announcements(){
 
         // SET TITLE
@@ -36,11 +59,13 @@ class SettingsController extends Controller
         return view('admin.settings.announcements',compact('announcements', 'title'));
     }
 
+    // CREATE ANNOUNCEMENT
     public function createAnnouncements(){
 
         return view('admin.settings.create-announcement');
     }
 
+    // STORE ANNOUNCEMENT
     public function storeAnnouncements(Request $request){
         
         // VALIDATOR FOR ANNOUNCEMENT
@@ -54,6 +79,20 @@ class SettingsController extends Controller
         $announcement->save();
 
         if ($announcement){
+            // SET NOTIFY
+            $notify_user = Auth::id(); // ID sa e-notify; NOT NULL
+            $notify_info = $announcement; // Query gihimu; NOT NULL
+            $notify_title = 'Announcement'; // Title or table; NOT NULL
+            $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+            $notify_subtitle = 'New announcement'; // Title description; NOT NULL            
+            $notify_url = false ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+            
+            $notify_info->title = $notify_title;
+            $notify_info->table_id = $notify_table_id.': ';
+            $notify_info->subtitle = $notify_subtitle;
+            $notify_info->action_url = $notify_url;
+            User::find($notify_user)->notify(new NewAnnouncement($notify_info));
+
             request()->session()->flash('success','Announcement sent');
         }else{
             request()->session()->flash('error','Announcement not sent');
@@ -62,6 +101,7 @@ class SettingsController extends Controller
         return redirect()->route('admin.announcements');
     }
 
+    // DESTROY ANNOUNCEMENT
     public function destroyAnnouncements($id){
 
         $announcement = CustomerService::find($id);
@@ -77,6 +117,7 @@ class SettingsController extends Controller
         return redirect()->route('admin.announcements');
     }
 
+    // CUSTOMER SERVICE
     public function customerService(){
 
         // SET TITLE
@@ -101,6 +142,7 @@ class SettingsController extends Controller
         return view('admin.settings.announcements', compact('announcements', 'title'));
     }
 
+    // REPLY CUSTOMER SERVICE
     public function replyCustomerService($id){
         
         // GET CUSTOMER MESSAGE
@@ -113,6 +155,7 @@ class SettingsController extends Controller
         return view('admin.settings.create-cs', compact('message'));
     }
 
+    // STORE CUSTOMER SERVICE
     public function storeCustomerService(Request $request){
         
         // VALIDATOR FOR CUSTOMER SERVICE

@@ -66,7 +66,7 @@
           {{-- PASSWORD --}}
           <div class="form-group">
             <label for="password" class="col-form-label">Password</label>
-            <input id="password" type="password" name="password" value="{{old('password')}}" class="form-control" {{$disabled}}>
+            <input id="password" type="text" name="password" value="{{old('password')}}" class="form-control" {{$disabled}}>
             @error('password')
               <span class="text-danger">{{$message}}</span>
             @enderror

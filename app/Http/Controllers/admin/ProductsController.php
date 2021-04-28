@@ -6,25 +6,47 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use App\Product;
 use App\SRP;
 
 class ProductsController extends Controller
 {
+    protected $check_auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
     
+    // INDEX
     public function index(){
         $products = DB::table('products as a')
-                    ->join('product_types as b', 'a.product_type_id', '=', 'b.product_type_id')
-                    ->where('a.deleted_at', NULL)
-                    ->paginate(10);
+            ->join('product_types as b', 'a.product_type_id', '=', 'b.product_type_id')
+            ->where('a.deleted_at', NULL)
+            ->paginate(10);
         return view('admin.products.index',compact('products'));
     }
 
+    // CREATE
     public function create()
     {
-        return view('admin.products.create');
+        return back();
     }
 
+    // STORE
     public function store(Request $request)
     {
         // PRODUCT TABLE VALIDATOR
@@ -35,7 +57,7 @@ class ProductsController extends Controller
         
         // CREATE PRODUCT
         $product = new Product;
-        $product->product_id = $request->input('category');
+        $product->product_type_id = $request->input('category');
         $product->product_name = $request->input('product_name');
         $product->product_description = $request->input('product_description');
         $product->save();
@@ -63,11 +85,13 @@ class ProductsController extends Controller
         return redirect()->route('admin.products.index');
     }
 
+    // SHOW
     public function show($id)
     {
-        //
+        return back();
     }
 
+    // EDIT
     public function edit($id){
 
         // GET PRODUCT & SRP
@@ -84,6 +108,7 @@ class ProductsController extends Controller
         }
     }
 
+    // UPDATE
     public function update(Request $request, $id)
     {
         // PRODUCT TABLE VALIDATOR
@@ -126,6 +151,7 @@ class ProductsController extends Controller
         return redirect()->route('admin.products.index');
     }
 
+    // DESTROY
     public function destroy($id)
     {
         $product = Product::find($id);

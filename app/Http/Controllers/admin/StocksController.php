@@ -5,26 +5,47 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\ProductType;
 use App\Stock;
 use App\Price;
 
 class StocksController extends Controller
 {
+    protected $check_auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // CHECK IF AUTHENTICATED & ADMIN
+            if (Auth::check()){
+                if (Auth::user()->user_type != 1){
+                    return back();
+                }
+            }
+            else{
+                return redirect()->route('admin.login');
+            }
+
+            return $next($request);
+        });
+    }
+
+    // INDEX
     public function index(){
         $stocks = DB::table('stocks as a')
-                    ->join('products as b', 'a.product_id', 'b.product_id')
-                    ->join('sellers as c', 'a.seller_id', 'c.seller_id')
-                    ->join('users as d', 'c.user_id', 'd.user_id')
-                    ->join('product_types as e', 'b.product_type_id', 'e.product_type_id')
-                    ->where('a.deleted_at', NULL)
-                    ->paginate(10);
+            ->join('products as b', 'a.product_id', 'b.product_id')
+            ->join('sellers as c', 'a.seller_id', 'c.seller_id')
+            ->join('users as d', 'c.user_id', 'd.user_id')
+            ->join('product_types as e', 'b.product_type_id', 'e.product_type_id')
+            ->where('a.deleted_at', NULL)
+            ->paginate(10);
         return view('admin.stocks.index',compact('stocks'));
     }
 
+    // CREATE
     public function create($id=null)
     {
-
         // COUNT PRODUCT TYPES & RETURN PRODUCTS FROM $id
         $count_id = ProductType::where('product_type_id',$id)->count();
         if ($count_id > 0){
@@ -50,6 +71,7 @@ class StocksController extends Controller
         return view ('admin.stocks.create',compact('products','category'));
     }
     
+    // STORE
     public function store(Request $request)
     {
         // STOCK TABLE VALIDATOR
@@ -87,10 +109,14 @@ class StocksController extends Controller
         }
         return redirect()->route('admin.stocks.index');
     }
+
+    // SHOW
     public function show($id)
     {
-        //
+        return back();
     }
+
+    // EDIT
     public function edit($id)
     {
         $products = DB::table('products as a')
@@ -120,6 +146,8 @@ class StocksController extends Controller
         }
 
     }
+
+    // UPDATE
     public function update(Request $request, $id)
     {
         // STOCK TABLE VALIDATOR
@@ -162,6 +190,7 @@ class StocksController extends Controller
         return redirect()->route('admin.stocks.index');
     }
 
+    // DESTROY
     public function destroy($id)
     {
         $stock = Stock::find($id);

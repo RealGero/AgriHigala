@@ -11,28 +11,33 @@ use App\Admin;
 
 class AdminsController extends Controller
 {
-    
-    public function __construct() {
-        
-    }
 
     // LOGIN FORM
     public function showAdminLoginForm(){
+
+        // CHECK IF AUTHENTICATED & ADMIN
+        if (Auth::check()){
+            return back();
+        }
+        else{
+            return view('admin.auth.login');
+        }
+
         return view('admin.auth.login');
     }
 
     // DASHBOARD
     public function adminDashboard(){
 
-        // // CHECK IF AUTHENTICATED & ADMIN
-        // if (!Auth::check()){
-        //     return redirect()->route('admin.login');
-        // }
-        // else{
-        //     if (Auth::user()->user_type != 1){
-        //         return back();
-        //     }
-        // }
+        // CHECK IF AUTHENTICATED & ADMIN
+        if (!Auth::check()){
+            return redirect()->route('admin.login');
+        }
+        else{
+            if (Auth::user()->user_type != 1){
+                return back();
+            }
+        }
 
         return view('admin.index');
     }

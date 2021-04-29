@@ -31,51 +31,62 @@ body{
 }
 //browse style 
  .bg{
-
-    
-    // margin: 0;
     background-image: url("/images/background_home.png");
-    height: 800px;
-   
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
    
 }
 
-.logo{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    height: 250px;
+// welcome blade
+.agri-logo{
+    width: 20%;
+    margin: 0 auto;
     
 }
 
-.word_logo{
-
-    // left: 0;
-    // right: 0;
-    // position: absolute;
-    // bottom: 100px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    height: 400px;
-    width: 500px;
+.agri-brand{
+    width: 30%;
+    margin: 0 auto;
 }
 
-.browse_nav{
+.agri-logo img, .agri-brand img{
+    width: 100%;
+    min-width: 200px;
+}
 
+.agri-title{
+    font-size: 1.2em;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    margin: 15% auto;
+}
+
+.agri-subtitle{
     background-image: url("/images/background_2.png");
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    
-    height: 700px;
-    width: 1000px;
+    width: 60%;
+    margin: 0 auto;
     background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 
+.agri-subtitle p{
+    padding: 3em;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+    text-shadow: 2px 2px #1101026b;
+    font-family: 'DM Sans', sans-serif;
+}
 
+.welcome-footer{
+    height: 100px;
+}
+
+.welcome-footer img{
+    width: 50px;
 }
 
 .browse_navbar {
@@ -93,14 +104,6 @@ body{
     font-size: 25px;
     color: white;
     text-align: center;
-
-}
-
-.browse_nav p{
-    padding-top: 200px;
-    text-align: center;
-    font-size: 40px;
-    color: white;
 
 }
 

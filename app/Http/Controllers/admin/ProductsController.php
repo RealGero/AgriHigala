@@ -43,7 +43,7 @@ class ProductsController extends Controller
     // CREATE
     public function create()
     {
-        return back();
+        return view('admin.products.create');
     }
 
     // STORE

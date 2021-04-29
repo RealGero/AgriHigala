@@ -66,9 +66,15 @@
                   @if ($price->discount_price)
                     <span>&#8369;{{$price->discount_price}}<small>/{{$price->unit_name}} discount price</small></span>
                   @endif
+                </td>
+                <td>
+                  @if ($stock->stock_image)
+                    <img src="/storage/stock/{{$stock->stock_image}}" class="img-fluid" style="max-width:80px" alt="{{$stock->stock_image}}">
+                  @else
+                    <img src="/storage/stock/{{$stock->product_image}}" class="img-fluid" style="max-width:80px" alt="{{$stock->product_image}}">
+                  @endif
                   
                 </td>
-                <td><img src="/storage/stock/{{$stock->product_image}}" class="img-fluid" style="max-width:80px" alt="{{$stock->product_image}}"></td>
                 <td>
                     <a href="{{route('admin.stocks.edit',[$stock->stock_id])}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                     <form method="POST" action="{{route('admin.stocks.destroy',[$stock->stock_id])}}">

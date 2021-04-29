@@ -80,7 +80,7 @@ class SettingsController extends Controller
 
         if ($announcement){
             // SET NOTIFY
-            $notify_user = Auth::id(); // ID sa e-notify; NOT NULL
+            $notify_user = 17; // ID sa e-notify; NOT NULL
             $notify_info = $announcement; // Query gihimu; NOT NULL
             $notify_title = 'Announcement'; // Title or table; NOT NULL
             $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank

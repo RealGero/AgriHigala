@@ -28,6 +28,8 @@
                                     @php
                                        $buyer = \App\Order::getBuyerWaddress($order->buyer_id);
                                        $riders = \App\Order::getRiders($order->seller_id);
+    
+
                                     @endphp
                                       <tbody>
                                         <tr>
@@ -46,44 +48,63 @@
                                           <td> {{$buyer->mobile_number}} </td>
                                           <td>  &#8369;{{number_format($order->payment_total)}}</td>
                                           <td>
-                                            @if($order->order_accepted_at == null)
-                                              <form action="{{route('orderRequestwithId',[$order->order_id])}}">
-                                                  @csrf
-                                                  @method('PUT')
-                                                  <input type="hidden" name="response" value="accept">
-                                                  <input type="submit" value="Accept" name="accept" id="" class="btn btn-success btn-sm d-block"> 
-                                              </form>
-
-                                              <form action="{{route('orderRequestwithId',[$order->order_id])}}">
-                                                  @csrf
-                                                  @method('PUT')
-                                                  <input type="hidden" name="response" value="decline">
-                                                  <input type="submit" name="decline" value="Decline" id="" class="btn btn-danger btn-sm d-block"> 
-                                               </form>
-                                             @elseif($order->order_accepted_at != null && $order->packed_at == null)
-                                                <form action="{{route('orderPacked',[$order->order_id])}}">
-                                                  @csrf
-                                                  @method('PUT')
-                                                  <select class="form-control" name="rider" required>
-                                                    <option disabled selected><small> Select Rider</small></option>
-                                                    @if($riders)
-                                                      @foreach ($riders as $rider)
-                                                      <option value="{{$rider->rider_id}}">{{$rider->f_name}} {{$rider->l_name}}</option>
-                                                      @endforeach
-                                                    <input type="hidden" name="response" value="packed">
-                                                    <input type="submit" name="packed_at" value="Packed_at" class="m-2 btn btn-primary btn-sm d-block">
+                                           
+                                                  {{-- Reject/Cancelled --}}
+                                                 @if($order->completed_at)
+                                                      @if($order->order_accepted_at == null)
+                                                          <span class="badge badge-pill badge-danger">Rejected/Cancelled</span>
+                                                      {{-- Cancelled --}}
+                                                     @elseif($order->order_accepted_at != null && $order->packed_at == null)  
+                                                        <span class="badge badge-pill badge-danger">Cancelled</span>
+                                                     @elseif($order->return_denied_at != null)
+                                                        <span class="badge badge-pill badge-danger">Rejected</span>
+                                                     @else
+                                                        <span class="badge badge-pill badge-success">Complete</span>
+                                                     @endif
+                                                 @else
+                                                      @if($order->return_created_at)
+                                                          @if($order->return_accepted_at == null)
+                                                             <span class="badge badge-pill badge-secondary">Requesting</span>
+                                                          @elseif($order->return_accepted_at != null)
+                                                            <span class="badge badge-pill badge-warning">Pending</span>
+                                                         @endif
+                                                      @else
+                                                          @if($order->order_accepted_at == null)
+                                            
+                                                              <form action="{{route('orderRequestwithId',[$order->order_id])}}">
+                                                                  @csrf
+                                                                  @method('PUT')
+                                                                  <input type="hidden" name="response" value="accept">
+                                                                  <input type="submit" value="Accept" name="accept" id="" class="btn btn-success btn-sm d-block"> 
+                                                              </form>
+                                                              <form action="{{route('orderRequestwithId',[$order->order_id])}}">
+                                                                  @csrf
+                                                                  @method('PUT')
+                                                                  <input type="hidden" name="response" value="decline">
+                                                                  <input type="submit" name="decline" value="Decline" id="" class="btn btn-danger btn-sm d-block"> 
+                                                              </form>
+                                                          @elseif($order->order_accepted_at != null && $order->packed_at == null)
+                                                              <form action="{{route('orderPacked',[$order->order_id])}}">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <select class="form-control" name="rider" required>
+                                                                  <option disabled selected><small> Select Rider</small></option>
+                                                                    @if($riders)
+                                                                      @foreach ($riders as $rider)
+                                                                  <option value="{{$rider->rider_id}}">{{$rider->f_name}} {{$rider->l_name}}</option>
+                                                                      @endforeach
+                                                                  <input type="hidden" name="response" value="packed">
+                                                                  <input type="submit" name="packed_at" value="Packed_at" class="m-2 btn btn-primary btn-sm d-block">
+                                                                    @endif
+                                                                </select>
+                                                              </form>
+                                                          @elseif($order->packed_at != null && $order->delivered_at == null)
+                                                           <span class="badge badge-pill badge-info">Delivering</span>
+                                                          @elseif($order->delivered_at != null)
+                                                          <span class="badge badge-pill badge-success">Delivered</span>
+                                                          @endif
                                                       @endif
-                                                  </select>
-                                                </form>
-                                              @elseif( $order->packed_at != null && $order->delivered_at == null)    
-                                                    <span> Delivering </span>
-                                             @elseif($order->order_accepted_at != null && $order->packed_at == null)
-                                                     <span> Canceled Order </span>
-                                              @elseif($order->delivered_at != null)
-                                                      <span> Delivered</span>
-                                                 @elseif($order->completed_at != null)     
-                                                 <span>Complete</span>
-                                              @endif
+                                               @endif 
                                           </td>
                                         </tr>
                                         @endforeach 
@@ -99,3 +120,33 @@
     </div>
 
 @endsection
+
+{{-- @if($order->order_accepted_at == null)
+<form action="{{route('orderRequestwithId',[$order->order_id])}}">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="response" value="accept">
+    <input type="submit" value="Accept" name="accept" id="" class="btn btn-success btn-sm d-block"> 
+</form>
+
+<form action="{{route('orderRequestwithId',[$order->order_id])}}">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="response" value="decline">
+    <input type="submit" name="decline" value="Decline" id="" class="btn btn-danger btn-sm d-block"> 
+ </form>
+@elseif($order->order_accepted_at != null && $order->packed_at == null)
+  <form action="{{route('orderPacked',[$order->order_id])}}">
+    @csrf
+    @method('PUT')
+    <select class="form-control" name="rider" required>
+      <option disabled selected><small> Select Rider</small></option>
+      @if($riders)
+        @foreach ($riders as $rider)
+        <option value="{{$rider->rider_id}}">{{$rider->f_name}} {{$rider->l_name}}</option>
+        @endforeach
+      <input type="hidden" name="response" value="packed">
+      <input type="submit" name="packed_at" value="Packed_at" class="m-2 btn btn-primary btn-sm d-block">
+        @endif
+    </select>
+  </form> --}}

@@ -11318,6 +11318,10 @@ img.payment-online {
   display: inline-block;
 }
 
+.card-body.card-size.overflow-auto {
+  height: 24rem;
+}
+
 .inbox-container img {
   height: 3rem;
   width: 3rem;
@@ -11587,7 +11591,7 @@ img.payment-online {
 }
 
 .rider-profile img {
-  width: 6.5rem;
+  width: 7rem;
 }
 
 .footer {

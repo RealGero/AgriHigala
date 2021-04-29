@@ -173,6 +173,7 @@ Route::resource('users', 'UsersController');
         // Route::get('/seller/inbox/','MessagesController@sellerMessage')->name('sellerMessage.index');
         Route::get('/seller/inbox','InboxController@sellerInboxIndex')->name('sellerInbox.index');
         Route::get('/seller/message/{id}','MessagesController@sellerMessageIndex')->name('sellerMessage.index');
+        Route::post('/seller/message/{id}','MessagesController@sellerMessageStore')->name('sellerMessage.store');
 
         Route::get('/seller/feedback', 'FeedBacksController@sellerFeedbackIndex')->name('sellerFeedback.index');
         Route::post('/seller/feedback', 'FeedBacksController@sellerFeedbackStore')->name('sellerFeedback.store');

@@ -86,6 +86,19 @@ class MessagesController extends Controller
         return redirect()->back();
 
      }
+     public function sellerMessageStore(Request $request,$id)
+     {
+ 
+         $message = new Message;
+         $message->sender = 'seller';
+         $message->message = $request->input('input-message');
+         $message->inbox_id = $id;
+         $message->save();
+ 
+ 
+         return redirect()->back();
+ 
+      }
 
 
      public function sellerMessageIndex($id)

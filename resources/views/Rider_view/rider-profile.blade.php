@@ -3,7 +3,7 @@
 @section('content')
     <div class="container rider-profile">
         <div class="row">
-            <div class="col-7 mx-auto">
+            <div class="col-6 mx-auto">
                 <div class="card mb-3">
                     <div class="card-body">
                       <div class="row d-flex justify-content-around">
@@ -22,7 +22,7 @@
             </div>
         </div>
       <div class="row">
-        <div class="col-6 mx-auto">
+        <div class="col-5 mx-auto">
           @if(session()->has('image'))
               <div class="alert alert-success">
                   {{ session()->get('image') }}
@@ -48,14 +48,14 @@
               <h2 class="card-title">Profile</h2>
                 <form action="{{action('RidersController@profileUpdate')}}" method="POST" enctype="multipart/form-data">
                   @csrf
-                    <div class="row">
+                    <div class="row d-flex justify-content-between">
                       <div class="col-4 ">
                         <img src="/storage/user/{{$rider->user_image}}" class="rounded-circle" alt="profile-pic">
-                        <a class="btn btn-primary btn-sm btn-block upload-photo-btn" data-toggle="modal" data-target="#add-rider-pic" href="#" role="button">Upload photo</a>
+                        <a class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#add-rider-pic" href="#" role="button">Upload photo</a>
                       </div>
                       <div class="col-8 mt-3">
                         <h4 class="font-weight-bold text-capitalize">{{$rider->f_name.' '.$rider->l_name}}</h4> 
-                        <h6>Joined   {{ \Carbon\Carbon::parse($rider->created_at)->diffForhumans() }}</h6>
+                       <h6> Joined   {{ \Carbon\Carbon::parse($rider->created_at)->diffForhumans() }}</h6>
                       </div>
                     </div>
                    

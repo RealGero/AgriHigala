@@ -23,7 +23,8 @@ class Message extends Model
         $message = DB::table('messages as a')
         ->join('inbox as b','b.inbox_id','a.inbox_id')
         ->where('a.inbox_id',$id)
-        ->latest('a.created_at')
+        ->select('a.*','b.*','a.created_at as message_created_at')
+        ->latest('message_created_at')
         ->get();
         // dd($message);
         return $message;

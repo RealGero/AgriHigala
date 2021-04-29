@@ -1,4 +1,4 @@
-@extends('layouts.seller')
+{{-- @extends('layouts.seller')
 
 
 @section('content')
@@ -21,23 +21,17 @@
                                     </form>
                                 </div> 
                             </div>
-                            {{-- {{dd($inbox->inbox_id)}}   --}}
+                          
                             @php
                                  $messages = \App\Message::getMessage($inbox->inbox_id);  
                                 $user =\App\User::find(Auth::id())->buyer->buyer_id;
-                                // dd($user);
+                                
                             @endphp
                           
                             @foreach($messages as $message)
 
                            
-                                {{-- <div class="col-4 text-center overflow-auto border-right">
-                                    <h3 class="mb-4">Name</h3> 
-                                    <img src="/images/lansones.jpg" alt="" class="mb-3"> 
-                                   <h5 class="d-inline p-2">John Doe</h5> <br>
-                                   <img src="/images/lansones.jpg" alt=""> 
-                                   <h5 class="d-inline p-2">John Doe</h5>
-                                </div>   --}}
+                              
                              @if( $user == $message->buyer_id && $message->sender == 'buyer')
                                 <div class="row mb-3">
                                     <div class="col-12">
@@ -69,4 +63,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}

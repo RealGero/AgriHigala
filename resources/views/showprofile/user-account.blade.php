@@ -24,7 +24,7 @@
                                         <form action="{{ action('UsersController@updateAccountUsername')}}" method="POST">  
                                             @csrf
                                             <div class="text-danger"> {{$errors->first('username')}}</div>
-                                            <input class="form-control @error('username') is-invalid @enderror mb-2 form-group" type="text" name="username">
+                                            <input class="form-control @error('username') is-invalid @enderror mb-2 form-group" type="text" name="username" value="{{$user->username}}">
                                             
                                             @method('PUT')
                                            <button class="btn btn-primary d-flex justify-content-center form-group d-block col-12" type="submit"> Save </button>

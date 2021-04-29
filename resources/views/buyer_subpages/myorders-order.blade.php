@@ -64,7 +64,7 @@
                     //     $status_btn = 'badge-success';
                     // }
                     
-                    if ($order->completed_at) {
+    if ($order->completed_at) {
         // SET STATUS FOR COMPLETE
         if ($order->order_accepted_at == null) {
           $status = 'Rejected/Cancelled';

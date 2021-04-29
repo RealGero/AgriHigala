@@ -413,8 +413,10 @@ img.payment-online {
     display: inline-block;
 
 }
-
-
+//message size 
+.card-body.card-size.overflow-auto {
+    height: 24rem
+}
 //messages img
 .inbox-container img {
     height: 3rem;
@@ -724,7 +726,7 @@ img.payment-online {
 //Rider ----------------------------------------------------------------------------------------------
 .rider-profile img{
 
-    width: 6.5rem;
+    width: 7rem;
 }
 
 

@@ -189,6 +189,10 @@ class OrdersController extends Controller
             $order = Order::find($id);
             $order->delivered_at = now();
             $order->save();
+            
+            $payment = Order::find($id)->payment;
+            $payment->paid_at = now();
+            $payment->save();
             request()->session()->flash('success','Order Delivered');
         }
         else{

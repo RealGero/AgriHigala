@@ -35,7 +35,7 @@ class Order extends Model
 
     public function returnOrder()
     {
-        return $this->hasOne('App\ReturnOrder');
+        return $this->hasOne('App\ReturnOrder', 'order_id', 'order_id');
     }
 
     public function rider()

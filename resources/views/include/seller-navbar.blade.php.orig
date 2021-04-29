@@ -41,9 +41,7 @@
     <div class="collapse" id="order-items">
       <div class="d-flex flex-column navigation-items text-white">
         <a href="/seller/order/order-request"> My orders</a> 
-                   <a href="{{route('order.request.index')}}"> My orders</a> 
         <a href="/seller/history">History</a> 
-                    <a href="/seller/history">History</a> 
         <a href="/seller/return">Return</a> 
       </div>
     </div>
@@ -57,8 +55,28 @@
     {{-- FEEDBACK --}}
     <a href="{{route('sellerFeedback.index')}}"> <i class="fas fa-thumbs-up pr-2"></i>Feedback</a>
 
+<<<<<<< Updated upstream
+            <div>
+                <a class="" data-toggle="collapse" href="#order-items" aria-expanded="false" aria-controls="order-items">
+                    <i class="fas fa-box pr-2"></i>Order
+                </a>
+           </div>
+           <div class="collapse" id="order-items">
+                <div class="d-flex flex-column navigation-items text-white">
+                   <a href="{{route('order.request.index')}}"> My orders</a> 
+                    <a href="/seller/history">History</a> 
+                    <a href="{{route('seller.return.index')}}">Return</a> 
+                </div>
+            </div>
+         
+          
+           <a href="/seller/ratings"> <i class="fas fa-star pr-2"></i>Ratings</a>
+           <a href="/seller/earnings"> <i class="fas fa-chart-bar pr-2"></i>Earnings</a>
+           <a href="{{route('sellerFeedback.index')}}"> <i class="fas fa-thumbs-up pr-2"></i>Feedback</a>
+=======
     {{-- INBOX --}}
     <a href="{{route('sellerInbox.index')}}"> <i class="fa fa-envelope pr-2"></i>Inbox</a>
+>>>>>>> Stashed changes
 
     {{-- RIDER --}}
     <a href="{{route('rider.index')}}"> <i class="fas fa-motorcycle pr-2"></i>Rider</a>

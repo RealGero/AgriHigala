@@ -93,8 +93,6 @@ Route::resource('users', 'UsersController');
         Route::post('/buyer/feedback','FeedBacksController@buyerFeedbackStore')->name('buyerFeedback.store');
         Route::get('/customer-service','buyercontroller\PagesController@customerService');
 
-        Route::get('/buyer/order/order-view-details','buyercontroller\OrdersController@viewOrderDetails');
-
         Route::get('/buyer/order/myorder/{id?}', 'OrdersController@orderMyOrder')->name('buyer.order');
         Route::put('/buyer/order/cancel/{id}', 'OrdersController@orderMyOrderCancel')->name('buyer.order.cancel');
         Route::put('/buyer/order/received/{id}', 'OrdersController@orderMyOrderReceived')->name('buyer.order.received');
@@ -110,9 +108,6 @@ Route::resource('users', 'UsersController');
         // Route::get('/buyer/placeholder','OrdersController@clickedPlaceOrder');
 
         // Route::get('/buyer/order/myreturn', 'buyercontroller\OrdersController@orderMyReturn');
-
-
-        Route::get('/buyer/order/mycancellation', 'buyercontroller\OrdersController@orderMyCancellation');
 
         Route::get('/buyer/chat/{id}','MessagesController@buyerInboxMessage')->name('buyer.chat');
         Route::get('/buyer/message/{id}', 'MessagesController@buyerMessage')->name('buyerMessage.index');

@@ -95,9 +95,38 @@ class RegisterController extends Controller
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
 
-            'first_name' => ['required', 'string', 'min:2'],
-            'middle_name' => ['required', 'string', 'min:2' , 'regex:/^[a-zA-Z]+$/u'],
-            'last_name' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/u'],
+            'first_name' => ['required','min:2',
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The first name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The first name is invalid');
+                }
+            }
+        ],
+             'middle_name' => ['required','min:2',
+            
+                function ($attribute, $value, $fail) {
+                    if (preg_match('~[0-9]+~', $value)) {
+                        $fail('The first name is invalid');
+                    }
+                    if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                        $fail('The first name is invalid');
+                    }
+                }
+          ],
+            'last_name' => ['required','min:2',
+                        
+            function ($attribute, $value, $fail) {
+                if (preg_match('~[0-9]+~', $value)) {
+                    $fail('The last name is invalid');
+                }
+                if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $value)){
+                    $fail('The last name is invalid');
+                }
+            }
+        ],
             'mobile_number' => ['required', 'string', 'digits:11','unique:users'],
 
             'brgy' => ['required'],
@@ -133,7 +162,7 @@ class RegisterController extends Controller
         $user->save();
         $user->buyer()->save($buyer);
             
-       return redirect()->route('browse.index')->with('user',$user);
+       return redirect()->route('login')->with('success','Congratulation you already registered! Please Login');
     //     return 123;
     //     $user = new User;
          

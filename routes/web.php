@@ -91,7 +91,8 @@ Route::resource('users', 'UsersController');
         Route::get('/buyer/discount','buyercontroller\DiscountsController@index');
         Route::get('/buyer/feedback','FeedBacksController@buyerFeedbackIndex')->name('buyerFeedback.index');
         Route::post('/buyer/feedback','FeedBacksController@buyerFeedbackStore')->name('buyerFeedback.store');
-        Route::get('/customer-service','buyercontroller\PagesController@customerService');
+        Route::get('/customer-service','CustomerServiceController@buyerCustomerServiceIndex')->name('customer-service.index');
+        Route::post('/customer-service','CustomerServiceController@buyerCustomerServiceStore')->name('customer-service.store');
 
         Route::get('/buyer/order/myorder/{id?}', 'OrdersController@orderMyOrder')->name('buyer.order');
         Route::put('/buyer/order/cancel/{id}', 'OrdersController@orderMyOrderCancel')->name('buyer.order.cancel');
@@ -120,7 +121,7 @@ Route::resource('users', 'UsersController');
         Route::get('/buyer/ratings/{id}', 'RatingsController@orderMyOrderRatings')->name('buyer.ratings.index');
         Route::post('/buyer/ratings/store', 'RatingsController@buyerStore')->name('buyer.ratings.store');
         
-
+        
 
 
 //Seller-----------------------------------------------------------------------------------------
@@ -173,6 +174,7 @@ Route::resource('users', 'UsersController');
         Route::get('/seller/feedback', 'FeedBacksController@sellerFeedbackIndex')->name('sellerFeedback.index');
         Route::post('/seller/feedback', 'FeedBacksController@sellerFeedbackStore')->name('sellerFeedback.store');
 
+        Route::get('/seller/customer-service','CustomerServiceController@buyerCustomerServiceIndex');
     
         Route::get('/seller/earnings', 'sellercontroller\EarningsController@index');
 
@@ -210,7 +212,7 @@ Route::resource('users', 'UsersController');
         Route::put('/rider/orders/deliver/{id}','RidersController@riderDeliveredAt')->name('rider.deliveredAt');
 
         Route::get('/rider/dashboard','Riderscontroller@dashboard');
-        Route::get('/rider/history', 'RidersController@orderDetails');
+        Route::get('/rider/history', 'RidersController@orderDetails')->name('rider.history.index');
 
    
 

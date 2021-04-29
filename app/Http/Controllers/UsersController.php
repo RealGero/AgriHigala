@@ -14,6 +14,7 @@ use DB;
 use Hash;
 use Auth;
 use Illuminate\Validation\Rule;
+
 class UsersController extends Controller
 {
 

@@ -42,4 +42,16 @@ class Product extends Model
         return false;
     }
 
+    public static function getPrices($id)
+    {
+        $price = DB::table('prices as a')
+            ->join('stocks as b','b.stock_id','a.stock_id')
+            ->join('units as c','c.unit_id','a.unit_id')
+            ->where('a.stock_id',$id)
+            ->latest('a.created_at')
+            ->first();
+
+            return $price;
+    
+     }    
 }

@@ -11,10 +11,8 @@
 
 @auth
   {{-- NOTIFICATION --}}
-  <div class="dropdown ">
-    <button  type="button" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fa fa-bell  fa-2x fontawesome-color"></i>
-    </button>
+  <div class="dropdown dropdown-menu-left">
+    @include('admin.notification.show')
   </div>
 
   {{-- SIDENAV LINKS--}}
@@ -40,10 +38,9 @@
     </div>
     <div class="collapse" id="order-items">
       <div class="d-flex flex-column navigation-items text-white">
-        <a href="/seller/order/order-request"> My orders</a> 
+       
                    <a href="{{route('order.request.index')}}"> My orders</a> 
-        <a href="/seller/history">History</a> 
-                    <a href="/seller/history">History</a> 
+        {{-- <a href="/seller/history">History</a>  --}}
         <a href="/seller/return">Return</a> 
       </div>
     </div>
@@ -64,7 +61,7 @@
     <a href="{{route('rider.index')}}"> <i class="fas fa-motorcycle pr-2"></i>Rider</a>
 
     {{-- CUSTOMER SERVICE --}}
-    <a href="seller/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
+    <a href="{{route('customer-service.index')}}"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
     
     {{-- LOGOUT BUTTON --}}
     <a href="{{ route('logout') }}"  class="logout ml-5 font-italic" onclick="event.preventDefault();

@@ -39,7 +39,7 @@
                                             <a href="{{ route('login') }}" class="home_nav"><strong>Login</strong></a>
                                             </div>
                                             <div class="col">
-                                                <a href="/browse" class="home_nav"><strong>Browse</strong> </a>
+                                                <a href="/buyer/browse" class="home_nav"><strong>Browse</strong> </a>
                                             </div>
                                             @if (Route::has('register'))
                                                 <div class="col">

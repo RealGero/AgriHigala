@@ -5,6 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
+                @if(session()->has('success'))
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+               @endif
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
@@ -71,19 +76,9 @@
                                <hr>
                            </div>
                         </div>
-                        
-                        <div class="row mt-1 mb-2 ">
-                            <div class="col-12 d-flex justify-content-center ">
-                                
-                                <a href="" class=" text-decoration:none mr-2 text-dark border"> <i class="fab fa-facebook fa-lg p-2"> Facebook</i> </a> 
-                               
-                                <a href="" class=" text-decoration:none ml-2 text-dark border">  <i class="fab fa-google fa-lg p-2"> Google</i>  </a> 
-                                
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-12 d-flex justify-content-center mt-4 mb-1">
-                                <span class="h6">New to Agri-Higala?<a href="/register" class="mx-1 font-weight-bold">Sign up</a> </span>
+                                <span class="h6">New to Agri-Higala?<a href="{{ route('register') }}" class="mx-1 font-weight-bold">Sign up</a> </span>
                             </div>
                         </div>
                     </form>

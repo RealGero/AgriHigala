@@ -32,8 +32,7 @@ class ProductsController extends Controller
                     ->join('products as b', 'b.product_id', '=', 'a.product_id')
                     ->join('srp as c', 'c.product_id','=', 'b.product_id')
                     ->join('units as d', 'd.unit_id','=','c.unit_id')
-                    ->join('prices as e','e.price_id', '=','d.unit_id')
-                    ->select('a.stock_id','b.product_id','a.stock_image','b.product_name','d.unit_name','e.stock_price','a.qty_added','a.created_at','a.expiration_date','a.deleted_at')
+                    ->select('a.stock_id','b.product_id','a.stock_image','b.product_name','d.unit_name','a.qty_added','a.created_at','a.expiration_date','a.deleted_at')
                     ->where('a.seller_id',$seller_id)
                     ->get();
         Product::all();

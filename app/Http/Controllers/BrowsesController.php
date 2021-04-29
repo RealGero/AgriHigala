@@ -38,6 +38,7 @@ class BrowsesController extends Controller
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
+            ->join('units as h','h.unit_id','c.unit_id')
             ->where('b.product_name', 'LIKE', "%".$_GET['s']."%")
             ->latest('c.created_at')
             ->paginate(5);
@@ -50,6 +51,7 @@ class BrowsesController extends Controller
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
+            ->join('units as h','h.unit_id','c.unit_id')
             ->where('b.product_type_id', '=', $_GET['category'])
             ->latest('c.created_at')
             ->paginate(5);
@@ -61,10 +63,12 @@ class BrowsesController extends Controller
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
+            ->join('units as h','h.unit_id','c.unit_id')
             ->where('f.brgy_id', '=', $_GET['brgy'])
             ->latest('c.created_at')
              ->paginate(5);
         }
+        
         else{
             $products = DB::table('stocks as a')
                 ->join('products as b','b.product_id','=','a.product_id')
@@ -73,6 +77,7 @@ class BrowsesController extends Controller
                 ->join('orgs as e','e.org_id','=','d.org_id')
                 ->join('brgys as f','f.brgy_id','=','e.brgy_id')
                 ->join('product_types as g','g.product_type_id','=','b.product_type_id')
+                ->join('units as h','h.unit_id','c.unit_id')
                 ->latest('c.created_at')
                 ->paginate(5);
                

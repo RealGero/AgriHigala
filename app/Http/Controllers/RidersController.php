@@ -404,9 +404,21 @@ class RidersController extends Controller
 
     public function orderDetails()
     {
+        $id = Auth::id();
+        $rider_id = User::find($id)->rider->rider_id;
 
-        
-        return view('Rider_view.rider-history');
+        $orders = DB::table('orders as a')
+        ->join('payments as b', 'a.order_id', 'b.order_id')
+        ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        ->join('fees as d', 'b.fee_id', 'd.fee_id')
+        ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+         ->orderBy('a.created_at','desc')
+         ->where('a.rider_id',$rider_id)
+         ->whereNotNull('a.completed_at')
+        ->get();
+
+      
+        return view('Rider_view.rider-history',compact('orders'));
     }
 
     public function dashboard()

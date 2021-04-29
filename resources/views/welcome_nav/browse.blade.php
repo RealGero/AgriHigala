@@ -22,7 +22,7 @@
 
                                             {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
                                             <h5>{{$product->product_name}}</h5>
-                                            <p> &#8369; {{$product->stock_price}}</p>                                                                                                   
+                                            <p> &#8369; {{number_format($product->stock_price)}}/{{$product->unit_name}}</p>                                                                                                   
                                             <p>{{$product->brgy_name}}</p>
                                              <a href="/buyer/browse/{{$product->stock_id}}" class="btn btn-success">Add to Cart</a>
                                            

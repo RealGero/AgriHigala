@@ -37,13 +37,16 @@
                                 <tbody>
                                  
                                     @foreach($products as $product)
+                                      @php
+                                          $price = \App\Product::getPrices($product->stock_id);
+                                      @endphp
                                      @if(empty($product->deleted_at))
                                       <tr>
                                         <td><img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
                                         <td>{{$product->stock_id}}</td>
                                         <td>{{ $product->product_name }}</td>
-                                        <td>{{$product->unit_name ? $product->unit_name : '' }}</td>
-                                        <td>{{$product->stock_price ? $product->stock_price : 0 }}</td>
+                                        <td>{{$price->unit_name }}</td>
+                                        <td>&#8369;{{number_format($price->stock_price)}}</td>
                                         <td>{{$product->qty_added}}</td>
                                         <td>{{date('M d Y', strtotime($product->created_at))}}</td>
                                         <td>{{date('M d Y', strtotime($product->expiration_date))}}</td>

@@ -144,7 +144,7 @@
                                 <div class="col-12 mx-2">
                                     <div class="form-group">
                                      
-                                        <textarea class="form-control text-justify" id="exampleFormControlTextarea1" rows="3" placeholder="Descreption" name="description" >{{$stock->product_description}}</textarea>
+                                        <textarea class="form-control text-justify" id="exampleFormControlTextarea1" rows="3" placeholder="Description" name="description" >{{$stock->product_description}}</textarea>
                                    
                         
                                         </div>

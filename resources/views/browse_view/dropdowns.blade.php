@@ -13,12 +13,12 @@
                         <option value="{{$category->product_type_id}}">{{$category->product_type_name}}</option>
                       @endforeach
                   </select>
-                    <select class="form-select" aria-label="Default select example">
+                    {{-- <select class="form-select" aria-label="Default select example">
                       <option selected>Price</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
                       <option value="3">Three</option>
-                    </select>
+                    </select> --}}
                     <select class="form-select" aria-label="Default select example" name="brgy">
                       <option hidden>Select barangay</option>
                       @foreach($brgys as $brgy)
@@ -26,12 +26,12 @@
                       @endforeach
                     </select>
           
-                    <div class="form-check" style="display:inline">
+                    {{-- <div class="form-check" style="display:inline">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                       <label class="form-check-label" for="flexCheckDefault">
                        Discount
                       </label>
-                  </div>
+                  </div> --}}
                 </div>
            </div>
           </div>

@@ -18,11 +18,8 @@
                                         
                                         <div class="d-flex flex-column justify-content-center mx-4" >
                                          <a href="/buyer/browse/seller/{{$product->stock_id}}"> 
-                                            @if(is_null($product->stock_image))
-                                                <img src="/storage/seller/product_type_image/{{$product->product_image}}" alt=""> </a>  
-                                            @else
-                                                <img src="/storage/stock/{{$product->stock_image}}" alt=""> </a>   
-                                            @endif
+                                             <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></a>
+
                                             {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
                                             <h5>{{$product->product_name}}</h5>
                                             <p> &#8369; {{$product->stock_price}}</p>                                                                                                   
@@ -42,9 +39,9 @@
                              
                          </div>
                     </div>
+                </div>
             </div>
-        </div>
-       
+        </div>      
     </div>
     @include('browse_view.browse-products')
     @include('browse_view.dropdowns')

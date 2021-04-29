@@ -64,7 +64,7 @@
     <a href="{{route('rider.index')}}"> <i class="fas fa-motorcycle pr-2"></i>Rider</a>
 
     {{-- CUSTOMER SERVICE --}}
-    <a href="seller/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
+    <a href="{{route('customer-service.index')}}"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
     
     {{-- LOGOUT BUTTON --}}
     <a href="{{ route('logout') }}"  class="logout ml-5 font-italic" onclick="event.preventDefault();

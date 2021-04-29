@@ -312,7 +312,7 @@ class ProductsController extends Controller
      
         }
        
-        return redirect()->back()->with('success','Successfully editted your product');
+        return redirect()->back()->with('success','Successfully edited your product');
 
     
 

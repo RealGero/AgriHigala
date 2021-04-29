@@ -405,7 +405,8 @@ class RidersController extends Controller
     public function orderDetails()
     {
 
-        return view('Rider_view.transaction-history');
+        
+        return view('Rider_view.rider-history');
     }
 
     public function dashboard()

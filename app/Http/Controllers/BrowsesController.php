@@ -41,6 +41,7 @@ class BrowsesController extends Controller
             ->where('b.product_name', 'LIKE', "%".$_GET['s']."%")
             ->latest('c.created_at')
             ->paginate(5);
+            // dd($products);
         }
         elseif(isset($_GET['category'])){
             $products = DB::table('stocks as a')
@@ -49,7 +50,7 @@ class BrowsesController extends Controller
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
-            ->where('a.product_type_id', '=', $_GET['category'])
+            ->where('b.product_type_id', '=', $_GET['category'])
             ->latest('c.created_at')
             ->paginate(5);
         }

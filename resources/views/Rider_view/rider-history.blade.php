@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="container">
-        <div class="transaction-history">
+        <div class="rider-history">
             <div class="row">
                 <div class="col-8 mx-auto">
                     <span class="h3">Order transaction history</span>

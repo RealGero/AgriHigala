@@ -34,7 +34,7 @@
     <a href="/buyer/order/myorder"> <i class="fas fa-box pr-2"></i>Order </a>
 
     {{-- DISCOUNT --}}
-    <a href="/buyer/discount"> <i class="fa fa-tags pr-2"></i>Discount</a>
+    {{-- <a href="/buyer/discount"> <i class="fa fa-tags pr-2"></i>Discount</a> --}}
 
     {{-- FEEDBACK --}}
     <a href="/buyer/feedback"> <i class="fas fa-thumbs-up pr-2"></i>Feedback</a>
@@ -43,7 +43,7 @@
     <a href="/buyer/inbox"><i class="fas fa-envelope pr-2"></i>Inbox</a>
 
     {{-- HISTORY --}}
-    <a href="/buyer/history" > <i class="fas fa-history pr-2"></i>History</a>
+    {{-- <a href="/buyer/history" > <i class="fas fa-history pr-2"></i>History</a> --}}
 
     {{-- ABOUT US --}}
     <a href="/about"><i class="fas fa-info-circle pr-2"></i>About Us</a>
@@ -52,7 +52,7 @@
     <a href="/contact"><i class="fas fa-phone pr-2"></i>Contact Us</a>
 
     {{-- CUSTOMER SERVICE --}}
-    <a href="buyer/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service</a>
+    <a href="{{route('customer-service.index')}}"> <i class="fas fa-headset pr-2"></i>Customer Service</a>
 
     {{-- LOGOUT --}}
     <a href="{{ route('logout') }}"  class="logout ml-5 font-italic" onclick="event.preventDefault();

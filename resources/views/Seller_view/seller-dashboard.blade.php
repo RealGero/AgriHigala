@@ -20,45 +20,30 @@
                         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p></p>
+                                <p>{{\App\Stock::all()->where('seller_id', $id)->count()}}</p>
                                 <span class="h6">All</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>{{count($meats)}}</p>
+                                {{\App\Stock::countStockFromByCategory($id,2)}}
                                 <span class="h6">Meat</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>{{count($vegetables)}}</p>
+                                {{\App\Stock::countStockFromByCategory($id,3)}}
                                 <span class="h6">Vegetable</span>
                             </div>
                         </div>
         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p>{{count($fruits)}}</p>
+                                {{\App\Stock::countStockFromByCategory($id,4)}}
                                 <span class="h6">Fuits</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>{{count($fishes)}}</p>
+                                {{\App\Stock::countStockFromByCategory($id,1)}}
                                 <span class="h6">Fish</span>
                             </div>
-                            <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">Others</span>
-                            </div>
+                           
                         </div>
-                        <div class="row">
-                            <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">Expired</span>
-                            </div>
-                            <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">Discounted</span>
-                            </div>
-                                
-                        </div>
-                    
                         <div class="row mx-3 mt-3">
                             <div class="col-6">
                                 <h4 class="card-title my-2">Orders</h4>
@@ -69,26 +54,26 @@
                         </div>
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{\App\Order::countSellerDashboard($id,null)}}</p>
                                 <span class="h6">All</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">Request</span>
+                                <p>{{\App\Order::countSellerDashboard($id,'OR')}}</p>
+                                <span class="h6">Order Request</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{\App\Order::countSellerDashboard($id,'P')}}</p>
                                 <span class="h6">Pending</span>
                             </div>
                         </div>
         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{\App\Order::countSellerDashboard($id,'D')}}</p>
                                 <span class="h6">Delivering</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{\App\Order::countSellerDashboard($id,'RR')}}</p>
                                 <span class="h6">Return request</span>
                             </div>
                             
@@ -103,31 +88,20 @@
                             </div>
                         </div>
                         <div class="row my-3">
+                        
                             <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">All</span>
-                            </div>
-                            <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{\App\Order::countSellerDashboard($id,'C')}}</p>
                                 <span class="h6">Completed</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">Rejected</span>
-                            </div>
-                        </div>
-        
-                        <div class="row my-3">
-                            <div class="col-4 text-center">
-                                <p>0</p>
-                                <span class="h6">Cancelled</span>
+                                <p>{{\App\Order::countSellerDashboard($id,'RC')}}</p>
+                                <span class="h6">Rejected/Cancelled</span>
                             </div>
                             <div class="col-4 text-center">
-                                <p>0</p>
+                                <p>{{\App\Order::countSellerDashboard($id,'RE')}}</p>
                                 <span class="h6">Returned</span>
                             </div>
-                            
-                        </div>       
+                        </div>
                 </div>
             </div>
         </div>

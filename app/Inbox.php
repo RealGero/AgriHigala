@@ -42,11 +42,10 @@ class Inbox extends Model
         $buyer_message = DB::table('messages as a')
         ->join('inbox as b','b.inbox_id','a.inbox_id')
         ->where('b.inbox_id',$id)
-        ->select('a.created_at')
         ->latest('a.created_at')
-        ->first();    
-
-        return $buyer_message->created_at;
+        ->first();  
+        
+        return $buyer_message;
     }
 
     public static function countInboxMessages($id)

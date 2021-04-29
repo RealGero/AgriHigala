@@ -57,4 +57,18 @@ class Stock extends Model
         return $data;
     }
 
+    public static function countStockFromByCategory($id,$category)
+    {
+        $stock = DB::table('stocks as a')
+            ->join('products as b','b.product_id','a.product_id')
+            ->where('a.seller_id',$id)
+            ->where('b.product_type_id',$category)
+            ->count(); 
+
+            return $stock;
+    }
+
+   
+
+
 }

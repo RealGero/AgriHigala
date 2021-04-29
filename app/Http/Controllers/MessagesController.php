@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use Auth;
 use DB;
 use App\User;
+use App\Seller;
 use App\Inbox;
 use App\Message;
+use App\Notifications\NewMessage;
+
 class MessagesController extends Controller
 {
     public function __construct()
@@ -75,13 +78,30 @@ class MessagesController extends Controller
 
     public function buyerMessageStore(Request $request,$id)
     {
-
         $message = new Message;
         $message->sender = 'buyer';
         $message->message = $request->input('input-message');
         $message->inbox_id = $id;
         $message->save();
 
+        // FIND USER ID
+        $seller = Inbox::find($id)->seller_id;
+        $notify_id = Seller::find($seller)->user->user_id;
+
+        // ASSIGN VALUES
+        $notify_user = $notify_id; // ID sa e-notify; NOT NULL
+        $notify_info = $message; // Query gihimu; NOT NULL
+        $notify_title = 'Inbox '; // Title or table; NOT NULL
+        $notify_table_id = $id; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'New message'; // Title description; NOT NULL            
+        $notify_url = route('sellerMessage.index', [$id]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewMessage($notify_info));
 
         return redirect()->back();
 

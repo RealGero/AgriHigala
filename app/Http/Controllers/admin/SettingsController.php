@@ -82,7 +82,7 @@ class SettingsController extends Controller
             // SET NOTIFY
             $notify_user = 17; // ID sa e-notify; NOT NULL
             $notify_info = $announcement; // Query gihimu; NOT NULL
-            $notify_title = 'Announcement'; // Title or table; NOT NULL
+            $notify_title = 'Announcement '; // Title or table; NOT NULL
             $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
             $notify_subtitle = 'New announcement'; // Title description; NOT NULL            
             $notify_url = false ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank

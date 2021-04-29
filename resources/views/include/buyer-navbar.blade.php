@@ -4,14 +4,17 @@
 {{-- CART --}}
 <a href="{{route('cart.index')}}">
   <div></div>
-  <i class="fa fa-shopping-cart fa-2x fontawesome-color"></i>
-  @if (isset(Session::get('cart')->totalQty)) 
-    @if (Session::get('cart')->totalQty > 0) 
-      <span class="badge badge-danger badge-counter cart">
-        {{Session::has('cart')>0 ? Session::get('cart')->totalQty : null}}
-      </span>
-    @endif
-  @endif
+  <div class="badge">
+    <i class="fa fa-shopping-cart fa-2x fontawesome-color">
+      @if (isset(Session::get('cart')->totalQty)) 
+        @if (Session::get('cart')->totalQty > 0) 
+          <span class="badge badge-danger badge-counter cart">
+            {{Session::has('cart')>0 ? Session::get('cart')->totalQty : null}}
+          </span>
+        @endif
+      @endif
+    </i>
+  </div>
 </a>  
 
 @auth

@@ -12,10 +12,8 @@
 
 @auth
   {{-- NOTIFICATION --}}
-  <div class="dropdown ">
-    <button  type="button" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fa fa-bell  fa-2x fontawesome-color"></i>
-    </button>
+  <div class="dropdown dropdown-menu-left">
+    @include('admin.notification.show')
   </div>
 
   {{-- SIDENAV LINKS--}}

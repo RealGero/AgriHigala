@@ -124,4 +124,94 @@ class Order extends Model
             return 0; 
         }
     }
+    public static function countSellerDashboard($id,$order=null)
+    {
+
+        $orders = DB::table('orders as a')
+        ->join('payments as b', 'a.order_id', 'b.order_id')
+        ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        ->join('fees as d', 'b.fee_id', 'd.fee_id')
+         ->where('d.seller_id',$id)
+         ->count();
+
+
+        if($order == 'OR' )
+        {
+            $orders = DB::table('orders as a')
+                ->join('payments as b', 'a.order_id', 'b.order_id')
+                ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+                ->join('fees as d', 'b.fee_id', 'd.fee_id')
+                ->where('d.seller_id',$id)
+                ->whereNull('a.accepted_at')
+                ->count();
+        }
+        elseif( $order =='P')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('d.seller_id',$id)
+            ->whereNotNull('a.accepted_at')
+            ->whereNull('a.packed_at')
+            ->count();
+        }
+        elseif( $order =='D')
+        {   
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('d.seller_id',$id)
+            ->whereNotNull('a.packed_at')
+            ->whereNull('a.delivered_at')
+            ->count();
+        }
+        elseif($order =='RR')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('d.seller_id',$id)
+            ->whereNotNull('c.created_at')
+            ->whereNull('c.accepted_at')
+            ->count();
+            
+        }
+        elseif($order =='C')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('d.seller_id',$id)
+            ->whereNotNull('a.completed_at')
+            ->count();
+
+        }
+        elseif($order =='RC')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('d.seller_id',$id)
+            ->whereNotNull('a.completed_at')
+            ->whereNull('a.accepted_at')
+            ->count();
+        }
+        elseif($order =='RE')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('d.seller_id',$id)
+            ->where('c.return_id','<>', null)
+            ->count();
+        }       
+        
+        return $orders;
+    }
 }

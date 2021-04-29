@@ -114,7 +114,9 @@
 
                             </div>
                         </div>
-
+                        @php
+                            $brgys = \App\Brgy::all();
+                        @endphp
                         <div class="d-flex flex-row mb-3 form-group">
                             <label for="barangays" class="col-md-4 col-form-label text-md-right">{{__('Choose a Barangay:')}}</label>
                             <select name="brgy" id="brgy" class="form-control  @error('brgy') is-invalid @enderror">

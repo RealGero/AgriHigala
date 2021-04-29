@@ -10964,6 +10964,22 @@ body {
   list-style-type: none;
 }
 
+.badge.badge-danger.badge-counter.user {
+  bottom: 0.5rem;
+  left: 2rem;
+  position: absolute;
+}
+
+.dropdown-list.dropdown-menu.dropdown-menu-right.shadow.animated--grow-in.show {
+  width: 20rem;
+}
+
+.badge.badge-danger.badge-counter.cart {
+  position: absolute;
+  left: 24rem;
+  bottom: 3.8rem;
+}
+
 .bg {
   background-image: url("/images/background_home.png");
   height: 800px;

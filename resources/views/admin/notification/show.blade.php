@@ -1,17 +1,35 @@
 <div id="notifications">
-    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-bell fa-fw"></i>
-        <!-- Counter - Alerts -->
-        <span class="badge badge-danger badge-counter">
-            @if(count(Auth::user()->unreadNotifications) >10 )<span data-count="10" class="count">10+</span>
-            @else 
-                <span class="count" data-count="{{count(Auth::user()->unreadNotifications)}}">{{count(Auth::user()->unreadNotifications)}}</span>
+    <a class="nav-link" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @if (Auth::user()->user_type == '1')
+            <i class="fas fa-bell fa-fw"></i>
+            <!-- Counter - Alerts -->
+            <span class="badge badge-danger badge-counter">
+                @if(count(Auth::user()->unreadNotifications) >10 )
+                    <span data-count="10" class="count">10+</span>
+                @else 
+                    <span class="count" data-count="{{count(Auth::user()->unreadNotifications)}}">{{count(Auth::user()->unreadNotifications)}}</span>
+                @endif
+            </span>
+        @else
+            <i class="fa fa-bell  fa-2x fontawesome-color"></i>
+            <!-- Counter - Alerts -->
+            @if (count(Auth::user()->unreadNotifications) > 0 )
+                <span class="badge badge-danger badge-counter user">
+                    @if(count(Auth::user()->unreadNotifications) >10 )
+                        <span data-count="10" class="count">10+</span>
+                    @else 
+                        <span class="count" data-count="{{count(Auth::user()->unreadNotifications)}}">{{count(Auth::user()->unreadNotifications)}}</span>
+                    @endif
+                </span>
             @endif
-        </span>
+        @endif
       </a>
       <!-- Dropdown - Alerts -->
       <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">Notifications Center</h6>
+        @if (Auth::user()->user_type == '1')
+            <h6 class="dropdown-header">Notifications Center</h6>
+        @endif
+        
         @php
             $unreadNotifications = Auth::user()->unreadNotifications
         @endphp

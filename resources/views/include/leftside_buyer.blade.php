@@ -26,11 +26,3 @@
   <a href="#clients">My Message</a>
   <a href="#contact">My Notification</a>
 </div>
-</div>
-
-
-   
-    <a href="#clients">My Reviews</a>
-    <a href="#clients">My Message</a>
-    <a href="#contact">My Notification</a>
-  </div>

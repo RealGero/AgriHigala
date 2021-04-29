@@ -30,14 +30,8 @@ class NotificationsController extends Controller
     }
 
     public function readAll(){
-
-        // $user = Auth::user();
-
-        // foreach ($user->unreadNotifications as $notification) {
-        //     $notification->markAsRead();
-        // }
         
         Auth::user()->unreadNotifications()->update(['read_at' => now()]);
-        return 'okay';
+        return back();
     }
 }

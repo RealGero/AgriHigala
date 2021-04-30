@@ -44,7 +44,7 @@
     <div class="card">
       <h5 class="card-header">New {{$user_title}}Account</h5>
       <div class="card-body">
-        <form method="post" action="{{route('admin.users.store')}}">
+        <form method="post" action="{{route('admin.users.store')}}" enctype="multipart/form-data">
           {{csrf_field()}}
 
           {{-- WARNING --}}

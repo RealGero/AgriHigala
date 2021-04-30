@@ -12,6 +12,16 @@ input#user_image {
     border-radius: .35rem;
 }
 
+// ALL IMAGES
+.img-object-fit img{
+    width: 60px;
+    height: 60px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
+}
+
 // INBOX & MESSAGES
 .border-buyer {
     border-left: 4px solid #79B243;

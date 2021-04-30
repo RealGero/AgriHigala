@@ -46,19 +46,6 @@ class OrdersController extends Controller
             ->where('a.completed_at', null)
             ->where('c.return_id', null)
             ->paginate(10);
-
-        $notify_user = Auth::id; // ID sa e-notify; NOT NULL
-        $notify_info = $orders; // Query gihimu; NOT NULL
-        $notify_title = 'Order'; // Title or table; NOT NULL
-        $notify_table_id = '1'; // ID sa table nga involved; NULLABLE, pwede ra leave blank
-        $notify_subtitle = 'Order Received'; // Title description; NOT NULL            
-        $notify_url = route('admin.users.index', [1]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
-        
-        $notify_info->title = $notify_title;
-        $notify_info->table_id = $notify_table_id.': ';
-        $notify_info->subtitle = $notify_subtitle;
-        $notify_info->action_url = $notify_url;
-        User::find($notify_user)->notify(new NewOrder($notify_info));
         
         return view('admin.orders.index',compact('orders', 'title'));
     }

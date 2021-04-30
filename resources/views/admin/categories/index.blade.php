@@ -42,7 +42,9 @@
                     <td>{{$category->product_type_id}}</td>
                     <td class="text-capitalize">{{$category->product_type_name}}</td>
                     <td>{{$category->product_type_description}}</td>
-                    <td class="text-center"><img src="/storage/stock/{{$category->product_image}}" class="img-fluid" style="max-width:80px" alt="{{$category->product_image}}"></td>
+                    <td class="img-object-fit text-center">
+                      <img src="/storage/seller/product_type_image/{{$category->product_image}}" class="img-fluid" style="max-width:80px" alt="{{$category->product_image}}">
+                    </td>
                     <td>
                       <a href="{{route('admin.categories.edit',$category->product_type_id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                       <form method="POST" action="{{route('admin.categories.destroy',[$category->product_type_id])}}">

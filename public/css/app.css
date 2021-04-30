@@ -10987,6 +10987,23 @@ body {
   background-attachment: fixed;
 }
 
+.bg-admin {
+  background-image: url("/images/bg-admin.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100vh;
+}
+
+.card.admin-login {
+  margin-top: 10%;
+}
+
+.admin-container {
+  padding-top: 20vh;
+}
+
 .agri-logo {
   width: 20%;
   margin: 0 auto;
@@ -11657,6 +11674,15 @@ img.img-fluid.rounded-circle {
 input#user_image {
   border: 1px solid #d1d3e2;
   border-radius: 0.35rem;
+}
+
+.img-object-fit img {
+  width: 60px;
+  height: 60px;
+  -o-object-fit: cover;
+  object-fit: cover;
+  -o-object-position: center;
+  object-position: center;
 }
 
 .border-buyer {

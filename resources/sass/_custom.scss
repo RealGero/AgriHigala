@@ -38,6 +38,22 @@ body{
     background-attachment: fixed;
    
 }
+.bg-admin{
+    background-image: url("/images/bg-admin.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;
+   
+}
+.card.admin-login {
+    margin-top: 10%;
+}
+
+.admin-container{
+    padding-top: 20vh;
+}
 
 // welcome blade
 .agri-logo{

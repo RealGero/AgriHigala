@@ -96,16 +96,72 @@
     <div class="card my-3">
       <h5 class="card-header text-capitalize">{{$title}} Information</h5>
       <div class="card-body">
-        <div>
-          Order: {{$order->order_id}}
-          <br>
-          butang dari ang info
-          <br>
-          @if ($order->return_created_at)
-            <span class="badge badge-primary">Return</span>
-            <br>
-          @endif
-          <span class="badge {{$status_btn}}">{{$status}}</span>
+        <div class="row">
+          <div class="col">
+            <span>Order: {{$order->order_id}}</span> 
+            {{-- <br>
+            butang dari ang info --}}
+            {{-- <br> --}}
+            @if ($order->return_created_at)
+              <span class="badge badge-primary">Return</span>
+            @endif
+            <span class="badge {{$status_btn}}">{{$status}}</span>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 mb-5">
+                <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @php
+                        $orderLines = \App\Order::getOrderlines($order->order_id);
+                        $order_show = \App\Order::showOrder($order->order_id);
+                      @endphp
+                        @foreach ($orderLines as $orderLine)  
+                            <tr>
+                                <td class="img-object-fit"> <img src="{{ url('/storage/') }}{{ $orderLine->stock_image ? '/stock/'. $orderLine->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
+                                <td>  {{$orderLine->product_name}}  
+                                
+                                <td>Quantity: {{$orderLine->order_qty}}</td>
+                                <td>&#8369;{{number_format($orderLine->stock_price)}}/{{ucfirst($orderLine->unit_description)}}</td>
+                                <td>&#8369;{{number_format($orderLine->stock_price * $orderLine->order_qty) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mx-1">
+            <div class="col">
+                <span>Other Fee &#8369;{{number_format($order_show->fee_other)}}</span>
+                <br>
+                <span>Delivery fee: &#8369;{{number_format($order_show->fee_delivery)}}</span>
+                <br>
+                <span>Subtotal Fee: &#8369;{{number_format($order_show->payment_order )}}</span>
+                <br>
+                <span>Total fee: &#8369;{{number_format($order_show->payment_total) }}</span>
+            </div>
+            <div class="col">
+                <span>Organization Name: {{$order_show->org_name}}</span>
+                <br>
+                <span>Payment method: {{ucfirst($order_show->payment_method)}}</span>
+            </div>
+            @if($order_show->payment_method == 'online')
+            <div class="col">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#online-img">
+                    Upload Photo
+                </button>
+            </div>
+            @endif
         </div>
       </div>
     </div>

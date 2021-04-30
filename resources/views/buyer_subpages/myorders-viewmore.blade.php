@@ -26,17 +26,16 @@
                                               </tr>
                                             </thead>
                                             <tbody>
-                                               
                                                 @foreach ($orderLines as $orderLine)  
-                                              <tr>
-                                                <td> <img src="{{ url('/storage/') }}{{ $orderLine->stock_image ? '/stock/'. $orderLine->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
-                                                <td>  {{$orderLine->product_name}}  
-                                                
-                                                <td>Quantity: {{$orderLine->order_qty}}</td>
-                                                <td>&#8369;{{number_format($orderLine->stock_price)}}/{{ucfirst($orderLine->unit_description)}}</td>
-                                                <td>&#8369;{{number_format($orderLine->stock_price * $orderLine->order_qty) }}</td>
-                                              </tr>
-                                              @endforeach
+                                                    <tr>
+                                                        <td> <img src="{{ url('/storage/') }}{{ $orderLine->stock_image ? '/stock/'. $orderLine->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td>
+                                                        <td>  {{$orderLine->product_name}}  
+                                                        
+                                                        <td>Quantity: {{$orderLine->order_qty}}</td>
+                                                        <td>&#8369;{{number_format($orderLine->stock_price)}}/{{ucfirst($orderLine->unit_description)}}</td>
+                                                        <td>&#8369;{{number_format($orderLine->stock_price * $orderLine->order_qty) }}</td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>

@@ -6,7 +6,7 @@
     <div class="card">
       <h5 class="card-header">Add Category</h5>
       <div class="card-body">
-        <form method="post" action="{{route('admin.categories.update', [$category->product_type_id])}}">
+        <form method="post" action="{{route('admin.categories.update', [$category->product_type_id])}}" enctype="multipart/form-data">
           {{csrf_field()}}
 
           {{-- Title --}}

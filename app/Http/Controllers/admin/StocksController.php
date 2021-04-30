@@ -82,6 +82,7 @@ class StocksController extends Controller
             'price' => ['required', 'numeric'],
             'unit' => ['required'],
             'expiration' => ['required'],
+            'stock_image' => ['max:1999'],
 
         ]);
         
@@ -92,7 +93,20 @@ class StocksController extends Controller
         $stock->stock_description = $request->input('stock_description');
         $stock->qty_added = $request->input('stock_quantity');
         $stock->expiration_date = $request->input('expiration');
-        // $stock->stock_image = $request->input('stock_quantity');
+        
+        // CHECK STOCK IMAGE IF EMPTY
+        if($request->hasFile('stock_image'))
+        {
+            $filenameWithExt = $request->file('stock_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('stock_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('stock_image')->storeAs('public/stock',$filenameToStore); 
+
+            $stock->stock_image = $filenameToStore;
+        };
+
+        // SAVE CATEGORY
         $stock->save();
         
         // CREATE PRICE
@@ -158,6 +172,7 @@ class StocksController extends Controller
             'price' => ['required', 'numeric'],
             'unit' => ['required'],
             'expiration' => ['required'],
+            'stock_image' => ['max:1999'],
 
         ]);
     
@@ -168,7 +183,20 @@ class StocksController extends Controller
         $stock->stock_description = $request->input('stock_description');
         $stock->qty_added = $request->input('stock_quantity');
         $stock->expiration_date = $request->input('expiration');
-        // $stock->stock_image = $request->input('stock_quantity');
+        
+        // CHECK STOCK IMAGE IF EMPTY
+        if($request->hasFile('stock_image'))
+        {
+            $filenameWithExt = $request->file('stock_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('stock_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('stock_image')->storeAs('public/stock',$filenameToStore); 
+
+            $stock->stock_image = $filenameToStore;
+        };
+
+        // SAVE CATEGORY
         $stock->save();
 
         // CHECK PRICE IF UPDATED

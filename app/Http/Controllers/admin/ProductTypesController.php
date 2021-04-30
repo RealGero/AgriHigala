@@ -48,14 +48,30 @@ class ProductTypesController extends Controller
         $validated = $request->validate([
             'title' => ['required','string','min:2'],
             'description' => ['required','string','min:2'],
+            'image' => ['max:1999'],
         ]);
 
         // ASSIGN INPUT TO PRODUCT TYPE TABLE
         $category = new ProductType;
         $category->product_type_name = $request->input('title');
         $category->product_type_description = $request->input('description');
-        $category->save();
         
+        // CHECK USER IMAGE IF EMPTY
+        if($request->hasFile('image'))
+        {
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('image')->storeAs('public/seller/product_type_image',$filenameToStore); 
+
+            $category->product_image = $filenameToStore;
+        };
+
+        // SAVE CATEGORY
+        $category->save();
+
+        // CHECK IF SUCCESSFUL
         if ($category){
             request()->session()->flash('success','Successfully added category');
         }
@@ -88,11 +104,26 @@ class ProductTypesController extends Controller
         $validated = $request->validate([
             'title' => ['required','string','min:2'],
             'description' => ['required','string','min:2'],
+            'image' => ['max:1999'],
         ]);
 
         $category = ProductType::find($id);
         $category->product_type_name = $request->input('title');
         $category->product_type_description = $request->input('description');
+        
+        // CHECK USER IMAGE IF EMPTY
+        if($request->hasFile('image'))
+        {
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('image')->storeAs('public/seller/product_type_image',$filenameToStore); 
+
+            $category->product_image = $filenameToStore;
+        };
+
+        // SAVE CATEGORY
         $category->save();
 
         if ($category){

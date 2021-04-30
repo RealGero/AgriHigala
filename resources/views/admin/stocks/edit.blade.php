@@ -7,7 +7,7 @@
     <div class="card">
       <h5 class="card-header">Update Stock</h5>
       <div class="card-body">
-        <form method="post" action="{{route('admin.stocks.update', [$stock->stock_id])}}">
+        <form method="post" action="{{route('admin.stocks.update', [$stock->stock_id])}}" enctype="multipart/form-data">
           {{csrf_field()}}
 
           {{-- SELLER LIST --}}

@@ -214,4 +214,28 @@ class Order extends Model
         
         return $orders;
     }
+
+    public static function getOrderlines($id){
+        $orderLines = DB::table('orderlines as a')
+            ->join('stocks as b','b.stock_id','a.stock_id')
+            ->join('products as c','c.product_id','b.product_id')
+            ->join('product_types as d','d.product_type_id','c.product_type_id')
+            ->join('prices as e','e.stock_id','b.stock_id')
+            ->join('units as f','f.unit_id','e.unit_id')
+            ->where('a.order_id',$id)
+            ->get();
+        return $orderLines;
+    }
+
+    public static function showOrder($id){
+        $order = DB::table('orders as a')
+            ->leftJoin('payments as b','b.order_id','a.order_id')
+            ->leftJoin('fees as c','c.fee_id','b.fee_id')
+            ->leftJoin('sellers as d','d.seller_id','c.seller_id')
+            ->leftJoin('riders as e','e.seller_id','d.seller_id')
+            ->join('orgs as f','f.org_id','d.org_id')
+            ->where('a.order_id',$id)
+            ->first();
+        return $order;
+    }
 }

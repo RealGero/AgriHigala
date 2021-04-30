@@ -30,7 +30,7 @@ class Product extends Model
 
     public function srp()
     {
-        return $this->hasMany('App\SRP');
+        return $this->hasMany('App\SRP','product_id','product_id');
     }
 
     public static function getProductByProductType($id){

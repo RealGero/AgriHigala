@@ -25,7 +25,7 @@
     <div class="card">
       <h5 class="card-header">Update {{$user_title}}Account</h5>
       <div class="card-body">
-        <form method="post" action="{{route('admin.users.update', [$user->user_id])}}">
+        <form method="post" action="{{route('admin.users.update', [$user->user_id])}}" enctype="multipart/form-data">
           {{csrf_field()}}
 
           {{-- USERNAME --}}

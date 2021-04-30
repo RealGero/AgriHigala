@@ -70,9 +70,8 @@ class UsersController extends Controller{
             'middle_name' => ['required','string','min:2','regex:/^[\pL\s\-]+$/u'],
             'last_name' => ['required','string','min:2','regex:/^[\pL\s\-]+$/u'],
             'mobile_number' => ['required','string','digits:11','unique:users'],
-            'email' => ['required','email','unique:users']
-            // 'mobile_number' => 'required','string','digits:11'|Rule::unique('users')->ignore($id,'user_id'),
-            // 'email' => 'required'|Rule::unique('users')->ignore($id, 'user_id')
+            'email' => ['required','email','unique:users'],
+            'user_image' => ['max:1999'],
         ]);
 
         // CHECK USER TYPE AND WHICH TABLES TO SAVE
@@ -96,7 +95,18 @@ class UsersController extends Controller{
         $user->mobile_number = $request->input('mobile_number');
         $user->email = $request->input('email');
         $user->user_type = $user_type;
-        // $user->user_image = $request->input('user_image');
+
+        // CHECK FOR IMAGE
+        if($request->hasFile('user_image'))
+        {
+            $filenameWithExt = $request->file('user_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('user_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('user_image')->storeAs('public/user',$filenameToStore); 
+
+             $user->user_image = $filenameToStore;
+        };
 
         // INITIALIZE IF USER ADDED SUCCESSFULLY
         $status = true;
@@ -234,6 +244,7 @@ class UsersController extends Controller{
             'last_name' => ['required','string','min:2','regex:/^[\pL\s\-]+$/u'],
             'mobile_number' => ['required','string','digits:11',Rule::unique('users')->ignore($id, 'user_id')],
             'email' => ['required','email',Rule::unique('users')->ignore($id, 'user_id')],
+            'user_image' => ['max:1999'],
         ]);
 
         // CHECK USER TYPE AND WHICH TABLES TO SAVE
@@ -253,8 +264,18 @@ class UsersController extends Controller{
             $password = $request->input('password');
             $user->password = Hash::make($password);
         }
+        
         // CHECK USER IMAGE IF EMPTY
-        // $user->user_image = $request->input('user_image');
+        if($request->hasFile('user_image'))
+        {
+            $filenameWithExt = $request->file('user_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME); 
+            $extension = $request->file('user_image')->getClientOriginalExtension();
+            $filenameToStore = $filename.'.'.time().'.'.$extension;
+            $path = $request->file('user_image')->storeAs('public/user',$filenameToStore); 
+
+             $user->user_image = $filenameToStore;
+        };
         $user->save();
 
         // INITIALIZE IF USER ADDED SUCCESSFULLY

@@ -38,7 +38,7 @@
 
     <div class="card">
       <div class="card-body">
-        <form method="post" action="{{route('admin.stocks.store')}}">
+        <form method="post" action="{{route('admin.stocks.store')}}" enctype="multipart/form-data">
           {{csrf_field()}}
 
           {{-- SELLER LIST --}}

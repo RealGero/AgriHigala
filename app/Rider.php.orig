@@ -44,6 +44,7 @@ class Rider extends Model
             ->orderBy('b.l_name')
             ->get();
 
+<<<<<<< Updated upstream
         if($data){
             return $data;
         }
@@ -51,6 +52,8 @@ class Rider extends Model
     }
 
 
+=======
+>>>>>>> Stashed changes
     public static function orderLines($id)
     {
 

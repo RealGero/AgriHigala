@@ -19,9 +19,12 @@
                                         <option value="3">3</option>
                                         <option value="2">2</option>
                                         <option value="1">1</option>
+                                        <option value="5">5</option>
                                     </select>
                                     <label for="exampleFormControlTextarea1">Provide a comment please!</label>
                                     <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="6" required>
+
+                                    </textarea>
 
                                     </textarea>
                                    
@@ -37,6 +40,9 @@
                                     </div>
                                 </div>
                                    
+                                    <input type="submit" value="Submit" class="btn btn-success mt-3 d-inline">
+
+                                  </div>   
                             </form>
                         </div>
                      </div>

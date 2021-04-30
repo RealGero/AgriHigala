@@ -1,0 +1,69 @@
+@extends('layouts.app')
+
+
+@section('content')
+    <div class="container">
+        <div class="buyer-ratings">
+            <div class="row">
+                <div class="col-6 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="h5 font-weight-bold">Please Rate:</span>
+                           
+                            <form action="{{action('RatingsController@buyerStore')}}" method="POST">
+                                <div class="form-group">
+                                    @csrf
+                                    <select class="form-select form-select-sm form-control my-3" name="rating" aria-label=".form-select-sm example" required>
+<<<<<<< Updated upstream
+                                        <option value="5" selected>5</option>
+                                        <option value="4">4</option>
+                                        <option value="3">3</option>
+                                        <option value="2">2</option>
+                                        <option value="1">1</option>
+=======
+                                        <option selected>Rate the product</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+>>>>>>> Stashed changes
+                                    </select>
+                                    <label for="exampleFormControlTextarea1">Provide a comment please!</label>
+                                    <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="6" required>
+
+                                    </textarea>
+                                   
+                                    <input type="hidden" name="order" value="{{$id}}">
+<<<<<<< Updated upstream
+                                    </div> 
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="submit" value="Submit" class="btn btn-success">
+                                     
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="d-flex justify-content-end"> <a href="{{route('buyer.order')}}" class="btn btn-info">Back to Order</a></span>   
+                                    </div>
+                                </div>
+                                   
+=======
+
+                                    <input type="submit" value="Submit" class="btn btn-success mt-3 d-inline">
+
+                                  </div>   
+>>>>>>> Stashed changes
+                            </form>
+                        </div>
+                     </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  
+
+
+@endsection
+

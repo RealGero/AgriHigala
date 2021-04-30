@@ -414,6 +414,19 @@ class RidersController extends Controller
         return redirect()->route('rider.order.index',[$id]);
 
     }
+    public function riderDeliveredAt(Request $request,$id)
+    {
+        $response = $request->input('response');
+        if ($response == 'delivered'){
+            $order = Order::find($id);
+            $order->delivered_at = now();
+            $order->save();
+            request()->session()->flash('success','Order Delivered');
+        }
+
+        return redirect()->route('rider.order.index',[$id]);
+
+    }
 
     public function orderDetails()
     {

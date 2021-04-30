@@ -26,16 +26,18 @@
                                         <option value="2">2</option>
                                         <option value="3">3</option>
                                         <option value="4">4</option>
-                                        <option value="5">5</option>
 >>>>>>> Stashed changes
+                                        <option value="5">5</option>
                                     </select>
                                     <label for="exampleFormControlTextarea1">Provide a comment please!</label>
                                     <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="6" required>
 
                                     </textarea>
+<<<<<<< Updated upstream
+
+                                    </textarea>
                                    
                                     <input type="hidden" name="order" value="{{$id}}">
-<<<<<<< Updated upstream
                                     </div> 
                                 <div class="row">
                                     <div class="col-6">
@@ -48,11 +50,13 @@
                                 </div>
                                    
 =======
+                                   
+                                    <input type="hidden" name="order" value="{{$id}}">
 
+>>>>>>> Stashed changes
                                     <input type="submit" value="Submit" class="btn btn-success mt-3 d-inline">
 
                                   </div>   
->>>>>>> Stashed changes
                             </form>
                         </div>
                      </div>

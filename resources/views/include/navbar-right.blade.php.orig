@@ -1,3 +1,4 @@
+
 <<<<<<< Updated upstream
 <div class="col-6 right-side">
   
@@ -31,9 +32,8 @@
   @endguest
 </div> 
 
-
 =======
-
+>>>>>>> Stashed changes
     <div class="col-6 right-side">
         <a href="/buyer/browse"><i class="fa fa-search  fa-2x fontawesome-color"></i></a>
        
@@ -108,4 +108,3 @@
    </div> 
 
 
->>>>>>> Stashed changes

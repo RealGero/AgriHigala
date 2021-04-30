@@ -1,5 +1,5 @@
   
-<div class="dropdown ">
+  
 
   {{-- PROFILE --}}
   <button  type="button" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

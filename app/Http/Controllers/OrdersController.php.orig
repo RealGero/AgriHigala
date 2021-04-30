@@ -469,6 +469,36 @@ class OrdersController extends Controller
     }
 
 <<<<<<< Updated upstream
+    public function orderMyOrderCancel(Request $request,$id)
+    {
+        $response = $request->input('response');
+        if ($response == 'cancel'){
+            $order = Order::find($id);
+            $order->completed_at = now();
+            $order->save();
+            request()->session()->flash('success','Order cancelled');
+        }
+
+        return redirect()->route('buyer.order');
+
+    }
+
+    public function orderMyOrderReceived(Request $request,$id)
+    {
+        
+        $response = $request->input('response');
+        if ($response == 'received'){
+
+            $order = Order::find($order_id = $id);
+            $order->completed_at = now();
+            $order->save();
+            
+            request()->session()->flash('success','Order complete');
+        }
+
+        return redirect()->route('buyer.ratings.index',[$id]);
+    }
+
     
 
      public function buyerOrderReturnStore(Request $request,$id)

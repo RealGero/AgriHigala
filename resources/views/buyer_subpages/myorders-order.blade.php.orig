@@ -127,13 +127,6 @@
         }
       }
 
-     @endphp    
-                <div class="card my-3">
-                    <div class="card-body">
-                        <div class="row border-bottom">
-                            <div class="col-6 d-flex flex-column">
-                                <span class="h5">Order {{$order->order_id}}</span>  
-                                {{-- <span class="h5">Order#</span>   --}}
 =======
                     }elseif($order->delivered_at != null && $order->completed_at == null)
                     {
@@ -145,19 +138,15 @@
                         $badge = 'badge-success';
                     }
                 
-    
-                     @endphp    
-                    <div class="card my-3">
-                        <div class="card-body">
-                            <div class="row border-bottom">
-                                <div class="col-6 d-flex flex-column">
-                                    <span class="h5">Order {{$order->order_id}}</span>  
-                                    {{-- <span class="h5">Order#</span>   --}}
-                                </div>
-                                <div class="col-6 d-flex justify-content-end">
-                                    <span>Total : &#8369;{{number_format($order->payment_total)}}</span>  
-                                </div>
 >>>>>>> Stashed changes
+    
+     @endphp    
+                <div class="card my-3">
+                    <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-6 d-flex flex-column">
+                                <span class="h5">Order {{$order->order_id}}</span>  
+                                {{-- <span class="h5">Order#</span>   --}}
                             </div>
                             <div class="col-6 d-flex justify-content-end">
                                 <span>Total : &#8369;{{number_format($order->payment_total)}}</span>  

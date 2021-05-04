@@ -15,6 +15,7 @@ use App\Product;
 use App\Seller;
 use App\User;
 use DB;
+use App\Notifications\NewStock;
 class ProductsController extends Controller
 {
     public function __construct()
@@ -134,7 +135,7 @@ class ProductsController extends Controller
         $id = Auth::id();
         $seller = User::find($id)->seller->seller_id;
 
-         $price = new Price;
+        $price = new Price;
         $stock = new Stock;
           
         $stock->stock_description = $request->input('description');
@@ -161,6 +162,30 @@ class ProductsController extends Controller
         
        $stock->save();
        $stock->prices()->save($price);
+     
+       $id =   $stock->stock_id;
+    //    NOTIFICATIONS
+    //    $seller = Seller::find($id)->user->user_id;
+       // $notify_id = Seller::find($seller)->user->user_id;
+    //    $stock_id = DB::table('stocks')->latest()->first();
+
+        $admin = User::find(8)->user_id;
+       // ASSIGN VALUES
+       $notify_user = $admin; // ID sa e-notify; NOT NULL
+       $notify_info = $stock; // Query gihimu; NOT NULL
+       $notify_title = 'Stocks '; // Title or table; NOT NULL
+       $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+       $notify_subtitle = 'New stock'; // Title description; NOT NULL            
+       $notify_url = route('admin.stocks.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+       
+      
+       // SAVE TO NOTIFY_INFO
+       $notify_info->title = $notify_title;
+       $notify_info->table_id = $notify_table_id.': ';
+       $notify_info->subtitle = $notify_subtitle;
+    
+       $notify_info->action_url = $notify_url;
+       User::find($notify_user)->notify(new NewStock($notify_info));
 
        return redirect()->back()->with('success','Successfully added a product');
     }

@@ -101,7 +101,7 @@ Route::resource('users', 'UsersController');
         // Route::get('/buyer/order/uploadImage/{id}','OrdersController@uploadImageInViewOrder');
         Route::put('/buyer/order/uploadPayment/{id}','OrdersController@uploadImageInViewOrder');
 
-        Route::put('/buyer/order/online-cod', 'OrdersController@changeToCod');
+        Route::put('/buyer/order/online-cod/{id}', 'OrdersController@changeToCod');
         Route::post('/buyer/send-image/{id}','OrdersController@paymentImage')->name('payment.image');
 
         // Route::get('buyer/order/payment','OrdersController@paymentIndex')->name('payment.index');
@@ -211,7 +211,7 @@ Route::resource('users', 'UsersController');
         Route::get('/rider/orders', 'RidersController@orders')->name('rider.order.index');
         Route::put('/rider/orders/deliver/{id}','RidersController@riderDeliveredAt')->name('rider.deliveredAt');
 
-        Route::get('/rider/dashboard','Riderscontroller@dashboard');
+        Route::get('/rider/dashboard','Riderscontroller@dashboard')->name('rider.dashboard');
         Route::get('/rider/history', 'RidersController@orderDetails')->name('rider.history.index');
 
    

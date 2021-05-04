@@ -82,14 +82,14 @@
             </div>
            
         </div>
-           <a href="/buyer/order/myorder"> <i class="fas fa-box pr-2"></i>Order </a>
+           <a href="{{route('buyer.order')}}"> <i class="fas fa-box pr-2"></i>Order </a>
            <a href="/buyer/discount"> <i class="fa fa-tags pr-2"></i>Discount</a>
-           <a href="/buyer/feedback"> <i class="fas fa-thumbs-up pr-2"></i>Feedback</a>
+           <a href="{{route('buyerFeedback.index')}}"> <i class="fas fa-thumbs-up pr-2"></i>Feedback</a>
            <a href="/buyer/inbox"><i class="fas fa-envelope pr-2"></i>Inbox</a>
-           <a href="/buyer/history" > <i class="fas fa-history pr-2"></i>History</a>
+           {{-- <a href="/buyer/history" > <i class="fas fa-history pr-2"></i>History</a> --}}
            <a href="/about"><i class="fas fa-info-circle pr-2"></i>About Us</a>
            <a href="/contact"><i class="fas fa-phone pr-2"></i>Contact Us</a>
-           <a href="buyer/customer-service"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
+           <a href="{{route('customer-service.index')}}"> <i class="fas fa-headset pr-2"></i>Customer Service </i></a>
             {{-- <div class="login-word ">
               <span class="pl-5 text-white">Login as a</span>
               <a href="#"  class="d-inline p-2 font-italic  h6" id="seller-word"> Seller</a> 

@@ -24,7 +24,7 @@
                                     </thead>
 
                                     @foreach($orders as $order) 
-                                 
+                                    
                                     @php
                                        $buyer = \App\Order::getBuyerWaddress($order->buyer_id);
                                        $riders = \App\Order::getRiders($order->seller_id);

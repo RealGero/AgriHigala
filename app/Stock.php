@@ -46,15 +46,16 @@ class Stock extends Model
 
     public static function getQty($id){
         // GET QUANTITIES
-        $stock_qty = Stock::find($id)->qty_added;
-        $order_qty = OrderLine::where('stock_id', $id)->sum('order_qty');
-        $remaining_qty = $stock_qty - $order_qty;
-        
-        $data = (object)[];
-        $data->stock = $stock_qty;
-        $data->order = $order_qty;
-        $data->remaining = $remaining_qty;
-        return $data;
+    $stock_qty = Stock::find($id)->qty_added;
+    $order_qty = OrderLine::where('stock_id', $id)->sum('order_qty');
+    $remaining_qty = $stock_qty - $order_qty;
+    
+    $data = (object)[];
+    $data->stock = $stock_qty;
+    $data->order = $order_qty;
+    $data->remaining = $remaining_qty;
+    return $data;
+
     }
 
     public static function countStockFromByCategory($id,$category)
@@ -68,7 +69,15 @@ class Stock extends Model
             return $stock;
     }
 
-   
-
+    
+    // $stock_qty = Stock::find($id)->qty_added;
+    // $order_qty = OrderLine::where('stock_id', $id)->sum('order_qty');
+    // $remaining_qty = $stock_qty - $order_qty;
+    
+    // $data = (object)[];
+    // $data->stock = $stock_qty;
+    // $data->order = $order_qty;
+    // $data->remaining = $remaining_qty;
+    // return $data;
 
 }

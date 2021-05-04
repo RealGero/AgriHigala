@@ -14,7 +14,7 @@
                           </button>
                         </div>
                      
-                        <form action="{{action ('OrdersController@changeToCod')}}" method="POST"  >
+                        <form action="{{action ('OrdersController@changeToCod',[$payment->payment_id])}}" method="POST"  >
                           @csrf
                           <input type="hidden" value="{{$payment->payment_method}}" name="payment">
 

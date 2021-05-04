@@ -11,31 +11,37 @@
                         <div class="card-body">
                             <div class="row d-flex">
                                 <div class="col-2  d-flex flex-row ">
-                                    
-                                 
-                                    @foreach($products as $product)
-                                    
+                                  
+                                   
+                                        @foreach($products as $product)
                                         
-                                        <div class="d-flex flex-column justify-content-center mx-4" >
-                                         <a href="/buyer/browse/seller/{{$product->stock_id}}"> 
-                                             <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></a>
+                                            @php
+                                            // dd($product);
+                                                $quantity = \App\Stock::getQty($product->stock_id);
+                                                $price = \App\Price::getLatestPrice($product->stock_id); 
+                                            @endphp
+                                            @if($quantity->remaining > 0) 
+                                                <div class="d-flex flex-column justify-content-center mx-4" >
+                                                <a href="/buyer/browse/seller/{{$product->stock_id}}"> 
+                                                    <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></a>
 
-                                            {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
-                                            <h5>{{$product->product_name}}</h5>
-                                            <p> &#8369; {{number_format($product->stock_price)}}/{{$product->unit_name}}</p>                                                                                                   
-                                            <p>{{$product->brgy_name}}</p>
-                                             <a href="/buyer/browse/{{$product->stock_id}}" class="btn btn-success">Add to Cart</a>
-                                           
-                                        </div>                        
-                                    @endforeach
+                                                    {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
+                                                    <h5>{{$product->product_name}}</h5>
+                                                    <p> &#8369; {{number_format($price->stock_price)}}/{{$price->unit_name}}</p>                                                                                                   
+                                                    <p>{{$product->brgy_name}}</p>
+                                                    <a href="/buyer/browse/{{$product->stock_id}}" class="btn btn-success">Add to Cart</a>
+                                                
+                                                </div>   
+                                            @endif                     
+                                        @endforeach
  
                                 </div>
                              </div>
-                             <div class="row mt-3">
-                                 <div class="col-12 d-flex justify-content-center">
-                                    {{$products->links()}}
-                                 </div>
-                             </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 d-flex justify-content-center">
+                                        {{$products->links()}}
+                                    </div>
+                                </div>
                              
                          </div>
                     </div>

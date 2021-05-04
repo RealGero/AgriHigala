@@ -6,15 +6,15 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Order;
-
-class NewOrder extends Notification{
+use App\Buyer;
+class NewBuyer extends Notification
+{
     use Queueable;
-    public $order;
+    public $buyer;
 
-    public function __construct(Order $order)
+    public function __construct(Buyer $buyer)
     {
-        $this->order = $order;
+        $this->buyer = $buyer;
     }
 
     public function via($notifiable)
@@ -25,7 +25,7 @@ class NewOrder extends Notification{
     public function toDatabase($notifiable)
     {
         return [
-            'announcement' => $this->order
+            'announcement' => $this->buyer
         ];
     }
     

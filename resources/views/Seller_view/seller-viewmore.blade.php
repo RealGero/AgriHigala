@@ -24,12 +24,17 @@
                             </thead>
                             <tbody>
                                 @foreach($orderLine as $orderLines)
+                               
+                                @php
+                                    $price = \App\Price::getLatestPrice($orderLines->stock_id);
+                                @endphp
+
                               <tr>
                                 <td> <img src="{{ url('/storage/') }}{{ $orderLines->stock_image ? '/stock/'. $orderLines->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </td>
                                 <td>  {{$orderLines->product_name}}  
                                 <td>Quantity: {{$orderLines->order_qty}}</td>
-                                <td>&#8369;{{number_format($orderLines->stock_price)}}/{{ucfirst($orderLines->unit_description)}}</td>
-                                <td>&#8369;{{number_format($orderLines->stock_price * $orderLines->order_qty) }}</td>
+                                <td>&#8369;{{number_format($price->stock_price)}}/{{ucfirst($price->unit_description)}}</td>
+                                <td>&#8369;{{number_format($price->stock_price * $orderLines->order_qty) }}</td>
                                 <td>
                                     @if($order->accepted_at == null && $order->packed_at == null && $order->delivered_at == null && $order->completed_at = null)
                                         <span>Requesting</span>
@@ -84,9 +89,11 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                @if($order->payment_method == 'online')
-                                    <img class="payment-online" src="/storage/payment/{{$order->payment_image}}" alt="">
-                                @endif
+                                {{-- <img src="{{ url('/storage/') }}{{ $orderLines->stock_image ? '/stock/'. $orderLines->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> --}}
+                                {{-- <img class="payment-online" src="{{Storage::url('storage/payment/'.$order->payment_image)}}" alt=""> --}}
+                                {{-- {{dd($order->payment_image)}} --}}
+                                <img class="payment-online" src="/storage/payment/{{$order->payment_image}}" alt="">
+                               
                             </div>
                         </div>
                       </div>

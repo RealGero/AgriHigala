@@ -14,6 +14,9 @@ use App\Payment;
 use App\OrderLine;
 use App\User;
 use App\ReturnOrder;
+use App\Seller;
+use App\Notifications\NewOrder;
+use App\Buyer;
 class OrdersController extends Controller
 {
     public function __construct()
@@ -137,6 +140,8 @@ class OrdersController extends Controller
            
             if($request->input('payment_method') == 1)
             {
+             
+             
                 $payment = new Payment;
     
                 $payment->fee_id = $fee->fee_id;
@@ -145,7 +150,29 @@ class OrdersController extends Controller
                 
                 
                 $order->payment()->save($payment);
-                    
+                
+                // NOTIFICATION
+                 $seller = Seller::find($id)->user->user_id;
+                // $notify_id = Seller::find($seller)->user->user_id;
+           
+                // ASSIGN VALUES
+                $notify_user = $seller; // ID sa e-notify; NOT NULL
+                $notify_info = $order; // Query gihimu; NOT NULL
+                $notify_title = 'Order '; // Title or table; NOT NULL
+                $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+                $notify_subtitle = 'New Order COD'; // Title description; NOT NULL            
+                $notify_url = route('order.request.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+                
+               
+                // SAVE TO NOTIFY_INFO
+                $notify_info->title = $notify_title;
+                $notify_info->table_id = $notify_table_id.': ';
+                $notify_info->subtitle = $notify_subtitle;
+             
+                $notify_info->action_url = $notify_url;
+                User::find($notify_user)->notify(new NewOrder($notify_info));
+                      
+
                 return redirect()->route('buyer.order')->with('success' ,'Order Added! Please wait for seller confirmation');
                
             }
@@ -160,24 +187,30 @@ class OrdersController extends Controller
                 $payment->payment_total = $total + $fee->fee_delivery + $fee->fee_other;
             
                 $order->payment()->save($payment);
-                // return ($buyer_id);
                 $seller = DB::table('seller_banks as a')
                 ->join('sellers as b','b.seller_id','a.seller_id')
                 ->where('a.seller_id',$id)->first();
 
-
-                // $auth = Auth::id();
-                // $buyer_id = User::find($auth)->buyer->buyer_id;
-                // $payment = DB::table('payments')
-                // ->join('orders as b','b.order_id','=','a.order_id')
-                // ->leftJoin('buyers as c','c.buyer_id','b.buyer_id')
-                // ->where('b.buyer_id','=',$buyer_id)
-                // ->latest('a.created_at')
-                // ->get();
-                
+                $seller_id = Seller::find($id)->user->user_id;
+                // $notify_id = Seller::find($seller)->user->user_id;
            
+                // ASSIGN VALUES
+                $notify_user = $seller_id; // ID sa e-notify; NOT NULL
+                $notify_info = $order; // Query gihimu; NOT NULL
+                $notify_title = 'Order '; // Title or table; NOT NULL
+                $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+                $notify_subtitle = 'New Order Online payment'; // Title description; NOT NULL            
+                $notify_url = route('order.request.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
                 
-                // return dd($payment->buyer_id);
+               
+                // SAVE TO NOTIFY_INFO
+                $notify_info->title = $notify_title;
+                $notify_info->table_id = $notify_table_id.': ';
+                $notify_info->subtitle = $notify_subtitle;
+             
+                $notify_info->action_url = $notify_url;
+                User::find($notify_user)->notify(new NewOrder($notify_info));
+           
 
             
                 return view('buyer_subpages.payment',compact('seller','payment'));
@@ -224,12 +257,39 @@ class OrdersController extends Controller
     public function changeToCod(Request $request,$id)
     {
         
-        $paymentCod = Payment::find($id);
+        $order = Payment::find($id);
 
+       
+        $order->payment_method = 'cod';
+
+        $order->save();
+
+        
+        $fee_id = Payment::find($id)->fee_id;
+        $seller_id = Fee::find($fee_id)->seller_id;
+        $user_id = Seller::find($seller_id)->user->user_id;
+        $order = Order::find($order->order_id);
+        // $buyer_id = Buyer::find($buyer)->user->user_id;
       
-        $paymentCod->payment_method = 'cod';
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $user_id; // ID sa e-notify; NOT NULL
+        $notify_info = $order; // Query gihimu; NOT NULL
+        $notify_title = 'Order '; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'New order cod'; // Title description; NOT NULL            
+        $notify_url = route('order.request.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewOrder($notify_info));
 
-        $paymentCod->save();
 
         return redirect()->route('buyer.order')->with('success','Order Added! Please wait for seller confirmation');
 
@@ -259,10 +319,7 @@ class OrdersController extends Controller
              $payment->save();
           
         }
-        
-        
 
-       
 
         return redirect()->route('buyer.order')->with('success','Order Added! Please wait for seller confirmation');
       }  
@@ -397,8 +454,7 @@ class OrdersController extends Controller
                 ->join('stocks as b','b.stock_id','a.stock_id')
                 ->join('products as c','c.product_id','b.product_id')
                 ->join('product_types as d','d.product_type_id','c.product_type_id')
-                ->join('prices as e','e.stock_id','b.stock_id')
-                ->join('units as f','f.unit_id','e.unit_id')
+                
                 ->where('a.order_id',$id)
                 ->get();  
         // return dd($orderLines);
@@ -441,65 +497,31 @@ class OrdersController extends Controller
             request()->session()->flash('success','Order cancelled');
         }
 
-        return redirect()->route('buyer.order');
+        $fee_id = Order::find($id)->payment->fee_id;
+        $seller_id = Fee::find($fee_id)->seller_id;
+        $user_id = Seller::find($seller_id)->user->user_id;
 
-    }
-
-    public function orderMyOrderReceived(Request $request,$id)
-    {
+        // $buyer_id = Buyer::find($buyer)->user->user_id;
+      
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $user_id; // ID sa e-notify; NOT NULL
+        $notify_info = $order; // Query gihimu; NOT NULL
+        $notify_title = 'Order '; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'Your order has been cancelled'; // Title description; NOT NULL            
+        $notify_url = route('order.request.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
         
-        $response = $request->input('response');
-        if ($response == 'received'){
-
-            $order = Order::find($order_id = $id);
-            $order->completed_at = now();
-            $order->save();
-            
-            request()->session()->flash('success','Order complete');
-        }
-
-        return redirect()->route('buyer.ratings.index',[$id]);
-    }
-
-    public function orderMyOrderCancel(Request $request,$id)
-    {
-        $response = $request->input('response');
-        if ($response == 'cancel'){
-            $order = Order::find($id);
-            $order->completed_at = now();
-            $order->save();
-            request()->session()->flash('success','Order cancelled');
-        }
-
-        return redirect()->route('buyer.order');
-
-    }
-
-    public function orderMyOrderReceived(Request $request,$id)
-    {
-        
-        $response = $request->input('response');
-        if ($response == 'received'){
-
-            $order = Order::find($order_id = $id);
-            $order->completed_at = now();
-            $order->save();
-            
-            request()->session()->flash('success','Order complete');
-        }
-
-        return redirect()->route('buyer.ratings.index',[$id]);
-    }
-
-    public function orderMyOrderCancel(Request $request,$id)
-    {
-        $response = $request->input('response');
-        if ($response == 'cancel'){
-            $order = Order::find($id);
-            $order->completed_at = now();
-            $order->save();
-            request()->session()->flash('success','Order cancelled');
-        }
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewOrder($notify_info));
+   
 
         return redirect()->route('buyer.order');
 
@@ -518,10 +540,34 @@ class OrdersController extends Controller
             request()->session()->flash('success','Order complete');
         }
 
+        $fee_id = Order::find($id)->payment->fee_id;
+        $seller_id = Fee::find($fee_id)->seller_id;
+        $user_id = Seller::find($seller_id)->user->user_id;
+
+        // $buyer_id = Buyer::find($buyer)->user->user_id;
+      
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $user_id; // ID sa e-notify; NOT NULL
+        $notify_info = $order; // Query gihimu; NOT NULL
+        $notify_title = 'Order '; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'Your order has been received'; // Title description; NOT NULL            
+        $notify_url = route('order.request.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewOrder($notify_info));
+
         return redirect()->route('buyer.ratings.index',[$id]);
     }
 
-    
 
      public function buyerOrderReturnStore(Request $request,$id)
      {
@@ -581,13 +627,65 @@ class OrdersController extends Controller
             $order = Order::find($id);
             $order->accepted_at = now();
             $order->save();
+
+            $buyer = Order::find($id)->buyer_id;
+            $buyer_id = Buyer::find($buyer)->user->user_id;
+          
+            // $notify_id = Seller::find($seller)->user->user_id;
+       
+            // ASSIGN VALUES
+            $notify_user =  $buyer_id; // ID sa e-notify; NOT NULL
+            $notify_info = $order; // Query gihimu; NOT NULL
+            $notify_title = 'Order '; // Title or table; NOT NULL
+            $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+            $notify_subtitle = 'Your order has been accepted'; // Title description; NOT NULL            
+            $notify_url = route('buyer.order',[$id]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+            
+           
+            // SAVE TO NOTIFY_INFO
+            $notify_info->title = $notify_title;
+            $notify_info->table_id = $notify_table_id.': ';
+            $notify_info->subtitle = $notify_subtitle;
+         
+            $notify_info->action_url = $notify_url;
+            User::find($notify_user)->notify(new NewOrder($notify_info));
+       
+
             request()->session()->flash('success','Order accepted');
         }
         elseif ($response == 'reject') {
+
             $order = Order::find($id);
             $order->completed_at = now();
             $order->save();
+
+
+            $buyer = Order::find($id)->buyer_id;
+            $buyer_id = Buyer::find($buyer)->user->user_id;
+          
+            // $notify_id = Seller::find($seller)->user->user_id;
+       
+            // ASSIGN VALUES
+            $notify_user =  $buyer_id; // ID sa e-notify; NOT NULL
+            $notify_info = $order; // Query gihimu; NOT NULL
+            $notify_title = 'Order '; // Title or table; NOT NULL
+            $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+            $notify_subtitle = 'Your order has been rejected'; // Title description; NOT NULL            
+            $notify_url = route('buyer.order',[$id]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+            
+           
+            // SAVE TO NOTIFY_INFO
+            $notify_info->title = $notify_title;
+            $notify_info->table_id = $notify_table_id.': ';
+            $notify_info->subtitle = $notify_subtitle;
+         
+            $notify_info->action_url = $notify_url;
+            User::find($notify_user)->notify(new NewOrder($notify_info));
+       
             request()->session()->flash('success','Order rejected');
+
+
+          
         }
         else{
             request()->session()->flash('error','Error occurred while updating order');
@@ -612,6 +710,54 @@ class OrdersController extends Controller
             request()->session()->flash('success','Order packed');
         }
 
+        // NOTIFICATIONS FOR RIDER
+
+        $rider = Order::find($id)->rider_id;
+        $rider_id = Rider::find($rider_id)->user->user_id;
+      
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $$rider_id; // ID sa e-notify; NOT NULL
+        $notify_info = $order; // Query gihimu; NOT NULL
+        $notify_title = 'Order'; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'New order added'; // Title description; NOT NULL            
+        $notify_url = route('rider.order.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewOrder($notify_info));
+
+
+        // NOTIFICATION FOR BUYER
+        $buyer = Order::find($id)->buyer_id;
+        $buyer_id = Buyer::find($buyer)->user->user_id;
+      
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $buyer_id; // ID sa e-notify; NOT NULL
+        $notify_info = $order; // Query gihimu; NOT NULL
+        $notify_title = 'Order'; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'Your order has been packed'; // Title description; NOT NULL            
+        $notify_url = route('buyer.order',[$id]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewOrder($notify_info));
+
         return redirect()->route('order.request.index',[$id]);
     }
 
@@ -633,60 +779,19 @@ class OrdersController extends Controller
             ->where('d.seller_id',$seller)
             ->first();
 
+            
             $orderLine = DB::table('orderlines as a')
             ->join('stocks as b','b.stock_id','a.stock_id')
             ->join('products as c','c.product_id','b.product_id')
             ->join('product_types as d','d.product_type_id','c.product_type_id')
-            ->join('prices as e','e.stock_id','b.stock_id')
-            ->join('units as f','f.unit_id','e.unit_id')
             ->where('a.order_id',$id)
             // ->where('d.seller_id',$seller)
             ->get();
 
             return view('seller_view.seller-viewmore',compact('order','title','orderLine'));
 
-
-
-
-        // if ($order){
-           
-        // }
-        // else{
-        //     request()->session()->flash('error','Order not found');
-        //     return redirect()->route('');
-        // }
     }
-
-
-
 
     // Order ----- RIDER SIDE -------------------------------------------------------------------
-
-    
-
-
-    public function orderReceivedIndex()
-
-    {
-        return view('buyer_subpages.order-received');
-
-    }
-
-   
-
-    public function viewOrderDetails()
-    {
-        return view ('buyer_subpages.view-order-details');
-    }
-
-
-    
-
-   
-    public function orderMyCancellation()
-    {
-        return view('buyer_subpages.myorders-cancellation');
-
-    }
 
 }

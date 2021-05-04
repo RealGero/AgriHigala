@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use App\Notifications\NewBuyer;
 class Buyer extends Model
 {
     protected $table="buyers";

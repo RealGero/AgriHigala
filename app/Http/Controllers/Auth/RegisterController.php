@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Buyer;
+use App\Notifications\NewBuyer;
 class RegisterController extends Controller
 {
     /*
@@ -161,7 +162,31 @@ class RegisterController extends Controller
 
         $user->save();
         $user->buyer()->save($buyer);
-            
+      
+        // $id = $buyer->buyer_id;
+        $user_id = User::find(8)->user_id;
+
+        // $buyer_id = Buyer::find($buyer)->user->user_id;
+      
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $user_id; // ID sa e-notify; NOT NULL
+        $notify_info = $buyer; // Query gihimu; NOT NULL
+        $notify_title = 'Buyer '; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'A new buyer has been registered'; // Title description; NOT NULL            
+        $notify_url = route('admin.users.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewBuyer($notify_info));
+
        return redirect()->route('login')->with('success','Congratulation you already registered! Please Login');
     //     return 123;
     //     $user = new User;

@@ -20,14 +20,11 @@
                     <table class="table table-borderless">
                       <thead>
                         <tr>
-                          {{-- <th scope="col"></th> --}}
                           <th scope="col"></th>
                           <th scope="col">Name</th>
                           <th scope="col">Unit</th>
-                          {{-- <th scope="col">Price</th> --}}
                           <th scope="col">Quantity</th>
                           <th scope="col">Remaining stock</th>
-                          {{-- <th scope="col">Total price</th> --}}
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -41,7 +38,7 @@
                             @php
                               $sub_total = $product['price'] * $product['qty'];
                               $total += $sub_total;
-                               
+                               $stock_remain = \App\Stock::getQty($product['item']->stock_id);
                             @endphp
                             <tr class="cartpage">
                               {{-- <td> --}}
@@ -84,14 +81,14 @@
                                   {{-- {{dd($product['item']->qty_added)}} --}}
                                   <input type="number" value="{{$product['qty']}}" disabled>
 
-                                  @if($product['qty'] == $product['item']->qty_added)
+                                  @if($product['qty'] == $stock_remain->remaining)
                                     <button type="submit" value="up" name="change_to" class="btn btn-success" disabled>+</button>
                                   @else
                                     <button type="submit" value="up" name="change_to" class="btn btn-success">+</button>
                                   @endif
                                 </form>
                               </td>
-                              <td>{{$product['item']->qty_added}}</td>
+                              <td>{{$stock_remain->remaining}}</td>
                               <td><a href="/buyer/deleteCart/{{$product['item']->stock_id}}" class="btn btn-danger btn-sm">Delete</a></td>
                             </tr>
                           @endif

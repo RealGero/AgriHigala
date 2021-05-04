@@ -371,62 +371,78 @@ class RidersController extends Controller
         $id = Auth::id();
         $rider_id = User::find($id)->rider->rider_id;
 
-        $orders = DB::table('orders as a')
-        ->join('payments as b','b.order_id','a.order_id')
-        ->join('fees as c','c.fee_id','b.fee_id')
-        ->join('buyers as d','d.buyer_id','a.buyer_id')
-        ->join('riders as e','e.rider_id','a.rider_id')
-        ->join('users as f','f.user_id','d.user_id')
-        ->join('brgys as g','g.brgy_id','d.brgy_id')
-        ->select('c.*','d.address','a.*','b.*','g.brgy_name','f.*','e.*','f.f_name as buyer_fname','f.m_name as buyer_mname','f.l_name as buyer_lname')
-        ->where('a.rider_id',$rider_id)
+        $order = DB::table('orders as a')
+        ->join('payments as b', 'a.order_id', 'b.order_id')
+        ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        ->join('fees as d', 'b.fee_id', 'd.fee_id')
+        ->join('sellers as e','e.seller_id','d.seller_id')
+        ->join('orgs as f','f.org_id','e.org_id')
+        ->join('buyers as g','g.buyer_id','a.buyer_id')
+        ->join('users as h','h.user_id','g.user_id')
+        ->join('brgys as i','i.brgy_id','g.brgy_id')
+        ->select('i.brgy_name','h.mobile_number as buyer_mobile','g.address','h.l_name as buyer_lname','h.m_name as buyer_mname','h.f_name as buyer_fname','g.*','f.org_name','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
+        ->where('a.order_id', $rider_id)
+        ->first();
+
+        
+        $orderLine = DB::table('orderlines as a')
+        ->join('stocks as b','b.stock_id','a.stock_id')
+        ->join('products as c','c.product_id','b.product_id')
+        ->join('product_types as d','d.product_type_id','c.product_type_id')
+        ->where('a.order_id',$rider_id)
+        // ->where('d.seller_id',$seller)
         ->get();
+        // $orders = DB::table('orders as a')
+        // ->join('payments as b','b.order_id','a.order_id')
+        // ->join('fees as c','c.fee_id','b.fee_id')
+        // ->join('buyers as d','d.buyer_id','a.buyer_id')
+        // ->join('riders as e','e.rider_id','a.rider_id')
+        // ->join('users as f','f.user_id','d.user_id')
+        // ->join('brgys as g','g.brgy_id','d.brgy_id')
+        // ->select('c.*','d.address','a.*','b.*','g.brgy_name','f.*','e.*','f.f_name as buyer_fname','f.m_name as buyer_mname','f.l_name as buyer_lname')
+        // ->where('a.rider_id',$rider_id)
+        // ->get();
+   
+        return view('Rider_view.rider-order',compact('order','orderLine'));
+
+
+    }
+    public function riderDeliveredAt(Request $request,$id)
+    {
+        $response = $request->input('response');
+        if ($response == 'delivered'){
+            $order = Order::find($id);
+            $order->delivered_at = now();
+            $order->save();
+            request()->session()->flash('success','Order Delivered');
+        }
+
+        $fee_id = Order::find($id)->payment->fee_id;
+        $seller_id = Fee::find($fee_id)->seller_id;
+        $user_id = Seller::find($seller_id)->user->user_id;
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $user_id; // ID sa e-notify; NOT NULL
+        $notify_info = $order; // Query gihimu; NOT NULL
+        $notify_title = 'Order'; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'Your order has been delivered'; // Title description; NOT NULL            
+        $notify_url = route('buyer.order',[$id]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
         
-        // dd($orders);
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewOrder($notify_info));
         
-        return view('Rider_view.rider-order',compact('orders'));
-
-
-    }
-    public function riderDeliveredAt(Request $request,$id)
-    {
-        $response = $request->input('response');
-        if ($response == 'delivered'){
-            $order = Order::find($id);
-            $order->delivered_at = now();
-            $order->save();
-            request()->session()->flash('success','Order Delivered');
-        }
-
         return redirect()->route('rider.order.index',[$id]);
 
     }
-    public function riderDeliveredAt(Request $request,$id)
-    {
-        $response = $request->input('response');
-        if ($response == 'delivered'){
-            $order = Order::find($id);
-            $order->delivered_at = now();
-            $order->save();
-            request()->session()->flash('success','Order Delivered');
-        }
-
-        return redirect()->route('rider.order.index',[$id]);
-
-    }
-    public function riderDeliveredAt(Request $request,$id)
-    {
-        $response = $request->input('response');
-        if ($response == 'delivered'){
-            $order = Order::find($id);
-            $order->delivered_at = now();
-            $order->save();
-            request()->session()->flash('success','Order Delivered');
-        }
-
-        return redirect()->route('rider.order.index',[$id]);
-
-    }
+  
 
     public function orderDetails()
     {
@@ -443,7 +459,7 @@ class RidersController extends Controller
          ->whereNotNull('a.completed_at')
         ->get();
 
-      
+     
         return view('Rider_view.rider-history',compact('orders'));
     }
 

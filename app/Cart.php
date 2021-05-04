@@ -33,7 +33,7 @@ class Cart
             }
         }
         $storedItem['qty']++;
-        $storedItem['price'] = $item->stock_price * $storedItem['qty'];
+        // $storedItem['price'] = $item->stock_price * $storedItem['qty'];
         $storedItem['price'] = $item->stock_price;
 
         $this->items[$id] = $storedItem;

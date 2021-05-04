@@ -57,8 +57,6 @@
                                 <div class="col-4">
                                     <i class="fa fa-store"></i>
                                     Seller: {{\App\Seller::getSellerName($seller)}}
-                                    <i class="far fa-comment"></i>
-                                    Chat Now
                                 </div>
                                 
                             </div>

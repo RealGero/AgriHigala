@@ -54,16 +54,12 @@ class CartController extends Controller
     {   
       
         // $request->session()->flush();
-        $products = DB::table('products  as a')
-        ->join('stocks as b','b.product_id','=','a.product_id')
-        ->join('prices as c','c.stock_id','=','b.stock_id')
-        ->join('sellers as d','d.seller_id', '=','b.seller_id')
-        ->join('orgs as e','e.org_id','=','d.org_id')
-        ->join('brgys as f','f.brgy_id','=','e.brgy_id')
-        ->join('units as g','g.unit_id','=','c.unit_id')
-        ->join('users as h','h.user_id' ,'=' ,'d.user_id')
-        ->join('product_types as i', 'i.product_type_id','=','a.product_type_id')
+        $products = DB::table('prices  as a')
+        ->join('stocks as b','b.stock_id','=','a.stock_id')
+        ->join('products as c','c.product_id','=','b.product_id')
+        ->join('units as d','d.unit_id','=','a.unit_id')
         ->where('b.stock_id', '=' ,$id)
+        ->latest('a.created_at')
         ->first();
       
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
@@ -108,7 +104,7 @@ class CartController extends Controller
         $sellers= array_unique($sellers);
           
         }
-        
+        // dd($cart);
     //    $sellerInfo =  array_unique(array_column($sellers['id']));
     //    return dd($sellers);
       

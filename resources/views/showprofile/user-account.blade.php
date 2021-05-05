@@ -98,6 +98,7 @@
                                     <div class="row">      
                                     </div>
                                     @csrf
+                                    
                                     <div class="row d-flex justify-content-center p-2">
                                         <img src="/storage/buyer/valid-id-front/{{$user->buyer->valid_id_front}}"  alt="valid-id-front">
                                     </div>

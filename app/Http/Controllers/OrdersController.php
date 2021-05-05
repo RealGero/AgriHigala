@@ -17,6 +17,7 @@ use App\ReturnOrder;
 use App\Seller;
 use App\Notifications\NewOrder;
 use App\Buyer;
+use App\Rider;
 class OrdersController extends Controller
 {
     public function __construct()
@@ -44,6 +45,16 @@ class OrdersController extends Controller
 
     public function checkoutIndex($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
+     
 
        
         // if(!Session::has('cart')){
@@ -82,6 +93,14 @@ class OrdersController extends Controller
 
     public function clickedPlaceOrder(Request $request, $id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
        
         // return $id;
        $cart =  $request->session()->get('cart');
@@ -256,6 +275,14 @@ class OrdersController extends Controller
        
     public function changeToCod(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         
         $order = Payment::find($id);
 
@@ -297,6 +324,14 @@ class OrdersController extends Controller
 
       public function paymentImage(Request $request,$id)
       {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         
         // $this->validate($request,[
         //     'payment-img' => ['required', 'max:1999']
@@ -326,6 +361,15 @@ class OrdersController extends Controller
 
       public function orderMyOrder($id=null)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $buyer_id = Auth::id();
         $buyer = User::find($buyer_id)->buyer->buyer_id;
         $status = $id;
@@ -434,6 +478,14 @@ class OrdersController extends Controller
 
     public function viewMoreOrder($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         // return $id;
         $buyer_id = Auth::id();
         $buyer = User::find($buyer_id)->buyer->buyer_id;
@@ -465,6 +517,15 @@ class OrdersController extends Controller
     
     public function uploadImageInViewOrder(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $payment = Payment::find($id);
 
         if($request->hasFile('online-payment-img'))
@@ -489,6 +550,15 @@ class OrdersController extends Controller
 
     public function orderMyOrderCancel(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $response = $request->input('response');
         if ($response == 'cancel'){
             $order = Order::find($id);
@@ -529,6 +599,14 @@ class OrdersController extends Controller
 
     public function orderMyOrderReceived(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         
         $response = $request->input('response');
         if ($response == 'received'){
@@ -571,6 +649,14 @@ class OrdersController extends Controller
 
      public function buyerOrderReturnStore(Request $request,$id)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
 
       
         $response = $request->input('response');
@@ -592,6 +678,15 @@ class OrdersController extends Controller
 
     public function orderRequest()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $seller = User::find($id)->seller->seller_id;
         $title = 'order';
@@ -619,7 +714,16 @@ class OrdersController extends Controller
         return view('Seller_view.order-request',compact('orders','title'));
     }
 
-    public function sellerOrderRequest(Request $request, $id){
+    public function sellerOrderRequest(Request $request, $id)
+    { 
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         
         // CHECK IF THERE'S A RESPONSE
         $response = $request->input('response');
@@ -695,6 +799,14 @@ class OrdersController extends Controller
 
     public function orderPacked(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
           // VALIDATOR FOR RIDER
           $validated = $request->validate([
             'rider' => ['required']
@@ -713,12 +825,12 @@ class OrdersController extends Controller
         // NOTIFICATIONS FOR RIDER
 
         $rider = Order::find($id)->rider_id;
-        $rider_id = Rider::find($rider_id)->user->user_id;
+        $rider_id = Rider::find($rider)->user->user_id;
       
         // $notify_id = Seller::find($seller)->user->user_id;
    
         // ASSIGN VALUES
-        $notify_user =  $$rider_id; // ID sa e-notify; NOT NULL
+        $notify_user =  $rider_id; // ID sa e-notify; NOT NULL
         $notify_info = $order; // Query gihimu; NOT NULL
         $notify_title = 'Order'; // Title or table; NOT NULL
         $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
@@ -763,6 +875,15 @@ class OrdersController extends Controller
 
     public function sellerViewmore($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+        
         $seller_id = Auth::id();
         $seller = User::find($seller_id)->seller->seller_id;
         $title = 'order';

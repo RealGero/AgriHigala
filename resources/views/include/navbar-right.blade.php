@@ -77,8 +77,8 @@
           </div>
           <div class="collapse" id="account-items">
             <div class="d-flex flex-column navigation-items text-white">
-                <a href="/buyer/profile/edit"> Profile</a> 
-                <a href="/buyer/user/account">Account</a>
+                <a href="{{route('buyer.profile.edit')}}"> Profile</a> 
+                <a href="{{route('buyer.useraccount')}}">Account</a>
             </div>
            
         </div>

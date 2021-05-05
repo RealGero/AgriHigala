@@ -27,7 +27,9 @@
                                         <small>({{$buyer->username}})</small>
                                     </div>
                                     <div class="col">
-                                        <br><small class="ml-2">{{\Carbon\Carbon::parse($lastMessage)->diffForHumans()}}</small>
+                                        
+                                        <br><small class="ml-2">{{\Carbon\Carbon::parse($lastMessage->created_at)->diffForHumans()}}</small>
+                                        
                                     </div>
                                     <div class="col">
                                        <a href="/seller/message/{{$buyer->inbox_id}}" role="button" class="btn btn-primary  btn-sm">View Message</a>

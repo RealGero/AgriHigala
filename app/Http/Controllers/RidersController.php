@@ -12,6 +12,7 @@ use App\Order;
 use Hash;
 use DB;
 use Illuminate\Validation\Rule;
+use App\Notifications\NewRider;
 class RidersController extends Controller
 {
     public function __construct()
@@ -24,10 +25,27 @@ class RidersController extends Controller
 
      public function createRider()
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
          return view('Seller_view.createrider');
      }
      public function viewSellerRider()
      {  
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $seller_id = User::find($id)->seller->seller_id;
          $riders = DB::table('users as a')
@@ -40,6 +58,14 @@ class RidersController extends Controller
      }
      public function profileIndex()
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
 
         $id = Auth::id();
         $rider_id = User::find($id)->rider->rider_id; 
@@ -61,6 +87,14 @@ class RidersController extends Controller
 
      public function imageUpdate(Request $request)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
         
 
         $id = Auth::id();
@@ -89,6 +123,14 @@ class RidersController extends Controller
 
      public function profileUpdate(Request $request)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
        
         $id = Auth::id();
         $user = User::find($id);
@@ -157,6 +199,14 @@ class RidersController extends Controller
 
      public function passwordUpdate(Request $request)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
 
         $this->validate($request,[
 
@@ -188,6 +238,14 @@ class RidersController extends Controller
 
     public function updateRiderProfileImage()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
 
         $id = Auth::id();
         $user = User::find($id);
@@ -216,6 +274,14 @@ class RidersController extends Controller
 
      public function store(Request $request)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         
         $id = Auth::id();
         $data = $request->validate([
@@ -285,6 +351,8 @@ class RidersController extends Controller
 
         $rider->seller_id   =  $sellerId;
         
+        
+
       
         if($request->hasFile('rider_image'))
         {
@@ -301,6 +369,32 @@ class RidersController extends Controller
         $user->save();
         $user->rider()->save($rider);
 
+        $user_id = User::find(8)->user_id;
+
+        // $buyer_id = Buyer::find($buyer)->user->user_id;
+      
+        // $notify_id = Seller::find($seller)->user->user_id;
+   
+        // ASSIGN VALUES
+        $notify_user =  $user_id; // ID sa e-notify; NOT NULL
+        $notify_info = $rider; // Query gihimu; NOT NULL
+        $notify_title = 'Rider '; // Title or table; NOT NULL
+        $notify_table_id = ''; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+        $notify_subtitle = 'A new rider has been registered'; // Title description; NOT NULL            
+        $notify_url = route('admin.users.index') ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+        
+       
+        // SAVE TO NOTIFY_INFO
+        $notify_info->title = $notify_title;
+        $notify_info->table_id = $notify_table_id.': ';
+        $notify_info->subtitle = $notify_subtitle;
+     
+        $notify_info->action_url = $notify_url;
+        User::find($notify_user)->notify(new NewRider($notify_info));
+        
+        return redirect()->back()->with('message','Successfully added a new rider');
+        
+     }
         // $user->riders()->create([
         //     'first_name' => $request->input('first_name'),
         //     'middle_name' => $request->input('middle_name'),
@@ -362,12 +456,19 @@ class RidersController extends Controller
         //  }
         //  ('Seller_view.createrider')
         // Rider::create($request->all());
-        return redirect()->back()->with('message','Successfully added a new buyer');
-        
-     }
+
 
     public function orders()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $rider_id = User::find($id)->rider->rider_id;
 
@@ -384,7 +485,7 @@ class RidersController extends Controller
         ->where('a.order_id', $rider_id)
         ->first();
 
-        
+       
         $orderLine = DB::table('orderlines as a')
         ->join('stocks as b','b.stock_id','a.stock_id')
         ->join('products as c','c.product_id','b.product_id')
@@ -402,13 +503,22 @@ class RidersController extends Controller
         // ->select('c.*','d.address','a.*','b.*','g.brgy_name','f.*','e.*','f.f_name as buyer_fname','f.m_name as buyer_mname','f.l_name as buyer_lname')
         // ->where('a.rider_id',$rider_id)
         // ->get();
-   
+       
         return view('Rider_view.rider-order',compact('order','orderLine'));
 
 
     }
     public function riderDeliveredAt(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
+
         $response = $request->input('response');
         if ($response == 'delivered'){
             $order = Order::find($id);
@@ -446,6 +556,15 @@ class RidersController extends Controller
 
     public function orderDetails()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $rider_id = User::find($id)->rider->rider_id;
 
@@ -459,12 +578,21 @@ class RidersController extends Controller
          ->whereNotNull('a.completed_at')
         ->get();
 
+      
      
         return view('Rider_view.rider-history',compact('orders'));
     }
 
     public function dashboard()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 3){
+                return back();
+            }
+        }
 
         return view('Rider_view.rider-dashboard');
     }

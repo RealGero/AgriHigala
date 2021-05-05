@@ -18,6 +18,14 @@ class FeedBacksController extends Controller
 
     public function buyerFeedbackStore(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
 
         $feedback = new FeedBack;
 
@@ -47,12 +55,28 @@ class FeedBacksController extends Controller
 
     public function sellerFeedbackIndex()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
 
         return view ('Seller_view.seller-feedback');
         
     }
     public function sellerFeedbackStore(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
 
         $feedback = new FeedBack;
 

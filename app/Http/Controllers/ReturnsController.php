@@ -10,6 +10,15 @@ class ReturnsController extends Controller
 {
     public function buyerOrderReturn()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $id = Auth::id();
      
         $buyer_id = User::find($id)->buyer->buyer_id;
@@ -33,6 +42,14 @@ class ReturnsController extends Controller
 
     public function sellerOrderReturn()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         $id = Auth::id();
      
         $seller_id = User::find($id)->seller->seller_id;
@@ -64,6 +81,14 @@ class ReturnsController extends Controller
     
     public function sellerOrderReturnRequest($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         $response = $request->input('response');
         $return = Order::find($id)->returnOrder;
 

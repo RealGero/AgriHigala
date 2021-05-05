@@ -8,7 +8,16 @@ use DB;
 use App\User;
 class DashboardsController extends Controller
 {
-    public function sellerIndex(){
+    public function sellerIndex()
+    {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
 
         $auth = Auth::id();
         $id = User::find($auth)->seller->seller_id; 

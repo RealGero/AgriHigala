@@ -20,10 +20,10 @@ class SellerMiddleware
         // }
       
         //usertype = 2  == seller
-        if (Auth::check() && Auth::user()->usertype == 2) {
+        if (Auth::user()->usertype == 2) {
             return $next($request);
         }
-        
-        abort(403);
+        return back();
+     
     }
 }

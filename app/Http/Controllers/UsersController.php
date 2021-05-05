@@ -29,6 +29,14 @@ class UsersController extends Controller
     // update the address mobile number in checkout page
     public function updateProfileCheckout(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
 
         $id = Auth::id();
         $user = User::find($id); 
@@ -63,6 +71,15 @@ class UsersController extends Controller
 
     public function updateUserImage(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $user = User::find($id);
         // $this->validate($request,[
@@ -96,6 +113,14 @@ class UsersController extends Controller
 
     public function update(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         
    
         $id = Auth::id();
@@ -141,6 +166,15 @@ class UsersController extends Controller
 
     public function edit()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $user = User::find($id);
         $brgys = Brgy::all();
@@ -161,6 +195,14 @@ class UsersController extends Controller
 
     public function userAccount()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         
         $id = Auth::id();
         $user = User::find($id);
@@ -170,6 +212,15 @@ class UsersController extends Controller
 
     public function updateAccountUsername(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+        
         
         $this->validate($request,[
         'username' => ['required', 'string', 'max:50','unique:users'],
@@ -186,6 +237,15 @@ class UsersController extends Controller
 
     public function updateAccountPassword(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+        
         $this->validate($request,[
 
             'current_password'=> 'required',
@@ -216,6 +276,14 @@ class UsersController extends Controller
 
     public function updateValidId(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
 
          //    $buyer_id = Buyer::select('buyer_id')->where('user_id',Auth::id())->first();
          //    $seller = Buyer::find($buyer_id['id']);
@@ -256,12 +324,21 @@ class UsersController extends Controller
      
       $buyer->save();
 
-       return view('showprofile.user-account',compact('user'))->with('success','Successfully uploaded an image');
+    //   dd($buyer);
+       return view('showprofile.user-account',compact('user','buyer'))->with('success','Successfully uploaded an image');
     }
 
    
     public function sellerProfile()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         
     
         $id = Auth::id();
@@ -311,6 +388,14 @@ class UsersController extends Controller
 
     public function updateSellerDetails(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         $id = Auth::id();
         $user = User::find($id);
         $org = User::find($id)->seller->org;
@@ -387,6 +472,14 @@ class UsersController extends Controller
 
     public function updateSellerProfileImage(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
 
 
         $id = Auth::id();
@@ -415,6 +508,15 @@ class UsersController extends Controller
     }
     public function sellerAccount()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $seller = User::find($id);
 
@@ -423,6 +525,15 @@ class UsersController extends Controller
 
     public function sellerAccountUpdate(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         $id = Auth::id();
         $user = User::find($id);
 
@@ -458,6 +569,15 @@ class UsersController extends Controller
 
     public function sellerUpdateUsername(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+        
         $id = Auth::id();
         $user = User::find($id);
         $this->validate($request,[

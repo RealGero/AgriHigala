@@ -27,6 +27,16 @@ class ProductsController extends Controller
     }
     public function productMyProduct()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+        
+
         $id = Auth::id();
         $seller_id = User::find($id)->seller->seller_id;
         $products = DB::table('stocks as a')
@@ -46,6 +56,15 @@ class ProductsController extends Controller
 
     public function addNewProduct(Request $request,$id=null)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         $select =$id;
         $products = [];
          $productTypes = ProductType::all();
@@ -104,6 +123,15 @@ class ProductsController extends Controller
     }
     public function getProductName($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         // echo json_encode(
         //     DB::table('products as a')
         //     ->leftJoin('srp as b', 'b.product_id', '=', 'a.product_id')
@@ -121,6 +149,14 @@ class ProductsController extends Controller
 
     public function storeNewProduct(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
        
         // 
         // return dd($request->input('price'));
@@ -252,6 +288,15 @@ class ProductsController extends Controller
       
     public function editProduct($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+
         $stock = DB::table('stocks as a')
         ->join('products as b','b.product_id','=','a.product_id')
         ->join('product_types as c','c.product_type_id','=', 'b.product_type_id')
@@ -285,6 +330,14 @@ class ProductsController extends Controller
 
     public function updateProduct(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
       
         // return  $request->input('stock');
         $seller_id = Auth::id();
@@ -388,6 +441,14 @@ class ProductsController extends Controller
 
     public function deleteProduct($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         
        $stock = Stock::where('stock_id',$id)->first();
         $stock->delete();

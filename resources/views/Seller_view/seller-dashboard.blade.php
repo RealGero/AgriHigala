@@ -24,22 +24,22 @@
                                 <span class="h6">All</span>
                             </div>
                             <div class="col-4 text-center">
-                                {{\App\Stock::countStockFromByCategory($id,2)}}
+                              <p> {{\App\Stock::countStockFromByCategory($id,2)}}</p> 
                                 <span class="h6">Meat</span>
                             </div>
                             <div class="col-4 text-center">
-                                {{\App\Stock::countStockFromByCategory($id,3)}}
+                               <p>{{\App\Stock::countStockFromByCategory($id,3)}}</p> 
                                 <span class="h6">Vegetable</span>
                             </div>
                         </div>
         
                         <div class="row my-3">
                             <div class="col-4 text-center">
-                                {{\App\Stock::countStockFromByCategory($id,4)}}
+                              <p> {{\App\Stock::countStockFromByCategory($id,4)}}</p> 
                                 <span class="h6">Fuits</span>
                             </div>
                             <div class="col-4 text-center">
-                                {{\App\Stock::countStockFromByCategory($id,1)}}
+                               <p> {{\App\Stock::countStockFromByCategory($id,1)}}</p>
                                 <span class="h6">Fish</span>
                             </div>
                            
@@ -84,7 +84,7 @@
                                 <h4 class="card-title my-2">Transaction history</h4>
                             </div>
                             <div class="col-6 d-flex justify-content-end align-items-center">
-                               <a href="/seller/history"> <i class="fas fa-arrow-alt-circle-right fa-3x text-success"></i></a> 
+                               {{-- <a href="/seller/history"> <i class="fas fa-arrow-alt-circle-right fa-3x text-success"></i></a>  --}}
                             </div>
                         </div>
                         <div class="row my-3">

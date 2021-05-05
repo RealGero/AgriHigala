@@ -42,7 +42,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12  border-bottom d-flex justify-content-center">
-                           <a href="/buyer/seller-detail/{{$products->product_id}}" class="btn btn-success mb-3">Add to Cart</a>  
+                           <a href="/buyer/browse/{{$products->stock_id}}" class="btn btn-success mb-3">Add to Cart</a>  
                         </div>
                        
                     </div>
@@ -57,7 +57,7 @@
                             Supplier Name: {{ ucfirst($products->f_name). ' ' .ucfirst($products->m_name) .' '.  ucfirst($products->l_name)}} 
                         </div>
                         <div class="col-4 product-detail-btn">
-                            <a href="#" class="btn btn-success btn-md">Follow</a>  
+                            {{-- <a href="#" class="btn btn-success btn-md">Follow</a>   --}}
                             <a href="/buyer/message/{{$products->seller_id}}" class="btn btn-success btn-md">Chat</a>  
                         </div>
                     </div>

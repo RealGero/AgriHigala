@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Cart;
 use DB;
 use Session;
+use Auth;
 class CartController extends Controller
 {
     
@@ -18,6 +19,14 @@ class CartController extends Controller
 
     public function addFromSellerProfile(Request $request,$id)
     {   
+        // if (!Auth::check()){
+        //     return redirect()->route('login');
+        // }
+        // else{
+        //     if (Auth::user()->user_type != 4){
+        //         return back();
+        //     }
+        // }
       
         // $request->session()->flush();
         $products = DB::table('products  as a')
@@ -52,7 +61,15 @@ class CartController extends Controller
     }
     public function add(Request $request,$id)
     {   
-      
+        
+        // if (!Auth::check()){
+        //     return redirect()->route('login');
+        // }
+        // else{
+        //     if (Auth::user()->user_type != 4){
+        //         return back();
+        //     }
+       // }
         // $request->session()->flush();
         $products = DB::table('prices  as a')
         ->join('stocks as b','b.stock_id','=','a.stock_id')
@@ -83,6 +100,15 @@ class CartController extends Controller
 
     public function getCart()
     {
+        // if (!Auth::check()){
+        //     return redirect()->route('login');
+        // }
+        // else{
+        //     if (Auth::user()->user_type != 4){
+        //         return back();
+        //     }
+        // }
+
         $sellers = [];
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
@@ -116,6 +142,15 @@ class CartController extends Controller
 
     public function deleteCart(Request $request,$id)
     {
+        // if (!Auth::check()){
+        //     return redirect()->route('login');
+        // }
+        // else{
+        //     if (Auth::user()->user_type != 4){
+        //         return back();
+        //     }
+        // }
+
         $cart = $request->session()->get('cart');
         if(array_key_exists($id,$cart->items))
         {
@@ -141,6 +176,14 @@ class CartController extends Controller
 
     public function changeQty(Request $request, $id)
     {
+        // if (!Auth::check()){
+        //     return redirect()->route('login');
+        // }
+        // else{
+        //     if (Auth::user()->user_type != 4){
+        //         return back();
+        //     }
+        // }
         // return $id;
         $cart = session()->get('cart');
         // return dd($cart->items[$id]['qty']);

@@ -30,7 +30,16 @@ class MessagesController extends Controller
     //     return view('buyer_pages.inbox',compact('buyer_message'));
     // }
 
-    public function sellerInboxIndex(){
+    public function sellerInboxIndex()
+    {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
 
         $id = Auth::id();
 
@@ -48,6 +57,14 @@ class MessagesController extends Controller
 
     public function buyerMessage(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         
         $user_type = 'buyer';
         $buyer_id = Auth::id();
@@ -78,6 +95,15 @@ class MessagesController extends Controller
 
     public function buyerMessageStore(Request $request,$id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+
         $message = new Message;
         $message->sender = 'buyer';
         $message->message = $request->input('input-message');
@@ -108,13 +134,38 @@ class MessagesController extends Controller
      }
      public function sellerMessageStore(Request $request,$id)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
  
          $message = new Message;
          $message->sender = 'seller';
          $message->message = $request->input('input-message');
          $message->inbox_id = $id;
          $message->save();
+        
+         $buyer = Inbox::find($id)->buyer_id;
+         $notify_id = Seller::find($buyer)->user->user_id;
  
+         // ASSIGN VALUES
+         $notify_user = $notify_id; // ID sa e-notify; NOT NULL
+         $notify_info = $message; // Query gihimu; NOT NULL
+         $notify_title = 'Inbox '; // Title or table; NOT NULL
+         $notify_table_id = $id; // ID sa table nga involved; NULLABLE, pwede ra leave blank
+         $notify_subtitle = 'New message'; // Title description; NOT NULL            
+         $notify_url = route('sellerMessage.index', [$id]) ; //route('admin.users.index') Asa na route ma access ang notifications; NULLABLE, butang false if blank
+         
+         // SAVE TO NOTIFY_INFO
+         $notify_info->title = $notify_title;
+         $notify_info->table_id = $notify_table_id.': ';
+         $notify_info->subtitle = $notify_subtitle;
+         $notify_info->action_url = $notify_url;
+         User::find($notify_user)->notify(new NewMessage($notify_info));
  
          return redirect()->back();
  
@@ -123,6 +174,14 @@ class MessagesController extends Controller
 
      public function sellerMessageIndex($id)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         // dd(Auth::user()->user_type);
         // $user_type = 'seller';
 
@@ -138,6 +197,14 @@ class MessagesController extends Controller
 
      public function buyerInboxMessage($id)
      {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
 
         $inbox = DB::table('inbox as a')
         ->leftJoin('sellers as b','b.seller_id','a.seller_id') 

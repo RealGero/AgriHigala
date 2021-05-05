@@ -23,6 +23,14 @@ class RatingsController extends Controller
 
     public function orderMyOrderRatings($id)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
 
         return view('buyer_subpages.buyer-ratings',compact('id'));
     }
@@ -34,6 +42,15 @@ class RatingsController extends Controller
 
     public function buyerStore(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+        
         $rating = new Rating;
 
         $rating->order_id = $request->input('order');

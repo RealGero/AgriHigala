@@ -6,11 +6,11 @@
    </div>
     <div class="collapse" id="myaccount-items">
       <div class="d-flex flex-column myaccount-collapse text-white">
-         <a href="/buyer/profile">Account</a> 
-          <a href="/buyer/user/account">Profile</a>
+         <a href="{{route('account.index')}}">Account</a> 
+          <a href="{{route('rider.profile.index')}}">Profile</a>
       </div>
   </div>
    
-    <a href="#clients">Orders</a>
-    <a href="#contact">Notifications</a>
+    <a href="{{route('rider.order.index')}}">Orders</a>
+   
   </div>

@@ -11,14 +11,11 @@ use App\User;
 use Session;
 class BrowsesController extends Controller
 {
-    public function __construct()
-    {
-       if(!Auth::check())
-       {
-           return redirect('/login');
-       }
-    }
-    public function index(){
+   
+    public function index()
+    { 
+     
+    
 
        
         // $products = DB::table('stocks as a')
@@ -84,6 +81,7 @@ class BrowsesController extends Controller
 
     public function viewSellerDetails($id)
     {
+       
         $products = DB::table('stocks as a')
                 ->join('products as b','b.product_id','=','a.product_id')
                 ->join('prices as c','c.price_id','=','a.stock_id')

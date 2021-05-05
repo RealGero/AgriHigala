@@ -6,8 +6,8 @@
   </div>
   <div class="collapse" id="myaccount-items">
     <div class="d-flex flex-column myaccount-collapse text-white pl-3">
-        <a href="/buyer/user/account">Account</a> 
-        <a href="/buyer/profile">Profile</a>
+        <a href="{{route('buyer.profile.edit')}}">Account</a> 
+        <a href="{{route('buyer.useraccount')}}">Profile</a>
     </div>
   </div>
   <div>
@@ -19,10 +19,9 @@
     <div class="d-flex flex-column text-white pl-3">
        <a href="{{route('buyer.order')}}">Orders</a> 
         {{-- <a href="{{route('buyer.return.index')}}">Returns</a> --}}
-        <a href="">Cancellations</a>
+     
     </div>
   </div>
-  <a href="#clients">My Reviews</a>
-  <a href="#clients">My Message</a>
-  <a href="#contact">My Notification</a>
+  
+
 </div>

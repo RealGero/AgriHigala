@@ -23,6 +23,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                             
                                 @foreach($orderLine as $orderLines)
                             
                                 @php
@@ -52,6 +53,7 @@
                                 </td>
                             </tr>
                             @endforeach
+                         
                             </tbody>
                         </table>
                     <div class="row ">

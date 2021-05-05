@@ -39,6 +39,7 @@
 
   {{-- SIDENAV LINKS--}}
   <div id="mySidenav" class="sidenav">
+    <a href="{{route('sellerdashboard')}}"> <i class="fas fa-tachometer-alt"></i> Dashboard </a>
     {{-- PRODUCT --}}
     <div>
       <a class="" data-toggle="collapse" href="#product-items" aria-expanded="false" aria-controls="product-items">
@@ -60,29 +61,19 @@
             </div> --}}
        
 
-        {{-- <i class="fa fa-shopping-cart  fa-2x fontawesome-color"></i> --}}
-
-        <div id="mySidenav" class="sidenav">
-           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-
-           {{-- <div>
-                <a class="" data-toggle="collapse" href="#product-items" aria-expanded="false" aria-controls="product-items">
-                    <i class="fas fa-shopping-cart pr-2"></i>Product
-                </a>
-           </div> --}}
-           <div class="collapse" id="product-items">
-                <div class="d-flex flex-column navigation-items text-white">
-                   <a href="/seller/product/my-product"> My product</a> 
-                    <a href="/seller/product/add-new-product">Add product</a>
-                </div>
+            {{-- <i class="fa fa-shopping-cart  fa-2x fontawesome-color"></i> --}}
+            
+           
+            
+              
+            
+       
+            {{-- ORDER --}}
+            <div>
+              <a class="" data-toggle="collapse" href="#order-items" aria-expanded="false" aria-controls="order-items">
+                <i class="fas fa-box pr-2"></i>Order
+              </a>
             </div>
-        </div>
-      {{-- ORDER --}}
-      <div>
-        <a class="" data-toggle="collapse" href="#order-items" aria-expanded="false" aria-controls="order-items">
-          <i class="fas fa-box pr-2"></i>Order
-        </a>
-      </div>
       <div class="collapse" id="order-items">
         <div class="d-flex flex-column navigation-items text-white">
         
@@ -91,7 +82,6 @@
           <a href="/seller/return">Return</a> 
         </div>
       </div>
-
       {{-- RATING --}}
       <a href="/seller/ratings"> <i class="fas fa-star pr-2"></i>Ratings</a>
 

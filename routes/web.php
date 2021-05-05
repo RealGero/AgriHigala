@@ -30,10 +30,10 @@ Route::resource('users', 'UsersController');
 // Route::group(['middleware'=> ['auth']],function()
 // {
 
-    // Route::group(['middleware' => ['buyer']], function()
-    // {
+//     Route::group(['middleware' => ['buyer']], function()
+//     {
         
-     
+    
         Route::get('/buyer/browse/seller/{id}','BrowsesController@viewSellerDetails');
 
 
@@ -47,7 +47,7 @@ Route::resource('users', 'UsersController');
 
         //delete item from cart
         Route::get('/buyer/deleteCart/{id}','CartController@deleteCart')->name('deleteCart');
-///////////////////////////
+     ///////////////////////////
         // Route::post::
         Route::get('/change-qty/{id}', "CartController@changeQty")->name('change_qty');
 
@@ -57,7 +57,7 @@ Route::resource('users', 'UsersController');
         Route::get('/buyer/seller-detail/{id}','CartController@addFromSellerProfile');
 
         Route::get('/delete/session', 'CartController@deleteSession');
-        Route::get('/checkout/{id}','OrdersController@checkoutIndex')->name('checkoutIndex')->middleware('auth');
+        Route::get('/checkout/{id}','OrdersController@checkoutIndex')->name('checkoutIndex');
         Route::post('/place-order/{id}' ,'OrdersController@clickedPlaceOrder');
 
 
@@ -119,9 +119,9 @@ Route::resource('users', 'UsersController');
         // order------------------------------------------------------------------------
         // Ratings===========================================================
         Route::get('/buyer/ratings/{id}', 'RatingsController@orderMyOrderRatings')->name('buyer.ratings.index');
+
         Route::post('/buyer/ratings/store', 'RatingsController@buyerStore')->name('buyer.ratings.store');
-        
-        
+   
 
 
 //Seller-----------------------------------------------------------------------------------------
@@ -134,6 +134,8 @@ Route::resource('users', 'UsersController');
 
 // ADD TO CART--------------------------------------------------------------------------------------------------
         
+        // Route::group(['middleware' => ['seller']], function()
+        // {
 
         Route::get('/seller/dashboard','DashboardsController@sellerIndex')->name('sellerdashboard');
         
@@ -188,9 +190,9 @@ Route::resource('users', 'UsersController');
         // Route::get('/seller/rider','sellercontroller\MyRiderController@index');
         Route::get('/seller/ratings', 'RatingsController@sellerIndex')->name('seller.ratings.index');
         
+    
         
-        
-        
+
         
         //Rider------------------------------------------------------------------------------------------
         

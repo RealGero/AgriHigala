@@ -8,6 +8,8 @@
 
 {{-- SIDENAV LINKS--}}
 <div id="mySidenav" class="sidenav">
+  {{-- DASHBOARD --}}
+  <a href="{{route('rider.dashboard')}}"> <i class="fas fa-tachometer-alt"></i> Dashboard </a>
   {{-- ACCOUNT --}}
   <div>
     <a class="" data-toggle="collapse" href="#account-items" aria-expanded="false" aria-controls="product-items">

@@ -12,6 +12,14 @@ class InboxController extends Controller
     
     public function sellerInboxIndex()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
         $id = Auth::id();
         $seller_id = User::find($id)->seller->seller_id;
 
@@ -31,6 +39,14 @@ class InboxController extends Controller
 
     public function buyerInboxIndex()
     {
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
         $id = Auth::id();
         $buyer_id = User::find($id)->buyer->buyer_id;
         

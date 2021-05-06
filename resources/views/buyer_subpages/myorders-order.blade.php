@@ -161,43 +161,105 @@
                                             </ul>
                                         </td> 
                                         <td> Quantity {{$orderLines->quantity}}</td>
-                                        <td > @if ($order->return_id)
-                                            <span class="badge badge-pill badge-info">Return</span>  
-                                        @endif 
-                                        <span class="badge badge-pill {{$status_btn}}"> {{$status}}</span></td>
+                                        <td > 
+                                        @if($order->completed_at)
+                                            @if($order->order_accepted_at == null)
+                                                    <span class="badge badge-pill badge-danger">Rejected/Cancelled</span>
+                                                {{-- Cancelled --}}
+                                            @elseif($order->order_accepted_at != null && $order->packed_at == null)  
+                                                <span class="badge badge-pill badge-danger">Cancelled</span>
+                                            @elseif($order->return_denied_at != null)
+                                                <span class="badge badge-pill badge-danger">Rejected</span>
+                                            @else
+                                                <span class="badge badge-pill badge-success">Complete</span>
+                                            @endif
+                                         @else
+                                            @if($order->return_created_at)
+                                                @if($order->return_accepted_at == null)
+                                                <span class="badge badge-pill badge-info">Return</span>
+                                            <br>    <span class="badge badge-pill badge-secondary">Requesting</span>
+                                            
+                                                @elseif($order->return_accepted_at != null)
+                                                <span class="badge badge-pill badge-info">Return</span>
+                                             <br>     <span class="badge badge-pill badge-warning">Pending</span>
+
+                                               @endif
+                                            @else
+                                                @if($order->order_accepted_at == null)
+                                                 <span class="badge badge-pill badge-secondary">Requesting</span>
+                                                
+                                                @elseif($order->order_accepted_at != null && $order->packed_at == null)
+                                                
+                                                  <span class="badge badge-pill badge-warning">Pending</span>
+
+
+                                                @elseif($order->packed_at != null && $order->delivered_at == null)
+                                                  <span class="badge badge-pill badge-info">Delivering</span>
+                                                @elseif($order->delivered_at != null)
+                                                    <form action="{{route('buyer.order.received',[$order->order_id])}}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="response" value="received">
+                                                        <input type="submit" value="Received" class="btn btn-sm btn-primary">
+                                                    </form>
+                                                    <form action="{{action('OrdersController@buyerOrderReturnStore',[$order->order_id])}}" method="POST">
+                                                        <label for="exampleFormControlSelect1" class="h5">Reason for return</label>
+                                                        <select class="form-control text-capitalize" id="exampleFormControlSelect1" name="reason" required>
+                                                            @foreach($reasons as $reason)
+                                                                <option hidden>Select reason</option>
+                                                                <option class="text-capitalize" value="{{$reason->reason_id}}" >{{$reason->reason_name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                            <label for="description" class="h5 mt-3">Description:</label>
+                                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description" required></textarea>
+                                                            
+                                                            <input type="hidden" name="order" value="{{$order->order_id}}">
+                                                            <input type="hidden" name="response" value="return">
+                                                            <input type="submit" value="Return" class="btn btn-sm btn-primary mt-2">
+                                                    </form>
+
+                                                @endif
+                                            @endif
+                                         @endif           
+                                        </td>
+                                      
+                                        {{-- <span class="badge badge-pill {{$status_btn}}"> {{$status}}</span></td> --}}
                                         <td>Placed On 
                                             {{date('M d Y', strtotime($order->created_at))}}
                                         </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="row mb-3">
+                                <div class="row mt-3">
                                     <div class="col-12">
-                                        @if($order->packed_at == null && $order->completed_at == null)
-                                                <form action="{{route('buyer.order.cancel',[$order->order_id])}}" method="POST">
-                                                    @method('PUT')
+                                        <a href={{url('/buyer/order/vieworder/'.$order->order_id)}}>View more..</a>
 
-                                                    <input type="hidden" name="response" value="cancel">
-                                                    <input type="submit" value="Cancel Order" class="btn btn-sm btn-primary">
-                                                </form>
-                                            @elseif($order->packed_at == null && $order->completed_at != null)
-                                                 <span class="text-danger">Canceled Order</span>
-                                    
-                                            @elseif($order->delivered_at != null && $order->completed_at == null)
-                                             <div class="form-group mb-3">
-                                              
-                                                <form action="{{route('buyer.order.received',[$order->order_id])}}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="response" value="received">
-                                                    <input type="submit" value="Received" class="btn btn-sm btn-primary">
-                                                </form>
-                                               
-                                            </div>
-                                            <hr>   
-                                    </div>   
-                                </div>
-                                <div class="row">
+                                    </div>
+                                </div>         
+                               
+                            </div>
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+                @endforeach
+            </div>
+            
+        </div>
+      
+    </div>  
+</div>
+
+
+@endsection
+ {{-- <div class="row">
+                                    <div class="col-12">
+                                        <a href={{url('/buyer/order/vieworder/'.$order->order_id)}}>View more..</a>
+                                        
+                                    </div>
+                                </div> --}}
+                                {{-- <div class="row">
                                     <div class="col-6 mx-auto">
                                         <form action="{{action('OrdersController@buyerOrderReturnStore',[$order->order_id])}}" method="POST">
                                             <label for="exampleFormControlSelect1" class="h5">Reason for return</label>
@@ -215,35 +277,34 @@
                                                 <input type="submit" value="Return" class="btn btn-sm btn-primary mt-2">
                                         </form>
                                     </div>                    
-                                </div>
-             
-                                @endif 
-                                <div class="row mt-3">
+                                </div> --}}
+
+
+                                {{-- <div class="row mb-3">
                                     <div class="col-12">
-                                        <a href={{url('/buyer/order/vieworder/'.$order->order_id)}}>View more..</a>
+                                        @if($order->packed_at == null && $order->completed_at == null)
+                                                <form action="{{route('buyer.order.cancel',[$order->order_id])}}" method="POST">
+                                                    @method('PUT')
 
-                                    </div>
-                                </div>         
-                               
-                            </div>
-                        </div>
-                        
-                    </div>
-                    
-                    </div>
-                  
-                </div>
-            
-        </div>
-        @endforeach
-    </div>  
-</div>
-
-
-@endsection
- {{-- <div class="row">
-                                    <div class="col-12">
-                                        <a href={{url('/buyer/order/vieworder/'.$order->order_id)}}>View more..</a>
+                                                    <input type="hidden" name="response" value="cancel">
+                                                    <input type="submit" value="Cancel Order" class="btn btn-sm btn-primary">
+                                                </form>
+                                            @elseif($order->packed_at == null && $order->completed_at != null)
+                                                    <span class="text-danger">Canceled Order</span>
                                         
-                                    </div>
+                                            @elseif($order->delivered_at != null )
+                                             <div class="form-group mb-3">
+                                              
+                                                <form action="{{route('buyer.order.received',[$order->order_id])}}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="response" value="received">
+                                                    <input type="submit" value="Received" class="btn btn-sm btn-primary">
+                                                </form>
+                                               
+                                            </div>
+                                            <hr>   
+                                           
+                                        </div> 
+                                      
                                 </div> --}}

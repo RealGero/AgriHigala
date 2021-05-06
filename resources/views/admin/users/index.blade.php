@@ -24,7 +24,7 @@
               <th>Photo</th>
               <th>Join Date</th>
               <th>Role</th>
-              <th>Status</th>
+              <th class="d-none">Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -36,7 +36,7 @@
               <th>Photo</th>
               <th>Join Date</th>
               <th>Role</th>
-              <th>Status</th>
+              <th class="d-none">Status</th>
               <th>Action</th>
               </tr>
           </tfoot>
@@ -69,10 +69,10 @@
                     </td>
                     <td>{{(($user->created_at)? $user->created_at->diffForHumans() : '')}}</td>
                     <td>{{$role}}</td>
-                    <td>
-                        <span class="badge badge-success">active</span>
-                        <span class="badge badge-warning">inactive</span>
-                    </td>
+                    <td class="d-none">
+                         <span class="badge badge-success">active</span>
+                        <span class="badge badge-warning">inactive</span> 
+                    </td> 
                     <td>
                         <a href="{{route('admin.users.edit', $user->user_id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
 

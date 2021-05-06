@@ -36,7 +36,7 @@
                                         <form action="{{action('MessagesController@buyerMessageStore',[$inbox->inbox_id])}}" method="POST">
                                             @csrf
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <input class="form-control mr-3" type="text" placeholder="Type here. . " name="input-message"> 
+                                                <input class="form-control mr-3" type="text" placeholder="Type here. . " name="input-message" required> 
                                                 <button type="submit" class="btn btn-primary">Send</button>
                                             </div>
                                         </form>
@@ -44,7 +44,7 @@
                                         <form action="{{action('MessagesController@sellerMessageStore',[$inbox->inbox_id])}}" method="POST">
                                             @csrf
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <input class="form-control mr-3" type="text" placeholder="Type here. . " name="input-message"> 
+                                                <input class="form-control mr-3" type="text" placeholder="Type here. . " name="input-message" required> 
                                                 <button type="submit" class="btn btn-primary">Send</button>
                                             </div>
                                         </form>

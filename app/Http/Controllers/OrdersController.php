@@ -20,28 +20,7 @@ use App\Buyer;
 use App\Rider;
 class OrdersController extends Controller
 {
-    public function __construct()
-    {
-    //    if(!Auth::check())
-    //    {
-    //        return redirect('/login');
-    //    }
-    }
-    
-
-
-    // public function index (){
-
-
-    //     return 123;
-    //     return view('buyer_pages.order');
-        
-    // }
-
-    // public function cartIndex(){
-
-    //     return view('buyer_subpages.cart');
-    // }
+   
 
     public function checkoutIndex($id)
     {
@@ -561,6 +540,7 @@ class OrdersController extends Controller
 
         $response = $request->input('response');
         if ($response == 'cancel'){
+            return 123;
             $order = Order::find($id);
             $order->completed_at = now();
             $order->save();
@@ -893,9 +873,10 @@ class OrdersController extends Controller
             ->join('payments as b', 'a.order_id', 'b.order_id')
             ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
             ->join('fees as d', 'b.fee_id', 'd.fee_id')
-            ->join('sellers as e','e.seller_id','d.seller_id')
-            ->join('orgs as f','f.org_id','e.org_id')
-            ->select('f.org_name','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
+            ->join('buyers as e','e.buyer_id','a.buyer_id')
+            ->join('users as f','f.user_id','e.user_id')
+            ->join('brgys as g','g.brgy_id','e.brgy_id')
+            ->select('g.brgy_name','e.*','f.*','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at')
             ->where('a.order_id', $id)
             ->where('d.seller_id',$seller)
             ->first();
@@ -911,6 +892,38 @@ class OrdersController extends Controller
 
             return view('seller_view.seller-viewmore',compact('order','title','orderLine'));
 
+    }
+
+    public function buyerReturnRequest(Request $request, $id)
+    {
+        
+        if (!Auth::check()){
+            return redirect()->route('login');
+        }
+        else{
+            if (Auth::user()->user_type != 2){
+                return back();
+            }
+        }
+        $response = $request->input('response');
+        $return = Order::find($id)->returnOrder;
+
+        if ($response == 'accept' && $return){
+            $return->accepted_at = now();
+            $return->save();
+            request()->session()->flash('success','Return order accepted');
+        }
+        elseif ($response == 'reject') {
+            $return->denied_at = now();
+            $return->save();
+            
+            $order =Order::find($id);
+            $order->completed_at = now();
+            $order->save();
+            request()->session()->flash('success','Return order rejected');
+        }
+        
+        return redirect()->back();
     }
 
     // Order ----- RIDER SIDE -------------------------------------------------------------------

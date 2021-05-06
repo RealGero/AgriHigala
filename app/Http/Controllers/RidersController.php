@@ -10,9 +10,11 @@ use App\Buyer;
 use App\Seller;
 use App\Order;
 use Hash;
+use App\Fee;
 use DB;
 use Illuminate\Validation\Rule;
 use App\Notifications\NewRider;
+use App\Notifications\NewOrder;
 class RidersController extends Controller
 {
     public function __construct()
@@ -472,27 +474,68 @@ class RidersController extends Controller
         $id = Auth::id();
         $rider_id = User::find($id)->rider->rider_id;
 
-        $order = DB::table('orders as a')
+
+
+        $orders = DB::table('orders as a')
         ->join('payments as b', 'a.order_id', 'b.order_id')
         ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
         ->join('fees as d', 'b.fee_id', 'd.fee_id')
-        ->join('sellers as e','e.seller_id','d.seller_id')
-        ->join('orgs as f','f.org_id','e.org_id')
-        ->join('buyers as g','g.buyer_id','a.buyer_id')
-        ->join('users as h','h.user_id','g.user_id')
-        ->join('brgys as i','i.brgy_id','g.brgy_id')
-        ->select('i.brgy_name','h.mobile_number as buyer_mobile','g.address','h.l_name as buyer_lname','h.m_name as buyer_mname','h.f_name as buyer_fname','g.*','f.org_name','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
-        ->where('a.order_id', $rider_id)
-        ->first();
+        ->select('a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'c.description as reason_description', 'd.seller_id')
+         ->orderBy('a.created_at','desc')
+         ->where('a.rider_id',$rider_id)
+        ->get();
+
+        return view('Rider_view.rider-order',compact('orders'));
+
+
+    }
+
+    public function riderViewMore($id)
+    {
+        $rider_id = Auth::id();
+        $rider = User::find($rider_id)->rider->rider_id;
+       
+        $order = DB::table('orders as a')
+                ->leftJoin('payments as b','b.order_id','a.order_id')
+                ->leftJoin('fees as c','c.fee_id','b.fee_id')
+                ->leftJoin('sellers as d','d.seller_id','c.seller_id')
+                ->leftJoin('buyers as e','e.buyer_id','a.buyer_id')
+                ->join('orgs as f','f.org_id','d.org_id')
+                ->join('users as g','g.user_id','e.user_id')
+                ->join('brgys as h','h.brgy_id','e.brgy_id')
+                ->where('a.order_id',$id)
+                ->where('a.rider_id',$rider)
+                ->first();
+
+                $orderLines = DB::table('orderlines as a')
+                ->join('stocks as b','b.stock_id','a.stock_id')
+                ->join('products as c','c.product_id','b.product_id')
+                ->join('product_types as d','d.product_type_id','c.product_type_id')
+                
+                ->where('a.order_id',$id)
+                ->get();  
+
+                return view('Rider_view.rider-viewmore',compact('order','orderLines'));
+
+    }
+
+        // $orders = DB::table('orders as a')
+        // ->join('payments as b', 'a.order_id', 'b.order_id')
+        // ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        // ->join('fees as d', 'b.fee_id', 'd.fee_id')
+        // ->join('sellers as e','e.seller_id','d.seller_id')
+        // ->join('orgs as f','f.org_id','e.org_id')
+        // ->join('buyers as g','g.buyer_id','a.buyer_id')
+        // ->join('users as h','h.user_id','g.user_id')
+        // ->join('brgys as i','i.brgy_id','g.brgy_id')
+        // ->select('i.brgy_name','h.mobile_number as buyer_mobile','g.address','h.l_name as buyer_lname','h.m_name as buyer_mname','h.f_name as buyer_fname','g.*','f.org_name','d.*','a.*', 'b.*', 'a.accepted_at as order_accepted_at', 'a.created_at as order_created_at', 'b.created_at as payment_created_at', 'c.return_id', 'c.reason_id', 'c.description', 'c.accepted_at as return_accepted_at', 'c.denied_at as return_denied_at', 'c.created_at as return_created_at', 'd.seller_id')
+        // ->where('a.rider_id', $rider_id)
+        // ->get();
 
        
-        $orderLine = DB::table('orderlines as a')
-        ->join('stocks as b','b.stock_id','a.stock_id')
-        ->join('products as c','c.product_id','b.product_id')
-        ->join('product_types as d','d.product_type_id','c.product_type_id')
-        ->where('a.order_id',$rider_id)
+      
         // ->where('d.seller_id',$seller)
-        ->get();
+       
         // $orders = DB::table('orders as a')
         // ->join('payments as b','b.order_id','a.order_id')
         // ->join('fees as c','c.fee_id','b.fee_id')
@@ -504,10 +547,7 @@ class RidersController extends Controller
         // ->where('a.rider_id',$rider_id)
         // ->get();
        
-        return view('Rider_view.rider-order',compact('order','orderLine'));
-
-
-    }
+      
     public function riderDeliveredAt(Request $request,$id)
     {
         if (!Auth::check()){
@@ -593,7 +633,11 @@ class RidersController extends Controller
                 return back();
             }
         }
-
-        return view('Rider_view.rider-dashboard');
+        
+        $auth = Auth::id();
+        $id = User::find($auth)->rider->rider_id; 
+        
+       
+        return view('Rider_view.rider-dashboard',compact('id'));
     }
 }

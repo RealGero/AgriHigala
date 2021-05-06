@@ -61,13 +61,14 @@
                                 <span>Subtotal Fee: &#8369;{{number_format($order->payment_order )}}</span>
                                 <span>Total fee: &#8369;{{number_format($order->payment_total) }}</span>
                             </div>
-                            <div class="col-4 d-flex flex-column">
-                                <span>Organization Name: {{$order->org_name}}</span>
+                            <div class="col-5 d-flex flex-column">
+                              <span> <span class="font-weight-bold">Buyer Name: </span> <span class="text-capitalize"> {{$order->f_name}} {{$order->m_name[0]}}. {{$order->l_name}}</span></span> 
+                              <span> <span class="font-weight-bold">Address: </span> <span class="text-capitalize">{{$order->address}}, {{$order->brgy_name}}</span></span> 
                                 <span>Payment method: {{ucfirst($order->payment_method)}}</span>
                             </div>
                             {{-- date('M d Y', strtotime(($order->completed_at)) --}}
                             {{-- \Carbon\Carbon::parse($order->completed_at)->diffForHumans() --}}
-                            <div class="col-4 d-flex flex-column">
+                            <div class="col-3 d-flex flex-column">
                                  <span>Placed On: {{date('M d Y', strtotime($order->order_created_at))}}</span> 
                                  @if($order->packed_at)  
                                      <span>Packed On: {{date('M d Y', strtotime($order->packed_at))}}</span>   

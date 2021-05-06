@@ -47,7 +47,13 @@ class Stock extends Model
     public static function getQty($id){
         // GET QUANTITIES
     $stock_qty = Stock::find($id)->qty_added;
-    $order_qty = OrderLine::where('stock_id', $id)->sum('order_qty');
+    // $order_qty = OrderLine::where('stock_id', $id)->sum('order_qty');
+    $order_qty = DB::table('orderlines as a')
+        ->join('orders as b','b.order_id','a.order_id')
+        ->where('stock_id', $id)
+        ->whereNotNull('b.accepted_at')
+        ->sum('order_qty'); 
+
     $remaining_qty = $stock_qty - $order_qty;
     
     $data = (object)[];

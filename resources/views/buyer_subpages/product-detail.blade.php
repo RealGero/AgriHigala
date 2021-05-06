@@ -55,6 +55,7 @@
                     <div class="row pb-3">
                         <div class="col-8">
                             Supplier Name: {{ ucfirst($products->f_name). ' ' .ucfirst($products->m_name) .' '.  ucfirst($products->l_name)}} 
+                          <br>  Schedule Online Time:  {{$products->schedule_online_time}}
                         </div>
                         <div class="col-4 product-detail-btn">
                             {{-- <a href="#" class="btn btn-success btn-md">Follow</a>   --}}

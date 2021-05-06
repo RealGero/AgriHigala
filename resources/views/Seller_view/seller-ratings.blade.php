@@ -21,19 +21,21 @@
                                             <th scope="col">Order ID</th>
                                             <th scope="col">Buyer Name</th>
                                             <th scope="col">Ratings</th>
-                                            <th scope="col">Name</th>
+                                            {{-- <th scope="col">Name</th> --}}
                                             <th scope="col">Comments</th>
                                           </tr>
                                         </thead>
                                         <tbody>
                                           <tr>
-                                            
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>@mdo</td>
-                                            <td><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit, explicabo. <a class="btn btn-primary d-block" href="#" role="button">Link</a></p>
-                                            </td>
+                                            @foreach($ratings as $rating)
+                                            <td>{{$rating->order_id}}</td>
+                                            <td class="text-capitalize">{{$rating->f_name}} {{$rating->l_name}}</td>
+                                            <td>{{$rating->rating}}</td>
+                                            {{-- <td>@mdo</td> --}}
+                                            {{-- <td><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit, explicabo. <a class="btn btn-primary d-block" href="#" role="button">Link</a></p> --}}
+                                            {{-- </td> --}}
+                                            <td>{{$rating->comment}}</td>
+                                            @endforeach
                                           </tr>
                                         </tbody>
                                       </table>

@@ -64,10 +64,22 @@
                                                  @else
                                                       @if($order->return_created_at)
                                                           @if($order->return_accepted_at == null)
-                                                             <span class="badge badge-pill badge-secondary">Requesting</span>
+                                                            <form action="{{route('seller.order.return-request',[$order->order_id])}}" method="POST">
+                                                              @csrf
+                                                              @method('PUT')
+                                                              <input type="hidden" name="response" value="accept">
+                                                              <input type="submit" value="Accept" name="accept" id="" class="btn btn-success btn-sm d-block"> 
+                                                            </form>
+                                                            <form action="{{route('seller.order.return-request',[$order->order_id])}}" method="POST">
+                                                              <input type="hidden" name="response" value="reject">
+                                                              <input type="submit" value="Reject" name="reject" id="" class="btn btn-danger btn-sm d-block"> 
+                                                            </form>
+                                                      
                                                           @elseif($order->return_accepted_at != null)
-                                                            <span class="badge badge-pill badge-warning">Pending</span>
-                                                         @endif
+                                                            
+                                                            <span class="badge badge-pill badge-info">Return</span>
+                                                           <br> <span class="badge badge-pill badge-warning">Pending</span>
+                                                          @endif
                                                       @else
                                                           @if($order->order_accepted_at == null)
                                             
@@ -98,10 +110,10 @@
                                                                     @endif
                                                                 </select>
                                                               </form>
-                                                          @elseif($order->packed_at != null && $order->delivered_at == null)
-                                                           <span class="badge badge-pill badge-info">Delivering</span>
+                                                            @elseif($order->packed_at != null && $order->delivered_at == null)
+                                                            <span class="badge badge-pill badge-info">Delivering</span>
                                                           @elseif($order->delivered_at != null)
-                                                          <span class="badge badge-pill badge-success">Delivered</span>
+                                                           <span class="badge badge-pill badge-success">Delivered</span>
                                                           @endif
                                                       @endif
                                                @endif 

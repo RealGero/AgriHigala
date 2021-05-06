@@ -40,12 +40,7 @@
                                     </div>
                                 </div>
                                    
-                                    <input type="submit" value="Submit" class="btn btn-success mt-3 d-inline">
-                                    <input type="hidden" name="order" value="{{$id}}">
-
-                                  </div>   
-
-                                  </div>   
+                                   
                             </form>
                         </div>
                      </div>

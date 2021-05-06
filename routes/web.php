@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/admin', 'admin\AdminsController@adminDashboard')->name('admin');
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
@@ -189,6 +189,9 @@ Route::resource('users', 'UsersController');
         Route::put('/seller/account/username' ,'UsersController@sellerUpdateUsername');
         // Route::get('/seller/rider','sellercontroller\MyRiderController@index');
         Route::get('/seller/ratings', 'RatingsController@sellerIndex')->name('seller.ratings.index');
+
+
+        Route::put('/seller/order/return/{id}','OrdersController@buyerReturnRequest')->name('seller.order.return-request');
         
     
         
@@ -212,7 +215,7 @@ Route::resource('users', 'UsersController');
 
         Route::get('/rider/orders', 'RidersController@orders')->name('rider.order.index');
         Route::put('/rider/orders/deliver/{id}','RidersController@riderDeliveredAt')->name('rider.deliveredAt');
-
+        Route::get('/rider/order/viewmore/{id}','RidersController@riderViewMore')->name('rider.viewmore');
         Route::get('/rider/dashboard','Riderscontroller@dashboard')->name('rider.dashboard');
         Route::get('/rider/history', 'RidersController@orderDetails')->name('rider.history.index');
 

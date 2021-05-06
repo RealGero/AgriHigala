@@ -124,6 +124,55 @@ class Order extends Model
             return 0; 
         }
     }
+
+    
+    public static function countRiderDashboard($id,$order=null)
+    {
+        
+        $orders = DB::table('orders as a')
+        ->join('payments as b', 'a.order_id', 'b.order_id')
+        ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+        ->join('fees as d', 'b.fee_id', 'd.fee_id')
+         ->where('a.rider_id',$id)
+         ->count();
+
+
+         if( $order =='D')
+        {   
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('a.rider_id',$id)
+            ->whereNotNull('a.packed_at')
+            ->whereNull('a.delivered_at')
+            ->count();
+        }
+        elseif($order =='C')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('a.rider_id',$id)
+            ->whereNotNull('a.completed_at')
+            ->count();
+
+        }
+        elseif($order =='RE')
+        {
+            $orders = DB::table('orders as a')
+            ->join('payments as b', 'a.order_id', 'b.order_id')
+            ->leftJoin('return_orders as c', 'c.order_id', 'a.order_id')
+            ->join('fees as d', 'b.fee_id', 'd.fee_id')
+            ->where('a.rider_id',$id)
+            ->where('c.return_id','<>', null)
+            ->count();
+        }  
+        
+        return $orders;
+    }
+
     public static function countSellerDashboard($id,$order=null)
     {
 

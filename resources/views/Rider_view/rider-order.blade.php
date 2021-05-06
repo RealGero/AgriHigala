@@ -8,102 +8,103 @@
 
             <div class="col-10 mx-auto">
                 <a href="{{route('rider.dashboard')}}" class="btn btn-primary mb-2">Back</a>
-              <div class="card">
-                  <div class="card-body">
-                        <table class="table table-borderless">
-                            <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                             
-                                @foreach($orderLine as $orderLines)
+               
+                @foreach($orders as $order)
                             
-                                @php
-                                    $price = \App\Price::getLatestPrice($orderLines->stock_id);
-                                @endphp
-
-                            <tr>
-                                <td> <img src="{{ url('/storage/') }}{{ $orderLines->stock_image ? '/stock/'. $orderLines->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </td>
-                                <td>  {{$orderLines->product_name}}  
-                                <td>Quantity: {{$orderLines->order_qty}}</td>
-                                <td>&#8369;{{number_format($price->stock_price)}}/{{ucfirst($price->unit_description)}}</td>
-                                <td>&#8369;{{number_format($price->stock_price * $orderLines->order_qty) }}</td>
-                                <td>
-                                    @if($order->accepted_at == null && $order->packed_at == null && $order->delivered_at == null && $order->completed_at = null)
-                                        <span>Requesting</span>
-
-                                    @elseif($order->accepted_at != null && $order->packed_at == null && $order->delivered_at == null && $order->completed_at == null)
-
-                                    <span>Pending</span>
-                                    @elseif($order->accepted_at != null && $order->packed_at != null && $order->delivered_at == null && $order->completed_at == null)
-                                        <span>Delivering</span>
-                                    @elseif($order->accepted_at != null && $order->packed_at != null && $order->delivered_at != null && $order->completed_at == null)
-                                        <span>Delivered</span>
-                                    @elseif($order->accepted_at != null && $order->packed_at != null && $order->delivered_at != null && $order->completed_at != null)
-                                    <span>Completed</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                         
-                            </tbody>
-                        </table>
-                    <div class="row ">
-                        <div class="col-4 d-flex flex-column justify-content-around">
-                            <span>Other Fee &#8369;{{number_format($order->fee_other)}}</span>
-                            <span>Delivery fee: &#8369;{{number_format($order->fee_delivery)}}</span>
-                            <span>Subtotal Fee: &#8369;{{number_format($order->payment_order )}}</span>
-                            <span>Total fee: &#8369;{{number_format($order->payment_total) }}</span>
-                        </div>
-                        <div class="col-6    d-flex flex-column">
-                            <span>Organization Name: {{$order->org_name}}</span>
-                            <span>Payment method: {{ucfirst($order->payment_method)}}</span>
-                        </div>
-                        {{-- date('M d Y', strtotime(($order->completed_at)) --}}
-                        {{-- \Carbon\Carbon::parse($order->completed_at)->diffForHumans() --}}
-                   
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            {{-- <img src="{{ url('/storage/') }}{{ $orderLines->stock_image ? '/stock/'. $orderLines->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> --}}
-                            {{-- <img class="payment-online" src="{{Storage::url('storage/payment/'.$order->payment_image)}}" alt=""> --}}
-                            {{-- {{dd($order->payment_image)}} --}}
-                            <img class="payment-online" src="/storage/payment/{{$order->payment_image}}" alt="">
-                           
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-6">
-                          <span class="font-weight-bold">Buyer name:</span>    <span class="text-capitalize">{{$order->buyer_fname}} {{$order->buyer_mname[0]}}. {{$order->buyer_lname}}</span>  
-                        <br><span class="font-weight-bold">Mobile Number:</span> <span>{{$order->buyer_mobile}}</span>
-                        <br><span class="font-weight-bold">Address:</span> <span>{{$order->address}}, {{$order->brgy_name}}</span>
+                @php
+                    // $price = \App\Price::getLatestPrice($orderLines->stock_id);
+                    $orderLines = \App\OrderLine::getOrderLines($order->order_id);    
+                @endphp
+              <div class="card mb-3">
+               
+                     <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-6 d-flex flex-column">
+                                <span class="h5">Order {{$order->order_id}}</span>  
+                                {{-- <span class="h5">Order#</span>   --}}
+                            </div>
+                            <div class="col-6 d-flex justify-content-end">
+                                <span>Total : &#8369;{{number_format($order->payment_total)}}</span>  
+                            </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            {{-- <th>Items</th> --}}
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr> 
+                                            {{-- <td><img src="{{ url('/storage/') }}{{ $orderLines['items']->stock_image ? '/stock/'. $orderLines['items']->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></td> --}}
+
+                                        <td> 
+                                            <ul  class="list-unstyled">
+                                                @foreach($orderLines->orderLine as $productItem)
+                                                    <li>{{$productItem->product_name}} x {{$productItem->order_qty}}</li>
+                                                @endforeach
+                                            </ul>
+                                        </td> 
+                                        <td> Quantity {{$orderLines->quantity}}</td>
+                                        <td >
+                                            @if($order->completed_at)
+                                                
+                                                @if($order->return_denied_at != null)
+                                                    <span class="badge badge-pill badge-danger">Rejected</span>
+                                                @else
+                                                    <span class="badge badge-pill badge-success">Complete</span>
+                                                @endif
+                                        @else
+                                            @if($order->return_created_at)
+                                                @if($order->return_accepted_at == null)
+                                                   <span class="badge badge-pill badge-secondary">Return requesting</span>
+                                                @elseif($order->return_accepted_at != null)
+                                                <form action="{{route('rider.deliveredAt',[$order->order_id])}}" method="POST">
+                                                    @method('PUT')
+                                                    <input type="hidden" name="response" value="delivered">
+                                                    <input type="submit" value="Delivered" class="btn btn-sm btn-primary">
+                                                </form>
+                                                @endif 
+                                            
+                                            @else
+                                                @if($order->order_accepted_at == null)
+                                                @elseif($order->packed_at != null && $order->delivered_at == null)
+                                                <form action="{{route('rider.deliveredAt',[$order->order_id])}}" method="POST">
+                                                    @method('PUT')
+                                                    <input type="hidden" name="response" value="delivered">
+                                                    <input type="submit" value="Delivered" class="btn btn-sm btn-primary">
+                                                </form>
+                                                @elseif($order->delivered_at != null)
+                                                    <span class="badge badge-pill badge-success">Delivered</span>
+                                                @endif
+                                            @endif
+                                     @endif 
+                                        <td>Placed On 
+                                            {{date('M d Y', strtotime($order->created_at))}}
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <a href={{route('rider.viewmore',[$order->order_id])}}>View more..</a>
+
+                                    </div>
+                                </div>         
+                               
+                            </div>
+                        </div>
+                        
                     </div>
-                    <hr>
-                    <div class="col-5">
-                        @if($order->delivered_at)
-                    
-                        <span>Already received by buyer</span>
-                        @else
-                        <form action="{{route('rider.deliveredAt',[$order->order_id])}}" method="POST">
-                            @method('PUT')
-                            <input type="hidden" name="response" value="delivered">
-                            <input type="submit" value="Delivered" class="btn btn-sm btn-primary">
-                        </form>
-                        @endif
-                    </div>
-                  </div>
               </div>
+              @endforeach
             </div>
         </div>
     </div>
@@ -111,3 +112,29 @@
 
 
 @endsection
+{{-- @if($order->accepted_at == null && $order->packed_at == null && $order->delivered_at == null && $order->completed_at = null)
+<span>Requesting</span>
+
+@elseif($order->accepted_at != null && $order->packed_at == null && $order->delivered_at == null && $order->completed_at == null)
+
+<span>Pending</span>
+@elseif($order->accepted_at != null && $order->packed_at != null && $order->delivered_at == null && $order->completed_at == null)
+<span>Delivering</span>
+@elseif($order->accepted_at != null && $order->packed_at != null && $order->delivered_at != null && $order->completed_at == null)
+<span>Delivered</span>
+@elseif($order->accepted_at != null && $order->packed_at != null && $order->delivered_at != null && $order->completed_at != null)
+<span>Completed</span>
+@endif --}}
+
+
+{{-- 
+@if($order->delivered_at)
+                    
+<span>Already received by buyer</span>
+@else
+<form action="{{route('rider.deliveredAt',[$order->order_id])}}" method="POST">
+    @method('PUT')
+    <input type="hidden" name="response" value="delivered">
+    <input type="submit" value="Delivered" class="btn btn-sm btn-primary">
+</form>
+@endif --}}

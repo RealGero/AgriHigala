@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Rating;
+use DB;
+use App\User;
 class RatingsController extends Controller
 {
     public function __construct()
@@ -17,8 +19,20 @@ class RatingsController extends Controller
     }
     public function sellerIndex()
     {
-
-        return view('Seller_view.seller-ratings');
+        $id = Auth::id();
+        $seller_id = User::find($id)->seller->seller_id;
+        $ratings = DB::table('ratings as a')
+            ->join('orders as b','b.order_id','a.order_id')
+            ->join('buyers as c','c.buyer_id','b.buyer_id')
+            ->join('payments as d','d.order_id','b.order_id')
+            ->join('fees as e','e.fee_id','d.fee_id')
+            ->join('sellers as f','f.seller_id','e.seller_id')
+            ->join('users as g','g.user_id','c.user_id')
+            ->where('f.seller_id',$seller_id)
+            ->get();
+        
+  
+        return view('Seller_view.seller-ratings',compact('ratings'));
     }
 
     public function orderMyOrderRatings($id)

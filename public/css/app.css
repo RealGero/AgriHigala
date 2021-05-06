@@ -11628,6 +11628,11 @@ img.payment-online {
   width: 6rem;
 }
 
+.rider-viewmore img {
+  width: 7rem;
+  height: 7rem;
+}
+
 .seller-viewmore img {
   width: 6rem;
 }

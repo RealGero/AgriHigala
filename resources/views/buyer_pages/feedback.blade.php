@@ -33,9 +33,9 @@
                                                 <option value="1">1</option>
                                               </select>
                                             <label for="exampleFormControlTextarea1">Comment:</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="comment"></textarea>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="comment" required></textarea>
                                             <label for="email">Email:</label>
-                                            <input type="email" name="email" id="" class="form-control">
+                                            <input type="email" name="email" id="" class="form-control" required>
                                         </div>
                                         <button type="submit" class="btn btn-success">Submit</button>
                                     </div>

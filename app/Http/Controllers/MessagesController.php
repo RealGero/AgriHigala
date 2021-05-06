@@ -10,6 +10,7 @@ use App\User;
 use App\Seller;
 use App\Inbox;
 use App\Message;
+use App\Buyer;
 use App\Notifications\NewMessage;
 
 class MessagesController extends Controller
@@ -142,7 +143,7 @@ class MessagesController extends Controller
                 return back();
             }
         }
- 
+       
          $message = new Message;
          $message->sender = 'seller';
          $message->message = $request->input('input-message');
@@ -150,8 +151,8 @@ class MessagesController extends Controller
          $message->save();
         
          $buyer = Inbox::find($id)->buyer_id;
-         $notify_id = Seller::find($buyer)->user->user_id;
- 
+         $notify_id = Buyer::find($buyer)->user->user_id;
+         
          // ASSIGN VALUES
          $notify_user = $notify_id; // ID sa e-notify; NOT NULL
          $notify_info = $message; // Query gihimu; NOT NULL

@@ -8,6 +8,7 @@ use DB;
 use App\Brgy;
 use App\ProductType;
 use App\User;
+use App\Stock;
 use Session;
 class BrowsesController extends Controller
 {
@@ -29,51 +30,64 @@ class BrowsesController extends Controller
         // ->paginate(5);
         // Session::flush();
         if(isset($_GET['s'])){
-            $products = DB::table('stocks as a')
+            $stocks = DB::table('stocks as a')
             ->join('products as b','b.product_id','=','a.product_id')
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
             ->where('b.product_name', 'LIKE', "%".$_GET['s']."%")
-            ->paginate(5);
-            // dd($products);
+            // ->paginate(5);
+            ->get();
         }
         elseif(isset($_GET['category'])){
-            $products = DB::table('stocks as a')
+            $stocks = DB::table('stocks as a')
             ->join('products as b','b.product_id','=','a.product_id')
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
             ->where('b.product_type_id', '=', $_GET['category'])
-            ->paginate(5);
+            // ->paginate(5);
+            ->get();
         }
         elseif(isset($_GET['brgy'])){
-            $products = DB::table('stocks as a')
+            $stocks = DB::table('stocks as a')
             ->join('products as b','b.product_id','=','a.product_id')
             ->join('sellers as d','d.seller_id', '=','a.seller_id')
             ->join('orgs as e','e.org_id','=','d.org_id')
             ->join('brgys as f','f.brgy_id','=','e.brgy_id')
             ->where('f.brgy_id', '=', $_GET['brgy'])
-             ->paginate(5);
+            // ->paginate(5);
+            ->get();
         }
         
         else{
-            $products = DB::table('stocks as a')
+            $stocks = DB::table('stocks as a')
                 ->join('products as b','b.product_id','=','a.product_id')
                 ->join('sellers as d','d.seller_id', '=','a.seller_id')
                 ->join('orgs as e','e.org_id','=','d.org_id')
                 ->join('brgys as f','f.brgy_id','=','e.brgy_id')
                 ->join('product_types as g','g.product_type_id','=','b.product_type_id')
-                ->paginate(5);
+                // ->paginate(5);
+                ->get();
             
         }
-        // return dd($products);
+
+        // REMOVE EMPTY STOCK
+        $productList = collect();
+        foreach ($stocks as $stock) {
+            $qty = Stock::getQty($stock->stock_id);
+
+            if ($qty->remaining > 0){
+                $productList->add($stock);
+            }
+        }
+        // PAGINATE
+        $products = $productList->paginate(5);
+
+
         $id = Auth::id();
-       
         $brgys = Brgy::all();
         $categories = ProductType::all();
-
-        
 
         return view('welcome_nav.browse',compact('products','brgys','categories'));
     }

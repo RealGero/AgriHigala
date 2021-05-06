@@ -17,22 +17,19 @@
                                         
                                             @php
                                             // dd($product);
-                                                $quantity = \App\Stock::getQty($product->stock_id);
                                                 $price = \App\Price::getLatestPrice($product->stock_id); 
                                             @endphp
-                                            @if($quantity->remaining > 0) 
-                                                <div class="d-flex flex-column justify-content-center mx-4" >
+                                            <div class="d-flex flex-column justify-content-center mx-4" >
                                                 <a href="/buyer/browse/seller/{{$product->stock_id}}"> 
-                                                    <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></a>
+                                                <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""></a>
 
-                                                    {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
-                                                    <h5>{{$product->product_name}}</h5>
-                                                    <p> &#8369; {{number_format($price->stock_price)}}/{{$price->unit_name}}</p>                                                                                                   
-                                                    <p>{{$product->brgy_name}}</p>
-                                                    <a href="/buyer/browse/{{$product->stock_id}}" class="btn btn-success">Add to Cart</a>
-                                                
-                                                </div>   
-                                            @endif                     
+                                                {{-- <img src="{{ url('/storage/') }}{{ $product->stock_image ? '/stock/'. $product->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> </a> </td> --}}
+                                                <h5>{{$product->product_name}}</h5>
+                                                <p> &#8369; {{number_format($price->stock_price)}}/{{$price->unit_name}}</p>                                                                                                   
+                                                <p>{{$product->brgy_name}}</p>
+                                                <a href="/buyer/browse/{{$product->stock_id}}" class="btn btn-success">Add to Cart</a>
+                                            
+                                            </div>                
                                         @endforeach
  
                                 </div>

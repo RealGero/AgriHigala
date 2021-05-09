@@ -78,9 +78,11 @@
                     </div> --}}
                     <div class="d-flex flex-row mb-3 form-group">
                       <label for="barangays" class="col-md-4 col-form-label text-md-right">{{__('Choose a Barangay:')}}</label>
-                      <select name="brgy" id="brgy" class="form-control  @error('brgy') is-invalid @enderror">
+                      <select name="brgy" id="brgy" class="form-control  @error('brgy') is-invalid @enderror" required>
+               
                           @foreach($brgys as $brgy)
-                              <option value="{{$brgy->brgy_name}}" {{$brgy->brgy_id=='1' ? 'selected' : ''}}> {{$brgy->brgy_name}}</option>
+                              
+                              <option value="{{$brgy->brgy_id}}" {{$seller->brgy_id ==$brgy->brgy_id ? 'sellected':'' }} > {{$brgy->brgy_name}}</option>
                           @endforeach
                       </select>
                       <div class="text-danger"> {{$errors->first('brgy')}}</div>

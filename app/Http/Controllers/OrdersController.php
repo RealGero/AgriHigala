@@ -319,6 +319,7 @@ class OrdersController extends Controller
         $payment = Payment::find($id);
       
         if($request->hasFile('payment-img'))
+        
         {
             $filenameWithExt = $request->file('payment-img')->getClientOriginalName();
            
@@ -591,12 +592,18 @@ class OrdersController extends Controller
         $response = $request->input('response');
         if ($response == 'received'){
 
-            $order = Order::find($order_id = $id);
+            $order = Order::find($id);
             $order->completed_at = now();
             $order->save();
             
+            $payment = Payment::find($id);
+            $payment->paid_at = now();
+            $payment->save();
+            
             request()->session()->flash('success','Order complete');
         }
+
+
 
         $fee_id = Order::find($id)->payment->fee_id;
         $seller_id = Fee::find($fee_id)->seller_id;

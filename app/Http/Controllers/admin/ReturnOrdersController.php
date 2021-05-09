@@ -115,7 +115,7 @@ class ReturnOrdersController extends Controller
         
         // CHECK IF THERE'S A RESPONSE
         $response = $request->input('response');
-        return $return = Order::find($id)->returnOrder;
+        $return = Order::find($id)->returnOrder;
 
         if ($response == 'accept' && $return){
             $return->accepted_at = now();

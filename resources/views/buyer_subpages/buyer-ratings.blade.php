@@ -14,7 +14,7 @@
                                 <div class="form-group">
                                     @csrf
                                     <select class="form-select form-select-sm form-control my-3" name="rating" aria-label=".form-select-sm example" required>
-                                        <option value="5" selected>5</option>
+                                        <option value="5" selected>5</option>                      
                                         <option value="4">4</option>
                                         <option value="3">3</option>
                                         <option value="2">2</option>
@@ -22,10 +22,10 @@
                                         <option value="5">5</option>
                                     </select>
                                     <label for="exampleFormControlTextarea1">Provide a comment please!</label>
-                                    <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="6" required>
-
+                                    <textarea class="form-control @error('comment') is-invalid @enderror" name="comment" id="exampleFormControlTextarea1" rows="6">
+                                       
                                     </textarea>
-
+                                    <div class="text-danger">{{$errors->first('comment                                                             ')}}</div> 
                                     </textarea>
                                    
                                     <input type="hidden" name="order" value="{{$id}}">

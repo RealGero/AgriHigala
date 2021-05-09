@@ -15,6 +15,12 @@ class BrowsesController extends Controller
    
     public function index()
     { 
+        if (Auth::check()){
+            if (Auth::user()->user_type != 4){
+                return back();
+            }
+        }
+       
      
     
 
@@ -67,7 +73,7 @@ class BrowsesController extends Controller
                 ->join('orgs as e','e.org_id','=','d.org_id')
                 ->join('brgys as f','f.brgy_id','=','e.brgy_id')
                 ->join('product_types as g','g.product_type_id','=','b.product_type_id')
-                // ->paginate(5);
+                // ->paginate(15);
                 ->get();
             
         }

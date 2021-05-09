@@ -10,7 +10,7 @@
                         <div class="card-body">
                             <div class="row my-3">
                                 <div class="col-12 text-center">
-                                    <span class="border p-2 rounded">Ratings 3.5/5 <i class="fas fa-star"></i></span>
+                                    <span class="border p-2 rounded">Ratings {{$average}}/5 </i></span>
                                 </div>
                             </div>
                             <div class="row border-top mx-3 mt-5">
@@ -25,9 +25,10 @@
                                             <th scope="col">Comments</th>
                                           </tr>
                                         </thead>
+                                        @foreach($ratings as $rating)
                                         <tbody>
                                           <tr>
-                                            @foreach($ratings as $rating)
+                                           
                                             <td>{{$rating->order_id}}</td>
                                             <td class="text-capitalize">{{$rating->f_name}} {{$rating->l_name}}</td>
                                             <td>{{$rating->rating}}</td>
@@ -35,8 +36,9 @@
                                             {{-- <td><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit, explicabo. <a class="btn btn-primary d-block" href="#" role="button">Link</a></p> --}}
                                             {{-- </td> --}}
                                             <td>{{$rating->comment}}</td>
-                                            @endforeach
+                                           
                                           </tr>
+                                          @endforeach
                                         </tbody>
                                       </table>
                                 </div>

@@ -88,6 +88,8 @@
                                 @endif
                             </div>
                         </div>
+                        <br>
+                     <span class="font-weight-bold"> Payment photo:</span>  
                         <div class="row">
                             <div class="col-12">
                                 {{-- <img src="{{ url('/storage/') }}{{ $orderLines->stock_image ? '/stock/'. $orderLines->stock_image : '/seller/product_type_image/default_product_image.jpg'  }}" alt=""> --}}

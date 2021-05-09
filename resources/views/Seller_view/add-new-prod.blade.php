@@ -188,7 +188,7 @@
                                          <textarea class="form-control text-justify" id="exampleFormControlTextarea1" rows="3" placeholder="Descreption" name="description" >{{$products->product_description}}</textarea>
                                    
                                         @else --}}
-                                        <textarea class="form-control text-justify" id="exampleFormControlTextarea1" rows="3" placeholder="Descreption" name="description" {{ $disable}}></textarea>
+                                        <textarea class="form-control text-justify" id="exampleFormControlTextarea1" rows="3" placeholder="Description" name="description" {{ $disable}}></textarea>
                                    
                                         {{-- @endif --}}
                                         </div>

@@ -344,8 +344,9 @@ class UsersController extends Controller
         $id = Auth::id();
         $user =  User::find($id);
         $brgys = Brgy::all();
-        $brgy =  User::find($id)->seller;
-
+        $brgy =  User::find($id)->seller->org->brgy->brgy_name;
+        $seller = User::find($id)->seller->org;
+        // dd($seller);
         // $brgy = User::find($id)->seller->org->brgy->brgy_name;
       
         
@@ -383,11 +384,12 @@ class UsersController extends Controller
 
       
 
-        return view ('Seller_view.seller-profile',compact('user','brgys'));
+        return view ('Seller_view.seller-profile',compact('user','brgys','seller'));
     }
 
     public function updateSellerDetails(Request $request)
     {
+        
         if (!Auth::check()){
             return redirect()->route('login');
         }
@@ -399,9 +401,10 @@ class UsersController extends Controller
         $id = Auth::id();
         $user = User::find($id);
         $org = User::find($id)->seller->org;
-        $brgy = User::find($id)->seller->org->brgy;
+        $brgy = User::find($id)->seller->org;
+       
         $seller = User::find($id)->seller;
-
+      
         $this->validate($request,[
             'first_name' => ['required','min:2',
             function ($attribute, $value, $fail) {
@@ -457,8 +460,8 @@ class UsersController extends Controller
 
         $org->address = $request->input('address');
         
-        $brgy->brgy_name = $request->input('brgy');
-
+        $brgy->brgy_id = $request->input('brgy');
+        
         $seller->schedule_online_time = $request->input('schedule');
         $seller->seller_description = $request->input('description');
 
